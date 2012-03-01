@@ -1,0 +1,25 @@
+#ifndef ENVOBJECT_H
+#define ENVOBJECT_H
+
+#include "constants.h"
+#include <QColor>
+
+class EnvObject
+{
+public:
+    EnvObject();
+
+private:
+    unsigned int objectId;           //as one controller controls all envObjects,
+                                     //each of them must has own id
+
+    unsigned int portNumber;         //controller's port number
+    QColor color;                    //object's color
+    unsigned int size;               //size in special pixels (1/60 of real pixel)
+    //TODO: orientation
+    Intersection intersection;       //type of intersection
+    bool movable;                    //is object movable
+    std::pair<int, int> coords;      //object's coordinates, first - x, second - y;
+};
+
+#endif // ENVOBJECT_H
