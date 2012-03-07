@@ -21,8 +21,6 @@ private:
 
     //TODO: parameters
 
-    //FIXME: decide to use round local map
-    //(for bot it can be right, e.g. visibility area) or not
     std::pair<int, int> size;       //local map size
     double scaling;
 };
