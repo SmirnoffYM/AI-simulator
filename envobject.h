@@ -1,8 +1,8 @@
 #ifndef ENVOBJECT_H
 #define ENVOBJECT_H
 
-#include "constants.h"
 #include <QColor>
+#include "constants.h"
 
 class EnvObject
 {

@@ -1,8 +1,8 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include "constants.h"
 #include <QColor>
+#include "constants.h"
 
 class Robot
 {

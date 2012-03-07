@@ -10,7 +10,7 @@ public:
     HubModule();
 
 private:
-    ModellingSystem* modellingSystem;
+    ModellingSystem *modellingSystem;
 };
 
 #endif // HUBMODULE_H

@@ -1,8 +1,8 @@
 #ifndef COMMODULE_H
 #define COMMODULE_H
 
-#include "constants.h"
 #include <QtNetwork/QUdpSocket>
+#include "constants.h"
 
 class ComModule
 {
@@ -10,7 +10,7 @@ public:
     ComModule();
 
 private:
-    QUdpSocket* socket;
+    QUdpSocket *socket;
 };
 
 #endif // COMMODULE_H

@@ -14,9 +14,9 @@ public:
     ModellingSystem();
 
 private:
-    std::list<Robot*> robots;
-    std::list<EnvObject*> envObjects;
-    World* world;
+    std::list<Robot *> robots;
+    std::list<EnvObject *> envObjects;
+    World * world;
 
     bool loadMap(std::string fileName);
 };

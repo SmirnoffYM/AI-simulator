@@ -1,9 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QMessageBox>
 #include <QFileDialog>
-#include <QBitmap>
 #include <QImage>
-#include <QGraphicsItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,15 +39,22 @@ void MainWindow::on_action_Exit_triggered()
 void MainWindow::on_action_Open_map_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map",
-            QString::fromUtf8("Map files (*.bmp)"));
-    QBitmap* bitmap = new QBitmap(fileName);
+            tr("Map files (*.bmp)"));
+    QImage *image = new QImage(fileName);
 
     //TODO: load bitmap to World
     //TODO: start all threads if loading successfull
 
-    delete bitmap;
+    delete image;
 
     //TODO: close all threads
+}
+
+void MainWindow::on_actionAbout_Program_triggered()
+{
+    //TODO: description
+
+    QMessageBox::about(this, tr("AI simulator"), tr("description..."));
 }
 
 /* Limit line length to 100 characters; highlight 99th column

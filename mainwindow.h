@@ -28,13 +28,15 @@ private slots:
 
     void on_action_Open_map_triggered();
 
+    void on_actionAbout_Program_triggered();
+
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene* scene;
+    QGraphicsScene *scene;
 
-    QList<RobotWindow*> robotWindows;
-    QHubThread* hubThread;
-    QComThread* comThread;
+    QList<RobotWindow *> robotWindows;
+    QHubThread *hubThread;
+    QComThread *comThread;
 };
 
 #endif // MAINWINDOW_H
