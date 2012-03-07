@@ -11,8 +11,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    for (int i = 0; i < ROBOTS; i++)
-    {
+    for (int i = 0; i < ROBOTS; i++) {
         RobotWindow* robotWindow = new RobotWindow;
         robotWindows.push_back(robotWindow);
     }
@@ -40,7 +39,8 @@ void MainWindow::on_action_Exit_triggered()
 
 void MainWindow::on_action_Open_map_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map", QString::fromUtf8("Map files (*.bmp)"));
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map",
+            QString::fromUtf8("Map files (*.bmp)"));
     QBitmap* bitmap = new QBitmap(fileName);
 
     //TODO: load bitmap to World

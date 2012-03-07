@@ -18,7 +18,7 @@ struct Cell
     int height;
 };
 
-enum Intersection {Allowed, Denied, AllowedForSameColor};
+enum Intersection { Allowed, Denied, AllowedForSameColor };
 
 #endif // CONSTANTS_H
 
