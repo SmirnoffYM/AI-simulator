@@ -50,3 +50,7 @@ void MainWindow::on_action_Open_map_triggered()
 
     //TODO: close all threads
 }
+
+/* Limit line length to 100 characters; highlight 99th column
+ * vim: set textwidth=100 colorcolumn=-1:
+ */
