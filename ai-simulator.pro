@@ -18,7 +18,9 @@ SOURCES += main.cpp\
     modellingsystem.cpp \
     world.cpp \
     robot.cpp \
-    envobject.cpp
+    envobject.cpp \
+    qhubthread.cpp \
+    qcomthread.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -28,7 +30,9 @@ HEADERS  += mainwindow.h \
     world.h \
     robot.h \
     envobject.h \
-    constants.h
+    constants.h \
+    qhubthread.h \
+    qcomthread.h
 
 FORMS    += mainwindow.ui \
     robotwindow.ui

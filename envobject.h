@@ -16,7 +16,7 @@ private:
     unsigned int portNumber;         //controller's port number
     QColor color;                    //object's color
     unsigned int size;               //size in special pixels (1/60 of real pixel)
-    //TODO: orientation
+    double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     bool movable;                    //is object movable
     std::pair<int, int> coords;      //object's coordinates, first - x, second - y;

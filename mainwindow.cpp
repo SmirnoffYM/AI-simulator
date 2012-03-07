@@ -1,5 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFileDialog>
+#include <QBitmap>
+#include <QImage>
+#include <QGraphicsItem>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -12,6 +16,9 @@ MainWindow::MainWindow(QWidget *parent) :
         RobotWindow* robotWindow = new RobotWindow;
         robotWindows.push_back(robotWindow);
     }
+
+    scene = new QGraphicsScene();
+    ui->graphicsView->setScene(scene);
 }
 
 MainWindow::~MainWindow()
@@ -22,4 +29,24 @@ MainWindow::~MainWindow()
 void MainWindow::on_closePushButton_clicked()
 {
     this->close();
+}
+
+void MainWindow::on_action_Exit_triggered()
+{
+    //TODO: close all threads
+
+    this->close();
+}
+
+void MainWindow::on_action_Open_map_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map", QString::fromUtf8("Map files (*.bmp)"));
+    QBitmap* bitmap = new QBitmap(fileName);
+
+    //TODO: load bitmap to World
+    //TODO: start all threads if loading successfull
+
+    delete bitmap;
+
+    //TODO: close all threads
 }
