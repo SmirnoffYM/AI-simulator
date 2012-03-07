@@ -39,7 +39,7 @@ void MainWindow::on_action_Exit_triggered()
 void MainWindow::on_action_Open_map_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map",
-            tr("Map files (*.bmp)"));
+            tr("Grayscale map files (*.*)"));
     QImage *image = new QImage(fileName);
 
     //TODO: load bitmap to World
@@ -54,7 +54,7 @@ void MainWindow::on_actionAbout_Program_triggered()
 {
     //TODO: description
 
-    QMessageBox::about(this, tr("AI simulator"), tr("description..."));
+    QMessageBox::information(this, tr("AI simulator"), tr("description..."));
 }
 
 /* Limit line length to 100 characters; highlight 99th column
