@@ -1,15 +1,10 @@
 #include "modellingsystem.h"
 
-ModellingSystem::ModellingSystem()
+ModellingSystem::ModellingSystem(std::vector<std::vector<Cell> > map)
 {
-}
+    //TODO: load ALL envObjects and robots
 
-bool ModellingSystem::loadMap(std::string fileName)
-{
-    //TODO: load map from *.bmp file
-    //TODO: call setter from world class to set it's map coords and size
-
-    return true;
+    world = new World(map);
 }
 
 /* Limit line length to 100 characters; highlight 99th column

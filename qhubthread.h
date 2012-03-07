@@ -3,14 +3,18 @@
 
 #include <QThread>
 #include "hubmodule.h"
+#include "qcomthread.h"
 
 class QHubThread : public QThread
 {
 public:
     QHubThread();
 
+    void run();
 private:
     HubModule* hub;
+
+    QComThread *comThread;
 };
 
 #endif // QHUBTHREAD_H

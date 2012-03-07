@@ -9,8 +9,7 @@ class HubModule
 public:
     HubModule();
 
-private:
-    ModellingSystem *modellingSystem;
+    static ModellingSystem *modellingSystem;
 };
 
 #endif // HUBMODULE_H

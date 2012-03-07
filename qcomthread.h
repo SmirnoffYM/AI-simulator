@@ -9,6 +9,7 @@ class QComThread : public QThread
 public:
     QComThread();
 
+    void run();
 private:
     ComModule* com;
 };

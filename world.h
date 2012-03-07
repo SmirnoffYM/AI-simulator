@@ -7,10 +7,10 @@
 class World
 {
 public:
-    World();
+    World(std::vector<std::vector<Cell> > map);
 
 private:
-    std::vector<std::vector<Cell> > heightsMap;
+    std::vector<std::vector<Cell> > *heightsMap;
     std::pair<int, int> size;                       //map size; first - width, second - height
 
     //TODO: world colors

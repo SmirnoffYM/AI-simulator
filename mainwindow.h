@@ -3,11 +3,11 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QImage>
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
 #include "qhubthread.h"
-#include "qcomthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -36,7 +36,9 @@ private:
 
     QList<RobotWindow *> robotWindows;
     QHubThread *hubThread;
-    QComThread *comThread;
+
+    bool isMapCorrect(QImage image);
+    std::vector<std::vector<Cell> > loadMap(QImage image);
 };
 
 #endif // MAINWINDOW_H

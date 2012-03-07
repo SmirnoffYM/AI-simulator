@@ -11,14 +11,12 @@
 class ModellingSystem
 {
 public:
-    ModellingSystem();
+    ModellingSystem(std::vector<std::vector<Cell> > map);
 
 private:
     std::list<Robot *> robots;
     std::list<EnvObject *> envObjects;
-    World * world;
-
-    bool loadMap(std::string fileName);
+    World *world;
 };
 
 #endif // MODELLINGSYSTEM_H
