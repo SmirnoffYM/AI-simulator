@@ -6,8 +6,9 @@ RobotWindow::RobotWindow(QWidget *parent) :
     ui(new Ui::RobotWindow)
 {
     ui->setupUi(this);
-    ui->robotIdValueLabel->setText(robotId);
     //TODO: remove all window buttons from window title
+    //TODO: decide make RobotWindow modal or not
+    //TODO: place this window on the right side of the desktop, but not over other RobotWindows
 }
 
 RobotWindow::~RobotWindow()
@@ -18,6 +19,15 @@ RobotWindow::~RobotWindow()
 void RobotWindow::onRefreshMap()
 {
     //TODO: refresh local map
+}
+
+void RobotWindow::setRobotId(int id) {
+    if (id <= 0 || id > ROBOTS)
+        robotId = 0;
+    else
+        robotId = id;
+
+    ui->robotIdValueLabel->setText(QString("%1").arg(robotId));
 }
 
 /* Limit line length to 100 characters; highlight 99th column

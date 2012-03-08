@@ -29,12 +29,7 @@ public slots:
     void onRefreshMap();
 
 public:
-    void setRobotId(int id) {
-        if (id <= 0 || id > ROBOTS)
-            robotId = 0;
-        else
-            robotId = id;
-    }
+    void setRobotId(int id);
 };
 
 #endif // ROBOTWINDOW_H
