@@ -9,23 +9,146 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>684</width>
+    <height>354</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Robot window</string>
   </property>
-  <widget class="QGraphicsView" name="robotGraphicsView">
-   <property name="geometry">
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>381</width>
-     <height>192</height>
-    </rect>
-   </property>
-  </widget>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QGraphicsView" name="robotGraphicsView"/>
+   </item>
+   <item row="0" column="1">
+    <widget class="QGroupBox" name="statsGroupBox">
+     <property name="minimumSize">
+      <size>
+       <width>191</width>
+       <height>217</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>191</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="title">
+      <string>Robot parameters</string>
+     </property>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="robotIdLabel">
+        <property name="text">
+         <string>Robot ID:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLabel" name="robotIdValueLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="portLabel">
+        <property name="text">
+         <string>Port:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="portValueLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="colorLabel">
+        <property name="text">
+         <string>Color:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QGraphicsView" name="colorGraphicsView">
+        <property name="minimumSize">
+         <size>
+          <width>21</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>21</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="sizeLabel">
+        <property name="text">
+         <string>Size:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="sizeValueLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="intersectionTypeLabel">
+        <property name="text">
+         <string>Intersection:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0" colspan="2">
+       <widget class="QLabel" name="intersectionTypeValueLabel">
+        <property name="text">
+         <string>Allowed for same Color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="orientationLabel">
+        <property name="text">
+         <string>Orientation:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLabel" name="orientationValueLabel">
+        <property name="text">
+         <string>0</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="0">
+       <widget class="QLabel" name="coordsLabel">
+        <property name="text">
+         <string>Coordinates:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="7" column="1">
+       <widget class="QLabel" name="coordsValueLabel">
+        <property name="text">
+         <string>0, 0</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections/>

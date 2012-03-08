@@ -6,11 +6,18 @@ RobotWindow::RobotWindow(QWidget *parent) :
     ui(new Ui::RobotWindow)
 {
     ui->setupUi(this);
+    ui->robotIdValueLabel->setText(robotId);
+    //TODO: remove all window buttons from window title
 }
 
 RobotWindow::~RobotWindow()
 {
     delete ui;
+}
+
+void RobotWindow::onRefreshMap()
+{
+    //TODO: refresh local map
 }
 
 /* Limit line length to 100 characters; highlight 99th column

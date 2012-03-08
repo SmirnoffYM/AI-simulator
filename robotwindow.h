@@ -15,14 +15,26 @@ class RobotWindow : public QWidget
 public:
     explicit RobotWindow(QWidget *parent = 0);
     ~RobotWindow();
-    
+
 private:
     Ui::RobotWindow *ui;
 
+    unsigned int robotId;           //robot's number. It must be from 1 to ROBOTS
     //TODO: parameters
 
     std::pair<int, int> size;       //local map size
     double scaling;
+
+public slots:
+    void onRefreshMap();
+
+public:
+    void setRobotId(int id) {
+        if (id <= 0 || id > ROBOTS)
+            robotId = 0;
+        else
+            robotId = id;
+    }
 };
 
 #endif // ROBOTWINDOW_H

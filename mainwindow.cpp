@@ -14,6 +14,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < ROBOTS; i++) {
         RobotWindow* robotWindow = new RobotWindow;
         robotWindows.push_back(robotWindow);
+        robotWindows.at(i)->setRobotId(i+1);
     }
 
     scene = new QGraphicsScene();
@@ -57,6 +58,10 @@ void MainWindow::on_action_Open_map_triggered()
         delete image;
 
         //TODO: start hub thread
+
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->show();
+        }
 
         QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 
@@ -118,9 +123,11 @@ void MainWindow::onRefreshMap()
             }
         }
 
+        //TODO: draw ALL robots and envObjects
 
-        //TODO: refresh map
-        //TODO: refersh local maps in robot windows
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->onRefreshMap();
+        }
 
         QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(onRefreshMap()));
     } else {
