@@ -21,8 +21,8 @@ public:
     }
 
 private:
-    std::pair<int, int> size;                       //map size; first - width, second - height
     int** heightsMap;
+    std::pair<int, int> size;                       //map size; first - height, second - width
 
     //TODO: world colors
 };

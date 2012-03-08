@@ -2,6 +2,7 @@
 #define ROBOTWINDOW_H
 
 #include <QWidget>
+#include <QGraphicsScene>
 #include "constants.h"
 
 namespace Ui {
@@ -25,11 +26,17 @@ private:
     std::pair<int, int> size;       //local map size
     double scaling;
 
+    QGraphicsScene* localMapScene;
+    QGraphicsScene* robotColorScene;
+
 public slots:
     void onRefreshMap();
 
 public:
     void setRobotId(int id);
+
+private:
+    void refreshRobotParams();
 };
 
 #endif // ROBOTWINDOW_H
