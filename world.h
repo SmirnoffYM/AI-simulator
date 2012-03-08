@@ -1,17 +1,28 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+#include <vector>
 #include "constants.h"
-#include "vector"
 
 class World
 {
 public:
-    World(std::vector<std::vector<Cell> > map);
+    World(int** map, std::pair<int, int> s);
+
+    std::pair<int, int> getSize() {
+        return size;
+    }
+
+    int getHeight(int x, int y) {
+        if (x >= 0 && x < size.first && y >= 0 && y < size.second)
+            return heightsMap[x][y];
+        else
+            return 0;
+    }
 
 private:
-    std::vector<std::vector<Cell> > *heightsMap;
     std::pair<int, int> size;                       //map size; first - width, second - height
+    int** heightsMap;
 
     //TODO: world colors
 };

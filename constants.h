@@ -9,16 +9,13 @@
 #define ROBOTS                      3           //number of robots
 #define ENV_OBJECTS                 255         //number of environment objects
 #define SCREEN_REFRESH_RATE         30          //screen refresh rate in times per second
-#define REAL_PIXEL_SIZE             60          //number of cells in real pixel
-#define MIN_MAP_SIDE                24          //minimum length of the map's side
-//TODO: define MAX_MAP_SIDE
 
-struct Cell
-{
-    int x;
-    int y;
-    int height;
-};
+//TODO: if we want use REAL_PIXEL_SIZE = 60 and keep performance, we must set low MAX_MAP_SIDE
+
+#define REAL_PIXEL_SIZE             60           //number of cells in real pixel
+#define MIN_MAP_SIDE                24          //minimum length of the map's side
+
+//TODO: define MAX_MAP_SIDE
 
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 

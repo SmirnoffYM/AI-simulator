@@ -7,7 +7,6 @@
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
-#include "qhubthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -30,15 +29,16 @@ private slots:
 
     void on_actionAbout_Program_triggered();
 
+    void onRefreshMap();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
 
     QList<RobotWindow *> robotWindows;
-    QHubThread *hubThread;
 
     bool isMapCorrect(QImage image);
-    std::vector<std::vector<Cell> > loadMap(QImage image);
+    int** loadMap(QImage image);
 };
 
 #endif // MAINWINDOW_H

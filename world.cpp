@@ -1,9 +1,9 @@
 #include "world.h"
 
-World::World(std::vector<std::vector<Cell> > map)
+World::World(int **map, std::pair<int, int> s):
+    heightsMap(map),
+    size(s)
 {
-    heightsMap = &map;
-    size = std::pair<int, int>(heightsMap->size(), heightsMap->at(0).size());
 }
 
 /* Limit line length to 100 characters; highlight 99th column

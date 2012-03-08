@@ -1,9 +1,8 @@
 #ifndef MODELLINGSYSTEM_H
 #define MODELLINGSYSTEM_H
 
+#include <vector>
 #include "constants.h"
-#include "list"
-#include "algorithm"
 #include "robot.h"
 #include "envobject.h"
 #include "world.h"
@@ -11,12 +10,37 @@
 class ModellingSystem
 {
 public:
-    ModellingSystem(std::vector<std::vector<Cell> > map);
+    ModellingSystem(int** map, std::pair<int, int>);
 
+    static bool isModellingPerformed;
 private:
-    std::list<Robot *> robots;
-    std::list<EnvObject *> envObjects;
-    World *world;
+    std::vector<Robot> robots;
+    std::vector<EnvObject> envObjects;
+    World world;
+
+public:
+    World getWorld()
+    {
+        return world;
+    }
+
+    //number is between 0 and ROBOTS-1
+    Robot getRobot(unsigned int number)
+    {
+        if (number < robots.size() && number < ROBOTS)
+            return robots.at(number);
+        else
+            return Robot();
+    }
+
+    //number is between 0 and ENV_OBJECTS-1
+    EnvObject getEnvObject(unsigned int number)
+    {
+        if (number < envObjects.size() && number < ENV_OBJECTS)
+            return envObjects.at(number);
+        else
+            return EnvObject();
+    }
 };
 
 #endif // MODELLINGSYSTEM_H
