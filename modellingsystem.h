@@ -14,12 +14,12 @@ public:
 
     static bool isModellingPerformed;
 private:
-    std::vector<Robot> robots;
-    std::vector<EnvObject> envObjects;
-    World world;
+    std::vector<Robot*> robots;
+    std::vector<EnvObject*> envObjects;
+    World* world;
 
 public:
-    World getWorld()
+    World* getWorld()
     {
         return world;
     }
@@ -28,18 +28,18 @@ public:
     Robot getRobot(unsigned int number)
     {
         if (number < robots.size() && number < ROBOTS)
-            return robots.at(number);
+            return *(robots.at(number));
         else
             return Robot();
     }
 
     //number is between 0 and ENV_OBJECTS-1
-    EnvObject getEnvObject(unsigned int number)
+    EnvObject* getEnvObject(unsigned int number)
     {
         if (number < envObjects.size() && number < ENV_OBJECTS)
             return envObjects.at(number);
         else
-            return EnvObject();
+            return NULL;
     }
 };
 

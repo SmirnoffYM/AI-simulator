@@ -43,18 +43,19 @@ void RobotWindow::setRobotId(int id) {
 
 void RobotWindow::refreshRobotParams()
 {
-    Robot robot = HubModule::modellingSystem->getRobot(robotId);
+    Robot *robot = new Robot(HubModule::modellingSystem->getRobot(robotId-1));
 
-    ui->portValueLabel->setText(QString("%1").arg(robot.getPortNumber()));
+    ui->portValueLabel->setText(QString("%1").arg(robot->getPortNumber()));
     ui->coordsValueLabel->setText(QString("%1, %2").
-                                  arg(robot.getCoords().first).arg(robot.getCoords().second));
-    ui->orientationValueLabel->setText(QString("%1").arg(robot.getOrientation(), 2, 'f', 1));
-    ui->sizeValueLabel->setText(QString("%1").arg(robot.getSize()));
+                                  arg(robot->getCoords().first).arg(robot->getCoords().second));
+    ui->orientationValueLabel->setText(QString("%1").arg(robot->getOrientation(), 2, 'f', 1));
+    ui->sizeValueLabel->setText(QString("%1").arg(robot->getSize()));
 
-    robotColorScene->addRect(-5, -5, 20, 20, QPen(robot.getColor()), QBrush(robot.getColor()));
+    robotColorScene->clear();
+    robotColorScene->addRect(-5, -5, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
 
     QString intersectionText = QString();
-    switch(robot.getIntersection()) {
+    switch(robot->getIntersection()) {
     case Allowed:
         intersectionText = tr("Allowed");
         break;
@@ -66,6 +67,8 @@ void RobotWindow::refreshRobotParams()
         break;
     }
     ui->intersectionTypeValueLabel->setText(intersectionText);
+
+    delete robot;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

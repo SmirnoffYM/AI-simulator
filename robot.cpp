@@ -11,6 +11,18 @@ Robot::Robot():
     //default constructor
 }
 
+
+Robot::Robot(const Robot &copy)
+{
+    portNumber = copy.portNumber;
+    color = copy.color;
+    size = copy.size;
+    orientation = copy.orientation;
+    intersection = copy.intersection;
+    coords = copy.coords;
+}
+
+
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:
  */

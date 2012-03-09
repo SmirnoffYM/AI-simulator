@@ -110,10 +110,10 @@ void MainWindow::onRefreshMap()
     if (ModellingSystem::isModellingPerformed) {
         scene->clear();
 
-        std::pair<int, int> size = HubModule::modellingSystem->getWorld().getSize();
+        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
         for (int i = 0; i < size.first; i++) {
             for (int j = 0; j < size.second; j++) {
-                int *height = new int(HubModule::modellingSystem->getWorld().getHeight(i, j));
+                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
                 QColor *pixelColor = new QColor(*height, *height, *height);
                 scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
                                REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,

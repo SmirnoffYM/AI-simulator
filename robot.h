@@ -8,6 +8,7 @@ class Robot
 {
 public:
     Robot();
+    Robot(const Robot &copy);
 
 private:
     unsigned int portNumber;         //also it's robot's id

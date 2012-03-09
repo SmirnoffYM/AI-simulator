@@ -2,17 +2,24 @@
 
 bool ModellingSystem::isModellingPerformed = false;
 
-ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size):
-    world(map, size)
+ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
 {
-    //TODO: load ALL envObjects and robots
+    world = new World(map, size);
 
     for (int i = 0; i < ROBOTS; i++) {
+        Robot *robot = new Robot();
+
         //TODO: load robot parameters from /robots directory
+
+        robots.push_back(robot);
     }
 
     for (int i = 0; i < ENV_OBJECTS; i++) {
+        EnvObject *envObject = new EnvObject();
+
         //TODO: load envObject parameters from environment setting file
+
+        envObjects.push_back(envObject);
     }
 
     isModellingPerformed = true;
