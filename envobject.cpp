@@ -8,8 +8,8 @@ EnvObject::EnvObject():
     size(0),
     orientation(0),
     intersection(AllowedForSameColor),
-    coords(0, 0),
-    movable(false)
+    movable(false),
+    coords(0, 0)
 {
     //default constructor
 }
