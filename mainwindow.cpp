@@ -4,6 +4,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTimer>
+#include <QGraphicsItem>
+#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -123,7 +125,28 @@ void MainWindow::onRefreshMap()
             }
         }
 
-        //TODO: draw ALL robots and envObjects
+        for (int i = 0; i < ROBOTS; i++) {
+            Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
+
+            QColor outlineColor(255 - robot->getColor().red(),
+                                255 - robot->getColor().green(),
+                                255 - robot->getColor().blue());
+            scene->addEllipse(robot->getCoords().first - robot->getSize() / 2,
+                              robot->getCoords().second - robot->getSize() / 2,
+                              robot->getSize(), robot->getSize(),
+                              QPen(outlineColor), QBrush(robot->getColor()));
+
+            double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * M_PI / 180);
+            double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * M_PI / 180);
+
+            scene->addLine(robot->getCoords().first, robot->getCoords().second,
+                           robot->getCoords().first + new_x, robot->getCoords().second - new_y,
+                           QPen(outlineColor));
+
+            delete robot;
+        }
+
+        //TODO: draw ALL envObjects
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->onRefreshMap();

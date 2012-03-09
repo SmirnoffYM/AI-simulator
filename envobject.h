@@ -15,7 +15,7 @@ private:
 
     static unsigned int portNumber;  //controller's port number
     QColor color;                    //object's color
-    unsigned int size;               //size in special pixels (1/60 of real pixel)
+    unsigned int size;               //diameter in special pixels (1/60 of real pixel)
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     bool movable;                    //is object movable
