@@ -1,8 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QDesktopWidget>
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QDebug>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -13,10 +14,14 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < ROBOTS; i++) {
         RobotWindow* robotWindow = new RobotWindow;
         robotWindows.push_back(robotWindow);
+        robotWindows.at(i)->setRobotId(i+1);
     }
 
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+
+    const QRect screen = QApplication::desktop()->screenGeometry();
+    this->move(screen.center() - this->rect().center());
 }
 
 MainWindow::~MainWindow()
@@ -26,7 +31,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_closePushButton_clicked()
 {
-    this->close();
+    on_action_Exit_triggered();
 }
 
 void MainWindow::on_action_Exit_triggered()
@@ -40,18 +45,27 @@ void MainWindow::on_action_Open_map_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open map file"), "map",
             tr("Grayscale map files (*.*)"));
+
+    if (fileName.isEmpty())
+        return;
+
     QImage *image = new QImage(fileName);
 
     if (isMapCorrect(*image)) {
-        std::vector<std::vector<Cell> > heightsMap = loadMap(*image);
-        HubModule::modellingSystem = new ModellingSystem(heightsMap);
+        HubModule::modellingSystem =
+                new ModellingSystem(loadMap(*image),
+                                    std::pair<int, int>(image->height(), image->width()));
         delete image;
 
         //TODO: start hub thread
 
-        //TODO: update map every SCREEN_REFRESH_RATE times per second
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->show();
+        }
 
-        //TODO: close hub thread
+        QTimer::singleShot(0, this, SLOT(onRefreshMap()));
+
+        //TODO: disable all buttons which can open map, start modelling process etc.
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Invalid map file!"));
         delete image;
@@ -74,23 +88,51 @@ bool MainWindow::isMapCorrect(QImage image)
         return false;
 }
 
-std::vector<std::vector<Cell> > MainWindow::loadMap(QImage image)
+int ** MainWindow::loadMap(QImage image)
 {
-    std::vector<std::vector<Cell> > map;
+    const int height = image.height();
+    const int width = image.width();
 
-    for (int i = 0; i < image.height(); i++) {
-        std::vector<Cell> cellsRow;
-        for (int j = 0; j < image.width(); j++) {
-            Cell cell;
-            cell.x = i;
-            cell.y = j;
-            cell.height = qGray(image.pixel(i, j));
-            cellsRow.push_back(cell);
-        }
-        map.push_back(cellsRow);
-    }
+    //I hate c++ for this:
+    int** map = new int*[height];
+    for (int i = 0; i < height; i++)
+        map[i] = new int[width];
+
+    for (int i = 0; i < height; i++)
+        for (int j = 0; j < width; j++)
+            map[i][j] = qGray(image.pixel(i, j));
 
     return map;
+}
+
+void MainWindow::onRefreshMap()
+{
+    if (ModellingSystem::isModellingPerformed) {
+        scene->clear();
+
+        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+        for (int i = 0; i < size.first; i++) {
+            for (int j = 0; j < size.second; j++) {
+                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
+                QColor *pixelColor = new QColor(*height, *height, *height);
+                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
+                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
+                               QPen(*pixelColor), QBrush(*pixelColor));
+                delete pixelColor;
+                delete height;
+            }
+        }
+
+        //TODO: draw ALL robots and envObjects
+
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->onRefreshMap();
+        }
+
+        QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(onRefreshMap()));
+    } else {
+        //TODO: enable all buttons which can open map, start modelling process etc.
+    }
 }
 
 /* Limit line length to 100 characters; highlight 99th column

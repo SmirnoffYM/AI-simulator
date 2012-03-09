@@ -1,6 +1,6 @@
 #include "hubmodule.h"
 
-ModellingSystem *HubModule::modellingSystem = NULL;
+ModellingSystem * HubModule::modellingSystem = NULL;
 
 HubModule::HubModule()
 {

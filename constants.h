@@ -9,16 +9,29 @@
 #define ROBOTS                      3           //number of robots
 #define ENV_OBJECTS                 255         //number of environment objects
 #define SCREEN_REFRESH_RATE         30          //screen refresh rate in times per second
-#define REAL_PIXEL_SIZE             60          //number of cells in real pixel
-#define MIN_MAP_SIDE                24          //minimum length of the map's side
-//TODO: define MAX_MAP_SIDE
 
-struct Cell
-{
-    int x;
-    int y;
-    int height;
-};
+#define REAL_PIXEL_SIZE             60          //number of cells in real pixel
+
+/*
+
+    For performance improving and memory consumption decreasing just save
+    hightMap as array of integers with dimension like source grayscale map.
+    But when sending messages to robot programs and environment control program
+    we must use other coordinates:
+
+        Grayscale map coordinates:      (X, Y)
+
+                                        are equals to
+
+        Real world map coordinates:     (X * REAL_PIXEL_SIZE, Y * REAL_PIXEL_SIZE)
+
+    Plz, remember it when developing hub module and displaying objects on GraphicsView
+
+*/
+
+#define MIN_MAP_SIDE                24          //minimum length of the map's side
+
+//TODO: define MAX_MAP_SIDE
 
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 

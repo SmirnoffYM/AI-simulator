@@ -8,6 +8,7 @@ class Robot
 {
 public:
     Robot();
+    Robot(const Robot &copy);
 
 private:
     unsigned int portNumber;         //also it's robot's id
@@ -16,6 +17,36 @@ private:
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     std::pair<int, int> coords;      //robot coordinates, first - x, second - y;
+public:
+    unsigned int getPortNumber()
+    {
+        return portNumber;
+    }
+
+    QColor getColor()
+    {
+        return color;
+    }
+
+    unsigned int getSize()
+    {
+        return size;
+    }
+
+    double getOrientation()
+    {
+        return orientation;
+    }
+
+    Intersection getIntersection()
+    {
+        return intersection;
+    }
+
+    std::pair<int, int> getCoords()
+    {
+        return coords;
+    }
 };
 
 #endif // ROBOT_H

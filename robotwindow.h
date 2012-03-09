@@ -2,6 +2,7 @@
 #define ROBOTWINDOW_H
 
 #include <QWidget>
+#include <QGraphicsScene>
 #include "constants.h"
 
 namespace Ui {
@@ -15,14 +16,27 @@ class RobotWindow : public QWidget
 public:
     explicit RobotWindow(QWidget *parent = 0);
     ~RobotWindow();
-    
+
 private:
     Ui::RobotWindow *ui;
 
+    unsigned int robotId;           //robot's number. It must be from 1 to ROBOTS
     //TODO: parameters
 
     std::pair<int, int> size;       //local map size
     double scaling;
+
+    QGraphicsScene* localMapScene;
+    QGraphicsScene* robotColorScene;
+
+public slots:
+    void onRefreshMap();
+
+public:
+    void setRobotId(int id);
+
+private:
+    void refreshRobotParams();
 };
 
 #endif // ROBOTWINDOW_H
