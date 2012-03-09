@@ -1,3 +1,9 @@
 Makefile
 ai-simulator
 ai-simulator.pro.user
+*.o
+# auto-generated files
+ui_mainwindow.h
+ui_robotwindow.h
+# vim swap files
+*.swp
