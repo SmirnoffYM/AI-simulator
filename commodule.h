@@ -2,12 +2,19 @@
 #define COMMODULE_H
 
 #include <QtNetwork/QUdpSocket>
+#include <QtNetwork/QHostAddress>
+#include <QtCore/QObject>
 #include "constants.h"
 
-class ComModule
+class ComModule : public QObject
 {
+    Q_OBJECT
+
 public:
     ComModule();
+
+private slots:
+    void handleMessage();
 
 private:
     QUdpSocket *socket;
