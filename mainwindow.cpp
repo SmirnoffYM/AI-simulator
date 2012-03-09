@@ -125,6 +125,7 @@ void MainWindow::onRefreshMap()
             }
         }
 
+        //FIXME: Issue #1
         for (int i = 0; i < ROBOTS; i++) {
             Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
 
@@ -146,7 +147,32 @@ void MainWindow::onRefreshMap()
             delete robot;
         }
 
-        //TODO: draw ALL envObjects
+        //FIXME: Issue #1
+        for (int i = 0; i < ENV_OBJECTS; i++) {
+            EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
+
+            QColor outlineColor(255 - envObject->getColor().red(),
+                                255 - envObject->getColor().green(),
+                                255 - envObject->getColor().blue());
+            scene->addEllipse(envObject->getCoords().first - envObject->getSize() / 2,
+                              envObject->getCoords().second - envObject->getSize() / 2,
+                              envObject->getSize(), envObject->getSize(),
+                              QPen(outlineColor), QBrush(envObject->getColor()));
+
+            if (envObject->isMovable()) {
+                double new_x = envObject->getSize() / 2.0 *
+                        sin(envObject->getOrientation() * M_PI / 180);
+                double new_y = envObject->getSize() / 2.0 *
+                        cos(envObject->getOrientation() * M_PI / 180);
+
+                scene->addLine(envObject->getCoords().first, envObject->getCoords().second,
+                               envObject->getCoords().first + new_x,
+                               envObject->getCoords().second - new_y,
+                               QPen(outlineColor));
+            }
+
+            delete envObject;
+        }
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->onRefreshMap();

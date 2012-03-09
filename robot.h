@@ -17,7 +17,10 @@ private:
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     std::pair<int, int> coords;      //robot coordinates, first - x, second - y;
+
 public:
+    // getters
+
     unsigned int getPortNumber()
     {
         return portNumber;
@@ -47,6 +50,8 @@ public:
     {
         return coords;
     }
+
+    // setters
 
     void setSize(int size)
     {
