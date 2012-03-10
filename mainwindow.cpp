@@ -137,8 +137,8 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ROBOTS; i++) {
             Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
 
-            if (robot->getCoords().first - robot->getSize() >= 0
-                    || robot->getCoords().second - robot->getSize() >= 0) {
+            if (robot->getCoords().first >= (int)robot->getSize() / 2
+                    && robot->getCoords().second >= (int)robot->getSize() / 2) {
                 QColor outlineColor(255 - robot->getColor().red(),
                                     255 - robot->getColor().green(),
                                     255 - robot->getColor().blue());
@@ -162,8 +162,8 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ENV_OBJECTS; i++) {
             EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
 
-            if (envObject->getCoords().first - envObject->getSize() >= 0
-                    || envObject->getCoords().second - envObject->getSize() >= 0) {
+            if (envObject->getCoords().first >= (int)envObject->getSize() / 2
+                    && envObject->getCoords().second >= (int)envObject->getSize() / 2) {
                 QColor outlineColor(255 - envObject->getColor().red(),
                                     255 - envObject->getColor().green(),
                                     255 - envObject->getColor().blue());
