@@ -4,6 +4,7 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTimer>
+#include <QCloseEvent>
 #include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -28,6 +29,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    for (int i = 0; i < ROBOTS; i++) {
+        robotWindows.at(i)->setClosePermit(true);
+        robotWindows.at(i)->close();
+    }
 }
 
 void MainWindow::on_closePushButton_clicked()

@@ -39,6 +39,8 @@ private:
 
     bool isMapCorrect(QImage image);
     int** loadMap(QImage image);
+
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // MAINWINDOW_H

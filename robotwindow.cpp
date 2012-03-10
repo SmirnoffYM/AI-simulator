@@ -1,16 +1,19 @@
 #include "robotwindow.h"
 #include "ui_robotwindow.h"
 #include "hubmodule.h"
+#include <QCloseEvent>
 
 RobotWindow::RobotWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RobotWindow)
+    ui(new Ui::RobotWindow),
+    closePermit(false)
 {
     ui->setupUi(this);
 
     robotColorScene = new QGraphicsScene();
     ui->colorGraphicsView->setScene(robotColorScene);
     localMapScene = new QGraphicsScene();
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint );
     ui->robotGraphicsView->setScene(localMapScene);
     ui->colorGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colorGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -69,6 +72,19 @@ void RobotWindow::refreshRobotParams()
     ui->intersectionTypeValueLabel->setText(intersectionText);
 
     delete robot;
+}
+
+void RobotWindow::closeEvent(QCloseEvent *event)
+{
+    if (closePermit)
+        event->accept();
+    else
+        event->ignore();
+}
+
+void RobotWindow::setClosePermit(bool permission)
+{
+    closePermit = permission;
 }
 
 /* Limit line length to 100 characters; highlight 99th column
