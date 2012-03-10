@@ -4,7 +4,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTimer>
-#include <QGraphicsItem>
 #include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -137,8 +136,8 @@ void MainWindow::onRefreshMap()
                               robot->getSize(), robot->getSize(),
                               QPen(outlineColor), QBrush(robot->getColor()));
 
-            double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * M_PI / 180);
-            double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * M_PI / 180);
+            double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * PI / 180);
+            double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * PI / 180);
 
             scene->addLine(robot->getCoords().first, robot->getCoords().second,
                            robot->getCoords().first + new_x, robot->getCoords().second - new_y,
@@ -161,9 +160,9 @@ void MainWindow::onRefreshMap()
 
             if (envObject->isMovable()) {
                 double new_x = envObject->getSize() / 2.0 *
-                        sin(envObject->getOrientation() * M_PI / 180);
+                        sin(envObject->getOrientation() * PI / 180);
                 double new_y = envObject->getSize() / 2.0 *
-                        cos(envObject->getOrientation() * M_PI / 180);
+                        cos(envObject->getOrientation() * PI / 180);
 
                 scene->addLine(envObject->getCoords().first, envObject->getCoords().second,
                                envObject->getCoords().first + new_x,
