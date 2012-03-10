@@ -53,7 +53,7 @@ void RobotWindow::refreshRobotParams()
     ui->sizeValueLabel->setText(QString("%1").arg(robot->getSize()));
 
     robotColorScene->clear();
-    robotColorScene->addRect(-5, -5, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
+    robotColorScene->addRect(-10, -10, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
 
     QString intersectionText = QString();
     switch(robot->getIntersection()) {
