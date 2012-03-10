@@ -8,6 +8,9 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    const QRect screen = QApplication::desktop()->screenGeometry();
+    this->move(screen.center() - this->rect().center());
+
     for (int i = 0; i < ROBOTS; i++) {
         RobotWindow* robotWindow = new RobotWindow;
         robotWindows.push_back(robotWindow);
@@ -18,9 +21,6 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
 
     objects = new QVector<QGraphicsItem *>();
-
-    const QRect screen = QApplication::desktop()->screenGeometry();
-    this->move(screen.center() - this->rect().center());
 }
 
 MainWindow::~MainWindow()
@@ -64,7 +64,8 @@ void MainWindow::on_action_Open_map_triggered()
                                     std::pair<int, int>(image->height(), image->width()));
         delete image;
 
-        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+        // Draw a map
+        std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         for (int i = 0; i < size.first; i++) {
             for (int j = 0; j < size.second; j++) {
                 int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
@@ -137,7 +138,10 @@ void MainWindow::onRefreshMap()
         }
         objects->clear();
 
-        //FIXME: Issue #1
+        // Draw all robots
+        // Each robot is a circle colored with robot->getColor()
+        // Robot's orientation is indicated by line with inverted circle color
+        // Line links circle's center and circle's outline
         for (int i = 0; i < ROBOTS; i++) {
             Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
 
@@ -167,7 +171,11 @@ void MainWindow::onRefreshMap()
             delete robot;
         }
 
-        //FIXME: Issue #1
+        // Draw all envObjects
+        // Each envObject is a circle colored with robot->getColor()
+        // If envObject is movable, it has orientation
+        // Orientation is indicated by line with inverted circle color
+        // Line links circle's center and circle's outline
         for (int i = 0; i < ENV_OBJECTS; i++) {
             EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
 
@@ -203,6 +211,7 @@ void MainWindow::onRefreshMap()
             delete envObject;
         }
 
+        // Refresh robotWindows
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->onRefreshMap();
         }
