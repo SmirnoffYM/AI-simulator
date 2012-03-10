@@ -14,6 +14,7 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     robotwindow.cpp \
     commodule.cpp \
+    messages.cpp \
     hubmodule.cpp \
     modellingsystem.cpp \
     world.cpp \
@@ -23,6 +24,7 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     robotwindow.h \
     commodule.h \
+    messages.h \
     hubmodule.h \
     modellingsystem.h \
     world.h \

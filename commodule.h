@@ -4,7 +4,9 @@
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>
 #include <QtCore/QObject>
+
 #include "constants.h"
+#include "messages.h"
 
 class ComModule : public QObject
 {
