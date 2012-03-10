@@ -2,7 +2,7 @@ Network Protocol
 ================
 
 Messages in simulator are encoded using JSON format and are transmitted using
-UDP. Every message have a type, which is determined by the "type" field. There
+UDP. Every message have a type, which is determined by the `type` field. There
 are 7 message types:
 
 * `move`
@@ -12,6 +12,12 @@ are 7 message types:
 * `change color`
 * `who is there?`
 * `there you see`
+
+Each message also contains `id` field:
+
+* for incoming message, that's an identifier of an agent;
+* for outgoing message (`bump` and `there you see`), that's a port to which
+  message should be sent.
 
 There are type-specific fields for each message type. Those would be described
 in more details shortly, but first it should be noted that of those 7 types, 4
