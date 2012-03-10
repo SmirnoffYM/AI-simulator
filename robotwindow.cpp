@@ -18,9 +18,7 @@ RobotWindow::RobotWindow(QWidget *parent) :
     ui->colorGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colorGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    //TODO: remove all window buttons from window title
-    //TODO: decide make RobotWindow modal or not
-    //TODO: place this window on the right side of the desktop, but not over other RobotWindows
+    //TODO: try to arrange RobotWindow so that they will not overlap MainWindow and other RobotWindows
 }
 
 RobotWindow::~RobotWindow()
