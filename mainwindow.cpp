@@ -1,10 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QDesktopWidget>
-#include <QMessageBox>
-#include <QFileDialog>
-#include <QTimer>
-#include <QCloseEvent>
 #include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -21,6 +16,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     scene = new QGraphicsScene();
     ui->graphicsView->setScene(scene);
+
+    objects = new QVector<QGraphicsItem *>();
 
     const QRect screen = QApplication::desktop()->screenGeometry();
     this->move(screen.center() - this->rect().center());
@@ -66,6 +63,19 @@ void MainWindow::on_action_Open_map_triggered()
                 new ModellingSystem(loadMap(*image),
                                     std::pair<int, int>(image->height(), image->width()));
         delete image;
+
+        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+        for (int i = 0; i < size.first; i++) {
+            for (int j = 0; j < size.second; j++) {
+                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
+                QColor *pixelColor = new QColor(*height, *height, *height);
+                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
+                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
+                               QPen(*pixelColor), QBrush(*pixelColor));
+                delete pixelColor;
+                delete height;
+            }
+        }
 
         //TODO: start hub thread
 
@@ -118,39 +128,41 @@ int ** MainWindow::loadMap(QImage image)
 void MainWindow::onRefreshMap()
 {
     if (ModellingSystem::isModellingPerformed) {
-        scene->clear();
 
-        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
-        for (int i = 0; i < size.first; i++) {
-            for (int j = 0; j < size.second; j++) {
-                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
-                QColor *pixelColor = new QColor(*height, *height, *height);
-                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
-                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
-                               QPen(*pixelColor), QBrush(*pixelColor));
-                delete pixelColor;
-                delete height;
-            }
+        // clear all objects before redrawing
+        for (int i = 0; i < objects->size(); i++) {
+            QGraphicsItem* item = objects->at(i);
+            scene->removeItem(item);
+            delete item;
         }
+        objects->clear();
 
         //FIXME: Issue #1
         for (int i = 0; i < ROBOTS; i++) {
             Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
 
-            QColor outlineColor(255 - robot->getColor().red(),
-                                255 - robot->getColor().green(),
-                                255 - robot->getColor().blue());
-            scene->addEllipse(robot->getCoords().first - robot->getSize() / 2,
-                              robot->getCoords().second - robot->getSize() / 2,
-                              robot->getSize(), robot->getSize(),
-                              QPen(outlineColor), QBrush(robot->getColor()));
+            if (robot->getCoords().first >= (int)robot->getSize() / 2
+                    && robot->getCoords().second >= (int)robot->getSize() / 2) {
+                QColor outlineColor(255 - robot->getColor().red(),
+                                    255 - robot->getColor().green(),
+                                    255 - robot->getColor().blue());
+                objects->push_back(scene->addEllipse(
+                                       robot->getCoords().first - robot->getSize() / 2,
+                                       robot->getCoords().second - robot->getSize() / 2,
+                                       robot->getSize(), robot->getSize(),
+                                       QPen(outlineColor), QBrush(robot->getColor()))
+                                   );
 
-            double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * PI / 180);
-            double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * PI / 180);
+                double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * PI / 180);
+                double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * PI / 180);
 
-            scene->addLine(robot->getCoords().first, robot->getCoords().second,
-                           robot->getCoords().first + new_x, robot->getCoords().second - new_y,
-                           QPen(outlineColor));
+                objects->push_back(scene->addLine(
+                                       robot->getCoords().first, robot->getCoords().second,
+                                       robot->getCoords().first + new_x,
+                                       robot->getCoords().second - new_y,
+                                       QPen(outlineColor))
+                                   );
+            }
 
             delete robot;
         }
@@ -159,24 +171,33 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ENV_OBJECTS; i++) {
             EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
 
-            QColor outlineColor(255 - envObject->getColor().red(),
-                                255 - envObject->getColor().green(),
-                                255 - envObject->getColor().blue());
-            scene->addEllipse(envObject->getCoords().first - envObject->getSize() / 2,
-                              envObject->getCoords().second - envObject->getSize() / 2,
-                              envObject->getSize(), envObject->getSize(),
-                              QPen(outlineColor), QBrush(envObject->getColor()));
+            if (envObject->getCoords().first >= (int)envObject->getSize() / 2
+                    && envObject->getCoords().second >= (int)envObject->getSize() / 2) {
+                QColor outlineColor(255 - envObject->getColor().red(),
+                                    255 - envObject->getColor().green(),
+                                    255 - envObject->getColor().blue());
+                objects->push_back(scene->addEllipse(
+                                       envObject->getCoords().first - envObject->getSize() / 2,
+                                       envObject->getCoords().second - envObject->getSize() / 2,
+                                       envObject->getSize(), envObject->getSize(),
+                                       QPen(outlineColor), QBrush(envObject->getColor()))
+                                   );
 
-            if (envObject->isMovable()) {
-                double new_x = envObject->getSize() / 2.0 *
-                        sin(envObject->getOrientation() * PI / 180);
-                double new_y = envObject->getSize() / 2.0 *
-                        cos(envObject->getOrientation() * PI / 180);
+                // draw orientation line if object is movable
+                if (envObject->isMovable()) {
+                    double new_x = envObject->getSize() / 2.0 *
+                            sin(envObject->getOrientation() * PI / 180);
+                    double new_y = envObject->getSize() / 2.0 *
+                            cos(envObject->getOrientation() * PI / 180);
 
-                scene->addLine(envObject->getCoords().first, envObject->getCoords().second,
-                               envObject->getCoords().first + new_x,
-                               envObject->getCoords().second - new_y,
-                               QPen(outlineColor));
+                    objects->push_back(scene->addLine(
+                                           envObject->getCoords().first,
+                                           envObject->getCoords().second,
+                                           envObject->getCoords().first + new_x,
+                                           envObject->getCoords().second - new_y,
+                                           QPen(outlineColor))
+                                       );
+                }
             }
 
             delete envObject;

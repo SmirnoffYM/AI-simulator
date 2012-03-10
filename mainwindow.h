@@ -3,7 +3,14 @@
 
 #include <QMainWindow>
 #include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QDesktopWidget>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QTimer>
 #include <QImage>
+#include <QCloseEvent>
+#include <QVector>
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
@@ -34,6 +41,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
+    QVector<QGraphicsItem *> *objects;
 
     QList<RobotWindow *> robotWindows;
 
