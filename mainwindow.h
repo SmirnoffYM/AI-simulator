@@ -29,8 +29,6 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_closePushButton_clicked();
-
     void on_action_Exit_triggered();
 
     void on_action_Open_map_triggered();
