@@ -58,11 +58,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 }
 
-void MainWindow::on_closePushButton_clicked()
-{
-    on_action_Exit_triggered();
-}
-
 void MainWindow::on_action_Exit_triggered()
 {
     stopModelling();
