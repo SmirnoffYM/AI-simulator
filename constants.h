@@ -37,8 +37,6 @@ enum Intersection { Allowed, Denied, AllowedForSameColor };
 
 #define PI 3.14159265358979323846
 
-/* Define some magic numbers */
-#define SCROLLBAR_WIDTH 46
 
 #endif // CONSTANTS_H
 

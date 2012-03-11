@@ -30,7 +30,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
         robotWindow->move(screen.width() -
-                          SCROLLBAR_WIDTH -
                           robotWindow->width(),
                           i * delta / ROBOTS);
 
