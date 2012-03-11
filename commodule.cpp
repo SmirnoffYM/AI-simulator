@@ -1,7 +1,9 @@
 #include "commodule.h"
 
-ComModule::ComModule() : QObject()
+ComModule::ComModule(QQueue<Message *> *q) : QObject()
 {
+    messageQueue = q;
+
     socket = new QUdpSocket(this);
     // FIXME: use the port specified in config
     socket->bind(QHostAddress::Any, 9000);

@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-#include <QGraphicsScene>
-#include <QImage>
+#include <QtGui/QMainWindow>
+#include <QtGui/QGraphicsScene>
+#include <QtGui/QImage>
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
@@ -39,6 +39,8 @@ private:
 
     bool isMapCorrect(QImage image);
     int** loadMap(QImage image);
+
+    HubModule *hub;
 };
 
 #endif // MAINWINDOW_H

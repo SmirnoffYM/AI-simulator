@@ -58,6 +58,7 @@ void MainWindow::on_action_Open_map_triggered()
         delete image;
 
         //TODO: start hub thread
+        hub = new HubModule();
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->show();

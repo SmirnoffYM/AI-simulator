@@ -1,9 +1,10 @@
 #ifndef COMMODULE_H
 #define COMMODULE_H
 
+#include <QtCore/QObject>
+#include <QtCore/QQueue>
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>
-#include <QtCore/QObject>
 
 #include "constants.h"
 #include "messages.h"
@@ -13,13 +14,14 @@ class ComModule : public QObject
     Q_OBJECT
 
 public:
-    ComModule();
+    ComModule(QQueue<Message *> *);
 
 private slots:
     void handleMessage();
 
 private:
     QUdpSocket *socket;
+    QQueue<Message *> *messageQueue;
 };
 
 #endif // COMMODULE_H
