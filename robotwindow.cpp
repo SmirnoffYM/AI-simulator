@@ -1,23 +1,25 @@
 #include "robotwindow.h"
 #include "ui_robotwindow.h"
 #include "hubmodule.h"
+#include <QCloseEvent>
 
 RobotWindow::RobotWindow(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RobotWindow)
+    ui(new Ui::RobotWindow),
+    closePermit(false)
 {
     ui->setupUi(this);
 
     robotColorScene = new QGraphicsScene();
     ui->colorGraphicsView->setScene(robotColorScene);
     localMapScene = new QGraphicsScene();
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint );
     ui->robotGraphicsView->setScene(localMapScene);
     ui->colorGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colorGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-    //TODO: remove all window buttons from window title
-    //TODO: decide make RobotWindow modal or not
-    //TODO: place this window on the right side of the desktop, but not over other RobotWindows
+    //TODO: always on top switcher
+    //TODO: try to arrange RobotWindow so that they will not overlap MainWindow and other RobotWindows
 }
 
 RobotWindow::~RobotWindow()
@@ -52,7 +54,7 @@ void RobotWindow::refreshRobotParams()
     ui->sizeValueLabel->setText(QString("%1").arg(robot->getSize()));
 
     robotColorScene->clear();
-    robotColorScene->addRect(-5, -5, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
+    robotColorScene->addRect(-10, -10, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
 
     QString intersectionText = QString();
     switch(robot->getIntersection()) {
@@ -69,6 +71,19 @@ void RobotWindow::refreshRobotParams()
     ui->intersectionTypeValueLabel->setText(intersectionText);
 
     delete robot;
+}
+
+void RobotWindow::closeEvent(QCloseEvent *event)
+{
+    if (closePermit)
+        event->accept();
+    else
+        event->ignore();
+}
+
+void RobotWindow::setClosePermit(bool permission)
+{
+    closePermit = permission;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

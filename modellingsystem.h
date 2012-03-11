@@ -34,12 +34,12 @@ public:
     }
 
     //number is between 0 and ENV_OBJECTS-1
-    EnvObject* getEnvObject(unsigned int number)
+    EnvObject getEnvObject(unsigned int number)
     {
         if (number < envObjects.size() && number < ENV_OBJECTS)
-            return envObjects.at(number);
+            return *(envObjects.at(number));
         else
-            return NULL;
+            return EnvObject();
     }
 };
 

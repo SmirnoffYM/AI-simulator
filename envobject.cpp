@@ -14,6 +14,18 @@ EnvObject::EnvObject():
     //default constructor
 }
 
+EnvObject::EnvObject(const EnvObject &copy)
+{
+    objectId = copy.objectId;
+    portNumber = copy.portNumber;
+    color = copy.color;
+    size = copy.size;
+    orientation = copy.orientation;
+    intersection = copy.intersection;
+    movable = copy.movable;
+    coords = copy.coords;
+}
+
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:
  */

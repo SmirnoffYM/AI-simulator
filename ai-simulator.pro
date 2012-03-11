@@ -35,3 +35,6 @@ LIBS += -lqjson
 
 FORMS    += mainwindow.ui \
     robotwindow.ui
+
+RESOURCES += \
+    resource.qrc

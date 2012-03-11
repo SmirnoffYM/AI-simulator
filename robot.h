@@ -13,11 +13,14 @@ public:
 private:
     unsigned int portNumber;         //also it's robot's id
     QColor color;                    //object's color
-    unsigned int size;               //size in special pixels (1/60 of real pixel)
+    unsigned int size;               //diameter in special pixels (1/60 of real pixel)
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     std::pair<int, int> coords;      //robot coordinates, first - x, second - y;
+
 public:
+    // getters
+
     unsigned int getPortNumber()
     {
         return portNumber;
@@ -46,6 +49,31 @@ public:
     std::pair<int, int> getCoords()
     {
         return coords;
+    }
+
+    // setters
+
+    void setSize(int size)
+    {
+        this->size = size;
+    }
+
+    void setOrientation(double orientation)
+    {
+        if (orientation >= 360 || orientation < 0)
+            this->orientation = 0;
+        else
+            this->orientation = orientation;
+    }
+
+    void setColor(QColor color)
+    {
+        this->color = color;
+    }
+
+    void setCoords(int x, int y)
+    {
+        coords = std::pair<int, int>(x, y);
     }
 };
 

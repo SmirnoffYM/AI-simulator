@@ -29,13 +29,17 @@ private:
     QGraphicsScene* localMapScene;
     QGraphicsScene* robotColorScene;
 
+    bool closePermit;
+
 public slots:
     void onRefreshMap();
 
 public:
     void setRobotId(int id);
+    void setClosePermit(bool permission);
 
 private:
+    void closeEvent(QCloseEvent *event);
     void refreshRobotParams();
 };
 
