@@ -21,6 +21,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->graphicsView->setScene(scene);
 
     objects = new QVector<QGraphicsItem *>();
+
+    modellingPaused = false;
 }
 
 MainWindow::~MainWindow()
@@ -43,8 +45,7 @@ void MainWindow::on_closePushButton_clicked()
 
 void MainWindow::on_action_Exit_triggered()
 {
-    //TODO: close all threads
-
+    stopModelling();
     this->close();
 }
 
@@ -59,12 +60,16 @@ void MainWindow::on_action_Open_map_triggered()
     QImage *image = new QImage(fileName);
 
     if (isMapCorrect(*image)) {
+
+        //TODO: delete old map, modelling system etc, before loading new map
+
         std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         HubModule::modellingSystem =
                 new ModellingSystem(loadMap(*image), size);
         delete image;
 
         // Draw a map
+        scene->clear();
         for (int i = 0; i < size.first; i++) {
             for (int j = 0; j < size.second; j++) {
                 int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
@@ -77,15 +82,7 @@ void MainWindow::on_action_Open_map_triggered()
             }
         }
 
-        //TODO: start hub thread
-
-        for (int i = 0; i < ROBOTS; i++) {
-            robotWindows.at(i)->show();
-        }
-
-        QTimer::singleShot(0, this, SLOT(onRefreshMap()));
-
-        //TODO: disable all buttons which can open map, start modelling process etc.
+        ui->actionRun->setEnabled(true);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Invalid map file!"));
         delete image;
@@ -219,6 +216,58 @@ void MainWindow::onRefreshMap()
     } else {
         //TODO: enable all buttons which can open map, start modelling process etc.
     }
+}
+
+void MainWindow::on_actionRun_triggered()
+{
+    HubModule::modellingSystem->isModellingPerformed = true;
+    if (!modellingPaused) {
+        //TODO: start hub thread
+
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->show();
+        }
+    }
+    modellingPaused = false;
+
+    QTimer::singleShot(0, this, SLOT(onRefreshMap()));
+
+    //TODO: disable all buttons which can open map, start modelling process etc.
+    ui->actionRun->setEnabled(false);
+    ui->actionPause->setEnabled(true);
+    ui->actionStop->setEnabled(true);
+}
+
+void MainWindow::on_actionPause_triggered()
+{
+    HubModule::modellingSystem->isModellingPerformed = false;
+    modellingPaused = true;
+
+    ui->actionRun->setEnabled(true);
+    ui->actionPause->setEnabled(false);
+    ui->actionStop->setEnabled(true);
+}
+
+void MainWindow::on_actionStop_triggered()
+{
+    HubModule::modellingSystem->isModellingPerformed = false;
+    stopModelling();
+
+    //TODO: enable all buttons which can open map, start modelling process etc.
+    ui->actionRun->setEnabled(false);
+    ui->actionPause->setEnabled(false);
+    ui->actionStop->setEnabled(false);
+}
+
+void MainWindow::stopModelling()
+{
+    modellingPaused = false;
+
+    for (int i = 0; i < ROBOTS; i++) {
+        robotWindows.at(i)->hide();
+    }
+
+    //TODO: close all threads
 }
 
 /* Limit line length to 100 characters; highlight 99th column

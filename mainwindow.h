@@ -11,6 +11,7 @@
 #include <QImage>
 #include <QCloseEvent>
 #include <QVector>
+#include <QMenu>
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
@@ -38,15 +39,23 @@ private slots:
 
     void onRefreshMap();
 
+    void on_actionRun_triggered();
+
+    void on_actionPause_triggered();
+
+    void on_actionStop_triggered();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QVector<QGraphicsItem *> *objects;
-
     QList<RobotWindow *> robotWindows;
+
+    bool modellingPaused;
 
     bool isMapCorrect(QImage image);
     int** loadMap(QImage image);
+    void stopModelling();
 
     void closeEvent(QCloseEvent *event);
 };

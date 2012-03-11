@@ -32,3 +32,6 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     robotwindow.ui
+
+RESOURCES += \
+    resource.qrc

@@ -22,7 +22,7 @@ ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
         envObjects.push_back(envObject);
     }
 
-    isModellingPerformed = true;
+    isModellingPerformed = false;
 }
 
 /* Limit line length to 100 characters; highlight 99th column
