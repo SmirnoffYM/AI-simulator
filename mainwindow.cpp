@@ -253,6 +253,7 @@ void MainWindow::on_actionRun_triggered()
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 
     //TODO: disable all buttons which can open map, start modelling process etc.
+    ui->action_Open_map->setEnabled(false);
     ui->actionRun->setEnabled(false);
     ui->actionPause->setEnabled(true);
     ui->actionStop->setEnabled(true);
@@ -262,7 +263,7 @@ void MainWindow::on_actionPause_triggered()
 {
     HubModule::modellingSystem->isModellingPerformed = false;
     modellingPaused = true;
-
+    ui->action_Open_map->setEnabled(false);
     ui->actionRun->setEnabled(true);
     ui->actionPause->setEnabled(false);
     ui->actionStop->setEnabled(true);
@@ -274,6 +275,7 @@ void MainWindow::on_actionStop_triggered()
     stopModelling();
 
     //TODO: enable all buttons which can open map, start modelling process etc.
+    ui->action_Open_map->setEnabled(true);
     ui->actionRun->setEnabled(false);
     ui->actionPause->setEnabled(false);
     ui->actionStop->setEnabled(false);
