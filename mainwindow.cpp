@@ -59,13 +59,12 @@ void MainWindow::on_action_Open_map_triggered()
     QImage *image = new QImage(fileName);
 
     if (isMapCorrect(*image)) {
+        std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         HubModule::modellingSystem =
-                new ModellingSystem(loadMap(*image),
-                                    std::pair<int, int>(image->height(), image->width()));
+                new ModellingSystem(loadMap(*image), size);
         delete image;
 
         // Draw a map
-        std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         for (int i = 0; i < size.first; i++) {
             for (int j = 0; j < size.second; j++) {
                 int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
