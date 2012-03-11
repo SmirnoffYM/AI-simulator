@@ -19,6 +19,7 @@ class ComModule : public QObject
 
 public:
     ComModule(QQueue<Message *> *);
+    ~ComModule();
 
 private slots:
     void handleMessage();

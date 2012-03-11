@@ -11,6 +11,11 @@ ComModule::ComModule(QQueue<Message *> *q) : QObject()
     connect(socket, SIGNAL(readyRead()), this, SLOT(handleMessage()));
 }
 
+ComModule::~ComModule()
+{
+    socket->~QUdpSocket();
+}
+
 void ComModule::handleMessage()
 {
     while(socket->hasPendingDatagrams()) {
