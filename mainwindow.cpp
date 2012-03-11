@@ -8,21 +8,42 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    const QRect screen = QApplication::desktop()->screenGeometry();
-    this->move(screen.center() - this->rect().center());
+    scene = new QGraphicsScene();
+    ui->graphicsView->setScene(scene);
 
-    for (int i = 0; i < ROBOTS; i++) {
+    const QRect screen = QApplication::desktop()->screenGeometry();
+
+    this->showMaximized();
+
+
+    for (int i = 0; i < ROBOTS; i++)
+    {
+
         RobotWindow* robotWindow = new RobotWindow;
+
+        int delta = robotWindow->frameGeometry().height() - screen.height() / ROBOTS;
+
+        if (delta > 0)
+            delta = screen.height() - delta;
+        else
+            delta = screen.height();
+
+
+        robotWindow->move(screen.width() -
+                          SCROLLBAR_WIDTH -
+                          robotWindow->width(),
+                          i * delta / ROBOTS);
+
         robotWindows.push_back(robotWindow);
         robotWindows.at(i)->setRobotId(i+1);
     }
 
-    scene = new QGraphicsScene();
-    ui->graphicsView->setScene(scene);
+
 
     objects = new QVector<QGraphicsItem *>();
 
     modellingPaused = false;
+
 }
 
 MainWindow::~MainWindow()

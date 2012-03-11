@@ -11,6 +11,7 @@
 #define SCREEN_REFRESH_RATE         30          //screen refresh rate in times per second
 #define REAL_PIXEL_SIZE             60          //number of cells in real pixel
 
+
 /*
 
     For performance improving and memory consumption decreasing just save
@@ -35,6 +36,9 @@ enum Intersection { Allowed, Denied, AllowedForSameColor };
 /* Define some non-crossplatform math constants: */
 
 #define PI 3.14159265358979323846
+
+/* Define some magic numbers */
+#define SCROLLBAR_WIDTH 46
 
 #endif // CONSTANTS_H
 

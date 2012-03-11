@@ -9,20 +9,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>354</height>
+    <width>461</width>
+    <height>254</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>684</width>
-    <height>354</height>
+    <width>461</width>
+    <height>254</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>684</width>
-    <height>354</height>
+    <width>461</width>
+    <height>254</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -36,13 +36,13 @@
     <widget class="QGroupBox" name="statsGroupBox">
      <property name="minimumSize">
       <size>
-       <width>191</width>
+       <width>151</width>
        <height>217</height>
       </size>
      </property>
      <property name="maximumSize">
       <size>
-       <width>191</width>
+       <width>151</width>
        <height>16777215</height>
       </size>
      </property>

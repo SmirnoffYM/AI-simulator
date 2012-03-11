@@ -13,11 +13,12 @@ RobotWindow::RobotWindow(QWidget *parent) :
     robotColorScene = new QGraphicsScene();
     ui->colorGraphicsView->setScene(robotColorScene);
     localMapScene = new QGraphicsScene();
-    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint );
+    setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint );
     ui->robotGraphicsView->setScene(localMapScene);
     ui->colorGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     ui->colorGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    //TODO: always on top switcher
     //TODO: try to arrange RobotWindow so that they will not overlap MainWindow and other RobotWindows
 }
 
