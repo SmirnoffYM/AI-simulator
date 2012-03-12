@@ -83,6 +83,9 @@ void MainWindow::on_action_Open_map_triggered()
                 new ModellingSystem(loadMap(*image), size);
         delete image;
 
+        //TODO: start hub thread
+        hub = new HubModule();
+        
         // Draw a map
         scene->clear();
         for (int i = 0; i < size.first; i++) {

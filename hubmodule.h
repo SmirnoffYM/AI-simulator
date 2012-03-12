@@ -1,8 +1,12 @@
 #ifndef HUBMODULE_H
 #define HUBMODULE_H
 
+#include <QtCore/QQueue>
+
 #include "constants.h"
 #include "modellingsystem.h"
+#include "messages.h"
+#include "commodule.h"
 
 class HubModule
 {
@@ -10,6 +14,10 @@ public:
     HubModule();
 
     static ModellingSystem *modellingSystem;
+
+private:
+    ComModule *comModule;
+    QQueue<Message *> *messageQueue;
 };
 
 #endif // HUBMODULE_H

@@ -53,9 +53,12 @@ private:
 
     bool isMapCorrect(QImage image);
     int** loadMap(QImage image);
+
     void stopModelling();
 
     void closeEvent(QCloseEvent *event);
+
+    HubModule *hub;
 };
 
 #endif // MAINWINDOW_H

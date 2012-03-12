@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 TARGET = ai-simulator
 TEMPLATE = app
@@ -23,12 +23,15 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     robotwindow.h \
     commodule.h \
+    messages.h \
     hubmodule.h \
     modellingsystem.h \
     world.h \
     robot.h \
     envobject.h \
     constants.h
+
+LIBS += -lqjson
 
 FORMS    += mainwindow.ui \
     robotwindow.ui

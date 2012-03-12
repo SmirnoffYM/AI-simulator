@@ -1,16 +1,32 @@
 #ifndef COMMODULE_H
 #define COMMODULE_H
 
+#include <QtCore/QObject>
+#include <QtCore/QQueue>
+#include <QtCore/QVariant>
 #include <QtNetwork/QUdpSocket>
-#include "constants.h"
+#include <QtNetwork/QHostAddress>
 
-class ComModule
+#include <qjson/parser.h>
+#include <qjson/qobjecthelper.h>
+
+#include "constants.h"
+#include "messages.h"
+
+class ComModule : public QObject
 {
+    Q_OBJECT
+
 public:
-    ComModule();
+    ComModule(QQueue<Message *> *);
+    ~ComModule();
+
+private slots:
+    void handleMessage();
 
 private:
     QUdpSocket *socket;
+    QQueue<Message *> *messageQueue;
 };
 
 #endif // COMMODULE_H
