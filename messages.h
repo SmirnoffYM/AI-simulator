@@ -5,6 +5,17 @@
 #include <QtGui/QColor>
 #include <QtCore/QLinkedList>
 
+enum MessageType {
+    MsgMove = 0,
+    MsgBump,
+    MsgTurn,
+    MsgChangeSize,
+    MsgChangeColor,
+    MsgWhoIsThere,
+    MsgThereYouSee,
+    MsgUndefined
+};
+
 class Message : public QObject
 {
     Q_OBJECT
@@ -207,6 +218,7 @@ public:
 private:
     QLinkedList<MessageObject> m_objects;
 };
+
 #endif // MESSAGES_H
 
 /* Limit line length to 100 characters; highlight 99th column
