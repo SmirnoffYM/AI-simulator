@@ -32,6 +32,8 @@ public:
     QString type() const { return m_type; };
     void setType(QString type) { m_type = type; };
 
+    MessageType getMessageType() const;
+
 protected:
     int m_id;
     QString m_type;

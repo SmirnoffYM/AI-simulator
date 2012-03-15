@@ -14,6 +14,7 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     robotwindow.cpp \
     commodule.cpp \
+    messages.cpp \
     hubmodule.cpp \
     modellingsystem.cpp \
     world.cpp \
