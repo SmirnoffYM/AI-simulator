@@ -9,6 +9,9 @@ Robot::Robot():
     coords(0, 0)
 {
     //default constructor
+    parameters = new double[CUSTOM_PARAMETERS_QUANTITY];
+    for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
+        parameters[i] = 0;
 }
 
 
@@ -20,6 +23,7 @@ Robot::Robot(const Robot &copy)
     orientation = copy.orientation;
     intersection = copy.intersection;
     coords = copy.coords;
+    parameters = copy.parameters;
 }
 
 

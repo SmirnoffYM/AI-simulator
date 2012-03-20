@@ -10,16 +10,9 @@ RobotWindow::RobotWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    robotColorScene = new QGraphicsScene();
-    ui->colorGraphicsView->setScene(robotColorScene);
     localMapScene = new QGraphicsScene();
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint );
     ui->robotGraphicsView->setScene(localMapScene);
-    ui->colorGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    ui->colorGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    //TODO: always on top switcher
-    //TODO: try to arrange RobotWindow so that they will not overlap MainWindow and other RobotWindows
 }
 
 RobotWindow::~RobotWindow()
@@ -40,35 +33,25 @@ void RobotWindow::setRobotId(int id) {
     else
         robotId = id;
 
-    ui->robotIdValueLabel->setText(QString("%1").arg(robotId));
+    this->setWindowTitle(tr("Robot #") + QString("%1").arg(robotId));
 }
 
 void RobotWindow::refreshRobotParams()
 {
     Robot *robot = new Robot(HubModule::modellingSystem->getRobot(robotId-1));
 
-    ui->portValueLabel->setText(QString("%1").arg(robot->getPortNumber()));
-    ui->coordsValueLabel->setText(QString("%1, %2").
-                                  arg(robot->getCoords().first).arg(robot->getCoords().second));
-    ui->orientationValueLabel->setText(QString("%1").arg(robot->getOrientation(), 2, 'f', 1));
-    ui->sizeValueLabel->setText(QString("%1").arg(robot->getSize()));
+    QString params = buildParametersLabel();
+    params = params.arg(robot->getCoords().first).arg(robot->getCoords().second).
+                    arg(robot->getOrientation(), 2, 'f', 1).arg(robot->getSize());
 
-    robotColorScene->clear();
-    robotColorScene->addRect(-10, -10, 20, 20, QPen(robot->getColor()), QBrush(robot->getColor()));
+    double *parameters = robot->getParameters();
+    const int letterCode = 65;
+    for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
+        params = params.arg(static_cast<char>(letterCode + i)).arg(parameters[i]);
 
-    QString intersectionText = QString();
-    switch(robot->getIntersection()) {
-    case Allowed:
-        intersectionText = tr("Allowed");
-        break;
-    case AllowedForSameColor:
-        intersectionText = tr("Allowed for same color");
-        break;
-    case Denied:
-        intersectionText = tr("Denied");
-        break;
-    }
-    ui->intersectionTypeValueLabel->setText(intersectionText);
+    //TODO: Display intersection type
+
+    ui->parametersLabel->setText(params);
 
     delete robot;
 }
@@ -84,6 +67,29 @@ void RobotWindow::closeEvent(QCloseEvent *event)
 void RobotWindow::setClosePermit(bool permission)
 {
     closePermit = permission;
+}
+
+QString RobotWindow::buildParametersLabel()
+{
+    const int prevParamsCount = 4;  //number of default params displayed before custom params
+
+    QString parametersLabel =
+            QString("<html><head/><body><table border=\"0\" ") +
+            QString("style=\" font-size:9pt; margin-top:0px; margin-bottom:0px; ") +
+            QString("margin-left:0px; margin-right:0px;\" cellspacing=\"2\" cellpadding=\"0\">");
+    parametersLabel.append("<tr><td>" + tr("Coordinates") + "</td><td>%1, %2</td></tr>");
+    parametersLabel.append("<tr><td>" + tr("Orientation") + "</td><td>%3</td></tr>");
+    parametersLabel.append("<tr><td>" + tr("Size") + "</td><td>%4</td></tr>");
+
+    const int start = prevParamsCount + 1;
+    const int end = start + CUSTOM_PARAMETERS_QUANTITY * 2;
+    for (int i = start; i < end; i += 2) {
+        parametersLabel.append(QString("<tr><td>%%1</td><td>%%2</td></tr>").arg(i).arg(i+1));
+    }
+
+    parametersLabel.append("</table></body></html>");
+
+    return parametersLabel;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

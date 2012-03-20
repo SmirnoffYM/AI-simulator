@@ -19,15 +19,11 @@ public:
 
 private:
     Ui::RobotWindow *ui;
-
-    unsigned int robotId;           //robot's number. It must be from 1 to ROBOTS
-    //TODO: parameters
-
-    std::pair<int, int> size;       //local map size
-    double scaling;
-
     QGraphicsScene* localMapScene;
-    QGraphicsScene* robotColorScene;
+
+    unsigned int robotId;                   //robot's number. It must be from 1 to ROBOTS
+    std::pair<int, int> size;               //local map size
+    double scaling;
 
     bool closePermit;
 
@@ -41,6 +37,7 @@ public:
 private:
     void closeEvent(QCloseEvent *event);
     void refreshRobotParams();
+    QString buildParametersLabel();
 };
 
 #endif // ROBOTWINDOW_H

@@ -17,6 +17,7 @@ private:
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
     std::pair<int, int> coords;      //robot coordinates, first - x, second - y;
+    double *parameters;              //custom robot parameters
 
 public:
     // getters
@@ -49,6 +50,11 @@ public:
     std::pair<int, int> getCoords()
     {
         return coords;
+    }
+
+    double* getParameters()
+    {
+        return parameters;
     }
 
     // setters

@@ -15,13 +15,13 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->showMaximized();
 
-
     for (int i = 0; i < ROBOTS; i++)
     {
 
         RobotWindow* robotWindow = new RobotWindow;
 
-        int delta = robotWindow->frameGeometry().height() - screen.height() / ROBOTS;
+        int delta = robotWindow->frameGeometry().height() -
+                    (screen.height() - ROBOT_WINDOWS_INDENT) / ROBOTS;
 
         if (delta > 0)
             delta = screen.height() - delta;
@@ -29,20 +29,16 @@ MainWindow::MainWindow(QWidget *parent) :
             delta = screen.height();
 
 
-        robotWindow->move(screen.width() -
-                          robotWindow->width(),
-                          i * delta / ROBOTS);
+        robotWindow->move(screen.width() - robotWindow->width(),
+                          i * delta / ROBOTS - ROBOT_WINDOWS_INDENT);
 
         robotWindows.push_back(robotWindow);
         robotWindows.at(i)->setRobotId(i+1);
     }
 
-
-
     objects = new QVector<QGraphicsItem *>();
 
     modellingPaused = false;
-
 }
 
 MainWindow::~MainWindow()
@@ -233,6 +229,10 @@ void MainWindow::onRefreshMap()
         QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(onRefreshMap()));
     } else {
         //TODO: enable all buttons which can open map, start modelling process etc.
+        ui->action_Open_map->setEnabled(true);
+        ui->actionRun->setEnabled(false);
+        ui->actionPause->setEnabled(false);
+        ui->actionStop->setEnabled(false);
     }
 }
 

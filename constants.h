@@ -10,7 +10,8 @@
 #define ENV_OBJECTS                 255         //number of environment objects
 #define SCREEN_REFRESH_RATE         30          //screen refresh rate in times per second
 #define REAL_PIXEL_SIZE             60          //number of cells in real pixel
-
+#define ROBOT_WINDOWS_INDENT        20          //indent from the top of the screen
+#define CUSTOM_PARAMETERS_QUANTITY  16          //number of custom robot params
 
 /*
 
