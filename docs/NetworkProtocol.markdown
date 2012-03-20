@@ -68,8 +68,10 @@ Agent sends that message to change its orientation.
 
 *Type-specific fields*: `degrees`
 
-`degrees` is a real number. Agent turns by `degrees` clockwise. The number may
-be negative (to turn counterclockwise).
+`degrees` is a floating point number (represented internally by `double`, which
+holds value in the range of ±1.7e±308 and about 15 digits after decimal point).
+Agent turns by `degrees` clockwise. The number may be negative (to turn
+counterclockwise).
 
 
 `change size`
@@ -77,9 +79,9 @@ be negative (to turn counterclockwise).
 
 Agent sends that message to change its size.
 
-*Type-specific fields*: `newWidth`, `newHeight`
+*Type-specific fields*: `newDiameter`
 
-Both fields are non-negative integers specifying new width and height of agent.
+`newDiameter` is non-negative integer specifying new diameter of agent.
 
 
 `change color`

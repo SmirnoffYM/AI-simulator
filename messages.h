@@ -84,36 +84,32 @@ class MessageTurn : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(qreal degrees READ degrees WRITE setDegrees)
+    Q_PROPERTY(double degrees READ degrees WRITE setDegrees)
 
 public:
     MessageTurn(QObject *parent = 0) : Message(parent) { m_type = "turn"; };
 
-    qreal degrees() const { return m_degrees; };
-    void setDegrees(const qreal degrees) { m_degrees = degrees; };
+    double degrees() const { return m_degrees; };
+    void setDegrees(const double degrees) { m_degrees = degrees; };
 
 private:
-    qreal m_degrees;
+    double m_degrees;
 };
 
 class MessageChangeSize : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(int newWidth READ newWidth WRITE setNewWidth)
-    Q_PROPERTY(int newHeight READ newHeight WRITE setNewHeight)
+    Q_PROPERTY(int newDiameter READ newDiameter WRITE setNewDiameter)
 
 public:
     MessageChangeSize(QObject *parent = 0) : Message(parent) { m_type = "change size"; };
 
-    int newWidth() const { return m_newWidth; };
-    void setNewWidth(const int x) { m_newWidth = x; };
-
-    int newHeight() const { return m_newHeight; };
-    void setNewHeight(const int y) { m_newHeight = y; };
+    int newDiameter() const { return m_newDiameter; };
+    void setNewDiameter(const int x) { m_newDiameter = x; };
 
 private:
-    int m_newWidth, m_newHeight;
+    int m_newDiameter;
 };
 
 class MessageChangeColor : public Message
