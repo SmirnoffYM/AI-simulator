@@ -9,19 +9,26 @@ class World
 public:
     World(int** map, std::pair<int, int> s);
 
-    std::pair<int, int> getSize() {
+    std::pair<int, int> getSize()
+    {
         return size;
     }
 
-    int getHeight(int x, int y) {
+    int getHeight(int x, int y)
+    {
         if (x >= 0 && x < size.first && y >= 0 && y < size.second)
             return heightsMap[x][y];
         else
             return 0;
     }
 
+    int ** getHeightsMap()
+    {
+        return heightsMap;
+    }
+
 private:
-    int** heightsMap;
+    int **heightsMap;
     std::pair<int, int> size;                       //map size; first - height, second - width
 
     //TODO: world colors

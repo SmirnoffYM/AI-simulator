@@ -72,7 +72,11 @@ void MainWindow::on_action_Open_map_triggered()
 
     if (isMapCorrect(*image)) {
 
-        //TODO: delete old map, modelling system etc, before loading new map
+        if (HubModule::modellingSystem != NULL) {
+            scene->clear();
+            objects->clear();
+            HubModule::modellingSystem->~ModellingSystem();
+        }
 
         std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         HubModule::modellingSystem =
@@ -96,7 +100,12 @@ void MainWindow::on_action_Open_map_triggered()
             }
         }
 
+        modellingPaused = false;
+
         ui->actionRun->setEnabled(true);
+        ui->actionPause->setEnabled(false);
+        ui->actionStop->setEnabled(false);
+        ui->action_Open_map->setEnabled(true);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Invalid map file!"));
         delete image;
@@ -228,9 +237,9 @@ void MainWindow::onRefreshMap()
 
         QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(onRefreshMap()));
     } else {
-        //TODO: enable all buttons which can open map, start modelling process etc.
+        // enable all buttons which can open map, start modelling process etc.
         ui->action_Open_map->setEnabled(true);
-        ui->actionRun->setEnabled(false);
+        ui->actionRun->setEnabled(true);
         ui->actionPause->setEnabled(false);
         ui->actionStop->setEnabled(false);
     }
@@ -238,19 +247,49 @@ void MainWindow::onRefreshMap()
 
 void MainWindow::on_actionRun_triggered()
 {
+    // if modelling was stopped and then started again
+    if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
+            && !modellingPaused) {
+        scene->clear();
+        objects->clear();
+        int **map = HubModule::modellingSystem->getWorld()->getHeightsMap();
+        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+        HubModule::modellingSystem->~ModellingSystem();
+
+        HubModule::modellingSystem = new ModellingSystem(map, size);
+
+        // Draw a map
+        for (int i = 0; i < size.first; i++) {
+            for (int j = 0; j < size.second; j++) {
+                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
+                QColor *pixelColor = new QColor(*height, *height, *height);
+                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
+                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
+                               QPen(*pixelColor), QBrush(*pixelColor));
+                delete pixelColor;
+                delete height;
+            }
+        }
+
+        modellingPaused = false;
+    }
+
     HubModule::modellingSystem->isModellingPerformed = true;
+
     if (!modellingPaused) {
         //TODO: start hub thread
+        hub = new HubModule();
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->show();
         }
     }
+
     modellingPaused = false;
 
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 
-    //TODO: disable all buttons which can open map, start modelling process etc.
+    // disable all buttons which can open map, start modelling process etc.
     ui->action_Open_map->setEnabled(false);
     ui->actionRun->setEnabled(false);
     ui->actionPause->setEnabled(true);
@@ -272,7 +311,7 @@ void MainWindow::on_actionStop_triggered()
     HubModule::modellingSystem->isModellingPerformed = false;
     stopModelling();
 
-    //TODO: enable all buttons which can open map, start modelling process etc.
+    // enable all buttons which can open map, start modelling process etc.
     ui->action_Open_map->setEnabled(true);
     ui->actionRun->setEnabled(false);
     ui->actionPause->setEnabled(false);

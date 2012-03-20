@@ -11,7 +11,6 @@
 #include <QImage>
 #include <QCloseEvent>
 #include <QVector>
-#include <QMenu>
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"

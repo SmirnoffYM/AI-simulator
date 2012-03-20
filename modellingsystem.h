@@ -11,6 +11,7 @@ class ModellingSystem
 {
 public:
     ModellingSystem(int** map, std::pair<int, int>);
+    ~ModellingSystem();
 
     static bool isModellingPerformed;
 private:
