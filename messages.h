@@ -4,6 +4,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QColor>
 #include <QtCore/QLinkedList>
+#include <QtCore/QMetaType>
 
 class Message : public QObject
 {
@@ -71,36 +72,32 @@ class MessageTurn : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(qreal degrees READ degrees WRITE setDegrees)
+    Q_PROPERTY(double degrees READ degrees WRITE setDegrees)
 
 public:
     MessageTurn(QObject *parent = 0) : Message(parent) { m_type = "turn"; };
 
-    qreal degrees() const { return m_degrees; };
-    void setDegrees(const qreal degrees) { m_degrees = degrees; };
+    double degrees() const { return m_degrees; };
+    void setDegrees(const double degrees) { m_degrees = degrees; };
 
 private:
-    qreal m_degrees;
+    double m_degrees;
 };
 
 class MessageChangeSize : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(int newWidth READ newWidth WRITE setNewWidth)
-    Q_PROPERTY(int newHeight READ newHeight WRITE setNewHeight)
+    Q_PROPERTY(int newDiameter READ newDiameter WRITE setNewDiameter)
 
 public:
     MessageChangeSize(QObject *parent = 0) : Message(parent) { m_type = "change size"; };
 
-    int newWidth() const { return m_newWidth; };
-    void setNewWidth(const int x) { m_newWidth = x; };
-
-    int newHeight() const { return m_newHeight; };
-    void setNewHeight(const int y) { m_newHeight = y; };
+    int newDiameter() const { return m_newDiameter; };
+    void setNewDiameter(const int x) { m_newDiameter = x; };
 
 private:
-    int m_newWidth, m_newHeight;
+    int m_newDiameter;
 };
 
 class MessageChangeColor : public Message
@@ -149,9 +146,8 @@ class MessageObject : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QColor color READ color WRITE setColor)
-    Q_PROPERTY(int width READ width WRITE setWidth)
-    Q_PROPERTY(int height READ height WRITE setHeight)
+    Q_PROPERTY(QString color READ color WRITE setColor)
+    Q_PROPERTY(int diameter READ diameter WRITE setDiameter)
     Q_PROPERTY(qreal orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(int coordX READ coordX WRITE setCoordX)
     Q_PROPERTY(int coordY READ coordY WRITE setCoordY)
@@ -161,21 +157,21 @@ public:
     MessageObject(const MessageObject & other) : QObject()
     {
         m_color = other.color();
-        m_width = other.width();
-        m_height = other.height();
+        m_diameter = other.diameter();
         m_coordX = other.coordX();
         m_coordY = other.coordY();
         m_orientation = other.orientation();
     };
 
-    QColor color() const { return m_color; };
-    void setColor(const QColor color) { m_color = color; };
+    QString color() const { return m_color; };
+    void setColor(const QString color)
+    {
+        m_color = color;
+        m_qcolor.setNamedColor(m_color);
+    };
 
-    int width() const { return m_width; };
-    void setWidth(const int x) { m_width = x; };
-
-    int height() const { return m_height; };
-    void setHeight(const int y) { m_height = y; };
+    int diameter() const { return m_diameter; };
+    void setDiameter(const int x) { m_diameter = x; };
 
     qreal orientation() const { return m_orientation; };
     void setOrientation(const qreal orientation) { m_orientation = orientation; };
@@ -187,8 +183,9 @@ public:
     void setCoordY(const int y) { m_coordY = y; };
 
 private:
-    QColor m_color;
-    int m_width, m_height, m_coordX, m_coordY;
+    QString m_color;
+    QColor m_qcolor;
+    int m_diameter, m_coordX, m_coordY;
     qreal m_orientation;
 };
 
