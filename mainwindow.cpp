@@ -72,40 +72,21 @@ void MainWindow::on_action_Open_map_triggered()
 
     if (isMapCorrect(*image)) {
 
+        // destroy old modelling system if it exists
         if (HubModule::modellingSystem != NULL) {
             scene->clear();
             objects->clear();
             HubModule::modellingSystem->~ModellingSystem();
         }
 
+        // create new modelling system with map from an image
         std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
-        HubModule::modellingSystem =
-                new ModellingSystem(loadMap(*image), size);
+        HubModule::modellingSystem = new ModellingSystem(loadMap(*image), size);
         delete image;
 
-        //TODO: start hub thread
-        hub = new HubModule();
-        
-        // Draw a map
-        scene->clear();
-        for (int i = 0; i < size.first; i++) {
-            for (int j = 0; j < size.second; j++) {
-                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
-                QColor *pixelColor = new QColor(*height, *height, *height);
-                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
-                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
-                               QPen(*pixelColor), QBrush(*pixelColor));
-                delete pixelColor;
-                delete height;
-            }
-        }
+        drawMap();
+        validateButtons(Stopped);
 
-        modellingPaused = false;
-
-        ui->actionRun->setEnabled(true);
-        ui->actionPause->setEnabled(false);
-        ui->actionStop->setEnabled(false);
-        ui->action_Open_map->setEnabled(true);
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Invalid map file!"));
         delete image;
@@ -117,6 +98,82 @@ void MainWindow::on_actionAbout_Program_triggered()
     //TODO: description
 
     QMessageBox::information(this, tr("AI simulator"), tr("description..."));
+}
+
+void MainWindow::on_actionRun_triggered()
+{
+    // if modelling was stopped and then started again
+    if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
+            && !modellingPaused) {
+        int **map = HubModule::modellingSystem->getWorld()->getHeightsMap();
+        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+        HubModule::modellingSystem->~ModellingSystem();
+        HubModule::modellingSystem = new ModellingSystem(map, size);
+        drawMap();
+    }
+
+    // if modelling was not paused, start hub and show all robowindows
+    if (!modellingPaused) {
+        //TODO: start hub thread
+        hub = new HubModule();
+
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->show();
+        }
+    }
+
+    HubModule::modellingSystem->isModellingPerformed = true;
+    modellingPaused = false;
+    validateButtons(Started);
+    QTimer::singleShot(0, this, SLOT(onRefreshMap()));
+}
+
+void MainWindow::on_actionPause_triggered()
+{
+    HubModule::modellingSystem->isModellingPerformed = false;
+    modellingPaused = true;
+    validateButtons(Paused);
+}
+
+void MainWindow::on_actionStop_triggered()
+{
+    HubModule::modellingSystem->isModellingPerformed = false;
+    modellingPaused = false;
+    stopModelling();
+    validateButtons(Stopped);
+}
+
+void MainWindow::stopModelling()
+{
+    for (int i = 0; i < ROBOTS; i++) {
+        robotWindows.at(i)->hide();
+    }
+
+    //TODO: close all threads
+}
+
+void MainWindow::validateButtons(ButtonsState state)
+{
+    switch(state) {
+    case Started:
+        ui->action_Open_map->setEnabled(false);
+        ui->actionRun->setEnabled(false);
+        ui->actionPause->setEnabled(true);
+        ui->actionStop->setEnabled(true);
+        break;
+    case Paused:
+        ui->action_Open_map->setEnabled(false);
+        ui->actionRun->setEnabled(true);
+        ui->actionPause->setEnabled(false);
+        ui->actionStop->setEnabled(true);
+        break;
+    case Stopped:
+        ui->action_Open_map->setEnabled(true);
+        ui->actionRun->setEnabled(true);
+        ui->actionPause->setEnabled(false);
+        ui->actionStop->setEnabled(false);
+        break;
+    }
 }
 
 bool MainWindow::isMapCorrect(QImage image)
@@ -237,97 +294,28 @@ void MainWindow::onRefreshMap()
 
         QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(onRefreshMap()));
     } else {
-        // enable all buttons which can open map, start modelling process etc.
-        ui->action_Open_map->setEnabled(true);
-        ui->actionRun->setEnabled(true);
-        ui->actionPause->setEnabled(false);
-        ui->actionStop->setEnabled(false);
+        validateButtons(Stopped);
     }
 }
 
-void MainWindow::on_actionRun_triggered()
+void MainWindow::drawMap()
 {
-    // if modelling was stopped and then started again
-    if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
-            && !modellingPaused) {
-        scene->clear();
-        objects->clear();
-        int **map = HubModule::modellingSystem->getWorld()->getHeightsMap();
-        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
-        HubModule::modellingSystem->~ModellingSystem();
-
-        HubModule::modellingSystem = new ModellingSystem(map, size);
-
-        // Draw a map
-        for (int i = 0; i < size.first; i++) {
-            for (int j = 0; j < size.second; j++) {
-                int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
-                QColor *pixelColor = new QColor(*height, *height, *height);
-                scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
-                               REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
-                               QPen(*pixelColor), QBrush(*pixelColor));
-                delete pixelColor;
-                delete height;
-            }
-        }
-
-        modellingPaused = false;
-    }
-
-    HubModule::modellingSystem->isModellingPerformed = true;
-
-    if (!modellingPaused) {
-        //TODO: start hub thread
-        hub = new HubModule();
-
-        for (int i = 0; i < ROBOTS; i++) {
-            robotWindows.at(i)->show();
+    scene->clear();
+    objects->clear();
+    std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+    for (int i = 0; i < size.first; i++) {
+        for (int j = 0; j < size.second; j++) {
+            int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
+            QColor *pixelColor = new QColor(*height, *height, *height);
+            scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
+                           REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
+                           QPen(*pixelColor), QBrush(*pixelColor));
+            delete pixelColor;
+            delete height;
         }
     }
-
-    modellingPaused = false;
-
-    QTimer::singleShot(0, this, SLOT(onRefreshMap()));
-
-    // disable all buttons which can open map, start modelling process etc.
-    ui->action_Open_map->setEnabled(false);
-    ui->actionRun->setEnabled(false);
-    ui->actionPause->setEnabled(true);
-    ui->actionStop->setEnabled(true);
 }
 
-void MainWindow::on_actionPause_triggered()
-{
-    HubModule::modellingSystem->isModellingPerformed = false;
-    modellingPaused = true;
-    ui->action_Open_map->setEnabled(false);
-    ui->actionRun->setEnabled(true);
-    ui->actionPause->setEnabled(false);
-    ui->actionStop->setEnabled(true);
-}
-
-void MainWindow::on_actionStop_triggered()
-{
-    HubModule::modellingSystem->isModellingPerformed = false;
-    stopModelling();
-
-    // enable all buttons which can open map, start modelling process etc.
-    ui->action_Open_map->setEnabled(true);
-    ui->actionRun->setEnabled(false);
-    ui->actionPause->setEnabled(false);
-    ui->actionStop->setEnabled(false);
-}
-
-void MainWindow::stopModelling()
-{
-    modellingPaused = false;
-
-    for (int i = 0; i < ROBOTS; i++) {
-        robotWindows.at(i)->hide();
-    }
-
-    //TODO: close all threads
-}
 
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:

@@ -48,16 +48,18 @@ private:
     QVector<QGraphicsItem *> *objects;
     QList<RobotWindow *> robotWindows;
 
+    enum ButtonsState {Started, Paused, Stopped};
+
     bool modellingPaused;
+    HubModule *hub;
 
     bool isMapCorrect(QImage image);
     int** loadMap(QImage image);
-
+    void drawMap();
     void stopModelling();
-
+    void validateButtons(ButtonsState state);
     void closeEvent(QCloseEvent *event);
 
-    HubModule *hub;
 };
 
 #endif // MAINWINDOW_H
