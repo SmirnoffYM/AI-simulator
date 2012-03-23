@@ -13,6 +13,7 @@ RobotWindow::RobotWindow(QWidget *parent) :
     localMapScene = new QGraphicsScene();
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint );
     ui->robotGraphicsView->setScene(localMapScene);
+    isIntersectionTypeDisplayed = false;
 }
 
 RobotWindow::~RobotWindow()
@@ -33,7 +34,7 @@ void RobotWindow::setRobotId(int id) {
     else
         robotId = id;
 
-    this->setWindowTitle(tr("Robot #") + QString("%1").arg(robotId));
+    setWindowTitle(tr("Robot #") + QString("%1").arg(robotId));
 }
 
 void RobotWindow::refreshRobotParams()
@@ -49,7 +50,21 @@ void RobotWindow::refreshRobotParams()
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
         params = params.arg(static_cast<char>(letterCode + i)).arg(parameters[i]);
 
-    //TODO: Display intersection type
+    if (!isIntersectionTypeDisplayed) {
+        QString winTitle = windowTitle() + QString(" | ") + tr("Intersection type: ");
+        switch(robot->getIntersection()) {
+        case Allowed:
+            setWindowTitle(winTitle + tr("allowed"));
+            break;
+        case AllowedForSameColor:
+            setWindowTitle(winTitle + tr("allowed for robots with same color"));
+            break;
+        case Denied:
+            setWindowTitle(winTitle + tr("denied"));
+            break;
+        }
+        isIntersectionTypeDisplayed = true;
+    }
 
     ui->parametersLabel->setText(params);
 

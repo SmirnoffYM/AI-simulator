@@ -27,6 +27,8 @@ private:
 
     bool closePermit;
 
+    bool isIntersectionTypeDisplayed;
+
 public slots:
     void onRefreshMap();
 
