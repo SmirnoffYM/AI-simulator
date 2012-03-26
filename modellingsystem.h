@@ -26,21 +26,21 @@ public:
     }
 
     //number is between 0 and ROBOTS-1
-    Robot getRobot(unsigned int number)
+    Robot* getRobot(unsigned int number)
     {
         if (number < robots.size() && number < ROBOTS)
-            return *(robots.at(number));
+            return robots.at(number);
         else
-            return Robot();
+            return NULL;
     }
 
     //number is between 0 and ENV_OBJECTS-1
-    EnvObject getEnvObject(unsigned int number)
+    EnvObject* getEnvObject(unsigned int number)
     {
         if (number < envObjects.size() && number < ENV_OBJECTS)
-            return *(envObjects.at(number));
+            return envObjects.at(number);
         else
-            return EnvObject();
+            return NULL;
     }
 };
 

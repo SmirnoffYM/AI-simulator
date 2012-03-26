@@ -27,7 +27,7 @@ RobotWindow::~RobotWindow()
 void RobotWindow::onRefreshMap()
 {
     // Draw map
-    Robot *robot = new Robot(HubModule::modellingSystem->getRobot(robotId-1));
+    Robot *robot = HubModule::modellingSystem->getRobot(robotId-1);
     localMapScene->clear();
 
     // get top left and bottom right corners of the local map
@@ -64,12 +64,10 @@ void RobotWindow::onRefreshMap()
         }
     }
 
-    delete robot;
-
     // Draw robots
     // we must draw only robots inside our localmap rectangle
     for (int i = 0; i < ROBOTS; i++) {
-        Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
+        Robot *robot = HubModule::modellingSystem->getRobot(i);
 
         if (robot->getCoords().first >= (int)robot->getSize() / 2
                 && robot->getCoords().second >= (int)robot->getSize() / 2
@@ -91,14 +89,12 @@ void RobotWindow::onRefreshMap()
                                    robot->getCoords().second - new_y,
                                    QPen(outlineColor));
         }
-
-        delete robot;
     }
 
     // Draw envObjects
     // we must draw only envObjects inside our localmap rectangle
     for (int i = 0; i < ENV_OBJECTS; i++) {
-        EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
+        EnvObject *envObject = HubModule::modellingSystem->getEnvObject(i);
 
         if (envObject->getCoords().first >= (int)envObject->getSize() / 2
                 && envObject->getCoords().second >= (int)envObject->getSize() / 2
@@ -127,8 +123,6 @@ void RobotWindow::onRefreshMap()
                                        QPen(outlineColor));
             }
         }
-
-        delete envObject;
     }
 
     refreshRobotParams();
@@ -145,7 +139,7 @@ void RobotWindow::setRobotId(int id) {
 
 void RobotWindow::refreshRobotParams()
 {
-    Robot *robot = new Robot(HubModule::modellingSystem->getRobot(robotId-1));
+    Robot *robot = HubModule::modellingSystem->getRobot(robotId-1);
 
     QString params = buildParametersLabel();
     params = params.arg(robot->getCoords().first).arg(robot->getCoords().second).
@@ -173,8 +167,6 @@ void RobotWindow::refreshRobotParams()
     }
 
     ui->parametersLabel->setText(params);
-
-    delete robot;
 }
 
 void RobotWindow::closeEvent(QCloseEvent *event)

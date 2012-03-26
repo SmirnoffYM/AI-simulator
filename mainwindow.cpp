@@ -219,7 +219,7 @@ void MainWindow::onRefreshMap()
         // Robot's orientation is indicated by line with inverted circle color
         // Line links circle's center and circle's outline
         for (int i = 0; i < ROBOTS; i++) {
-            Robot *robot = new Robot(HubModule::modellingSystem->getRobot(i));
+            Robot *robot = HubModule::modellingSystem->getRobot(i);
 
             if (robot->getCoords().first >= (int)robot->getSize() / 2
                     && robot->getCoords().second >= (int)robot->getSize() / 2) {
@@ -243,8 +243,6 @@ void MainWindow::onRefreshMap()
                                        QPen(outlineColor))
                                    );
             }
-
-            delete robot;
         }
 
         // Draw all envObjects
@@ -253,7 +251,7 @@ void MainWindow::onRefreshMap()
         // Orientation is indicated by line with inverted circle color
         // Line links circle's center and circle's outline
         for (int i = 0; i < ENV_OBJECTS; i++) {
-            EnvObject *envObject = new EnvObject(HubModule::modellingSystem->getEnvObject(i));
+            EnvObject *envObject = HubModule::modellingSystem->getEnvObject(i);
 
             if (envObject->getCoords().first >= (int)envObject->getSize() / 2
                     && envObject->getCoords().second >= (int)envObject->getSize() / 2) {
@@ -283,8 +281,6 @@ void MainWindow::onRefreshMap()
                                        );
                 }
             }
-
-            delete envObject;
         }
 
         // Refresh robotWindows
