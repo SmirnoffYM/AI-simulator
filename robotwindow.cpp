@@ -36,7 +36,6 @@ void RobotWindow::onRefreshMap()
     int x2 = robot->getCoords().first + ui->robotGraphicsView->geometry().size().width() / 2;
     int y2 = robot->getCoords().second + ui->robotGraphicsView->geometry().size().height() / 2;
 
-    //FIXME: frakin map is not centered correctly
     for (int i = x1 / REAL_PIXEL_SIZE; i <= x2 / REAL_PIXEL_SIZE; i++) {
         for (int j = y1 / REAL_PIXEL_SIZE; j <= y2 / REAL_PIXEL_SIZE; j++) {
 
@@ -63,6 +62,9 @@ void RobotWindow::onRefreshMap()
                                    width, height, QPen(pixelColor), QBrush(pixelColor));
         }
     }
+
+    // center view on robot position
+    ui->robotGraphicsView->centerOn(robot->getCoords().first, robot->getCoords().second);
 
     // Draw robots
     // we must draw only robots inside our localmap rectangle
