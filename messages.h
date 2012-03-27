@@ -4,6 +4,7 @@
 #include <QtCore/QObject>
 #include <QtGui/QColor>
 #include <QtCore/QLinkedList>
+#include <QtCore/QMetaType>
 
 enum MessageType {
     MsgMove = 0,
@@ -171,8 +172,7 @@ class MessageObject : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QString color READ color WRITE setColor)
-    Q_PROPERTY(int width READ width WRITE setWidth)
-    Q_PROPERTY(int height READ height WRITE setHeight)
+    Q_PROPERTY(int diameter READ diameter WRITE setDiameter)
     Q_PROPERTY(qreal orientation READ orientation WRITE setOrientation)
     Q_PROPERTY(int coordX READ coordX WRITE setCoordX)
     Q_PROPERTY(int coordY READ coordY WRITE setCoordY)
@@ -182,8 +182,7 @@ public:
     MessageObject(const MessageObject & other) : QObject()
     {
         m_color = other.color();
-        m_width = other.width();
-        m_height = other.height();
+        m_diameter = other.diameter();
         m_coordX = other.coordX();
         m_coordY = other.coordY();
         m_orientation = other.orientation();
@@ -195,11 +194,9 @@ public:
         m_color = color;
         m_qcolor.setNamedColor(m_color);
     };
-    int width() const { return m_width; };
-    void setWidth(const int x) { m_width = x; };
 
-    int height() const { return m_height; };
-    void setHeight(const int y) { m_height = y; };
+    int diameter() const { return m_diameter; };
+    void setDiameter(const int x) { m_diameter = x; };
 
     qreal orientation() const { return m_orientation; };
     void setOrientation(const qreal orientation) { m_orientation = orientation; };
@@ -220,7 +217,7 @@ public:
 private:
     QString m_color;
     QColor m_qcolor;
-    int m_width, m_height, m_coordX, m_coordY;
+    int m_diameter, m_coordX, m_coordY;
     qreal m_orientation;
 };
 
