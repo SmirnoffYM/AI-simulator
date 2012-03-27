@@ -116,16 +116,16 @@ class MessageChangeColor : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(qreal newColor READ newColor WRITE setNewColor)
+    Q_PROPERTY(QColor newColor READ newColor WRITE setNewColor)
 
 public:
     MessageChangeColor(QObject *parent = 0) : Message(parent) { m_type = "change color"; };
 
-    qreal newColor() const { return m_newColor; };
-    void setNewColor(const qreal newColor) { m_newColor = newColor; };
+    QColor newColor() const { return m_newColor; };
+    void setNewColor(const QColor newColor) { m_newColor = newColor; };
 
 private:
-    qreal m_newColor;
+    QColor m_newColor;
 };
 
 class MessageWhoIsThere : public Message
