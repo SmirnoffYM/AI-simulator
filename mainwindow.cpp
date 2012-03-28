@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     modellingPaused = false;
     mapOpened = false;
+    map = NULL;
 }
 
 MainWindow::~MainWindow()
@@ -83,9 +84,14 @@ void MainWindow::on_action_Open_map_triggered()
         // create new modelling system with map from an image
         std::pair<int, int> size = std::pair<int, int>(image->height(), image->width());
         HubModule::modellingSystem = new ModellingSystem(loadMap(*image), size);
+        // Store opened map
+        // We'll reload it if user will stop modelling and then start it without changing map
+        if (map != NULL)
+            delete map;
+        map = new QImage(*image);
+        drawMap(map);
         delete image;
 
-        drawMap();
         validateButtons(Stopped);
 
         mapOpened = true;
@@ -107,11 +113,11 @@ void MainWindow::on_actionRun_triggered()
     // if modelling was stopped and then started again
     if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
             && !modellingPaused && !mapOpened) {
-        int **map = HubModule::modellingSystem->getWorld()->getHeightsMap();
+        int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
         std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
         HubModule::modellingSystem->~ModellingSystem();
-        HubModule::modellingSystem = new ModellingSystem(map, size);
-        drawMap();
+        HubModule::modellingSystem = new ModellingSystem(heightMap, size);
+        drawMap(map);
     }
 
     // if modelling was not paused, start hub and show all robowindows
@@ -120,6 +126,7 @@ void MainWindow::on_actionRun_triggered()
         hub = new HubModule();
 
         for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->setMap(map);
             robotWindows.at(i)->show();
         }
     }
@@ -224,27 +231,37 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ROBOTS; i++) {
             Robot *robot = HubModule::modellingSystem->getRobot(i);
 
-            if (robot->getCoords().first >= (int)robot->getSize() / 2
-                    && robot->getCoords().second >= (int)robot->getSize() / 2) {
+            if (robot->getCoords().first >= static_cast<int>(robot->getSize() / 2)
+                    && robot->getCoords().second >= static_cast<int>(robot->getSize() / 2)) {
                 QColor outlineColor(255 - robot->getColor().red(),
                                     255 - robot->getColor().green(),
                                     255 - robot->getColor().blue());
-                objects->push_back(scene->addEllipse(
-                                       robot->getCoords().first - robot->getSize() / 2,
-                                       robot->getCoords().second - robot->getSize() / 2,
-                                       robot->getSize(), robot->getSize(),
-                                       QPen(outlineColor), QBrush(robot->getColor()))
-                                   );
+
+                int circle_x = (robot->getCoords().first - robot->getSize() / 2) / REAL_PIXEL_SIZE;
+                int circle_y = (robot->getCoords().second - robot->getSize() / 2) / REAL_PIXEL_SIZE;
+
+                objects->push_back(
+                            scene->addEllipse(
+                                       circle_x, circle_y,
+                                       robot->getSize() / REAL_PIXEL_SIZE,
+                                       robot->getSize() / REAL_PIXEL_SIZE,
+                                       QPen(outlineColor),
+                                       QBrush(robot->getColor())
+                                )
+                            );
 
                 double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * PI / 180);
                 double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * PI / 180);
 
-                objects->push_back(scene->addLine(
-                                       robot->getCoords().first, robot->getCoords().second,
-                                       robot->getCoords().first + new_x,
-                                       robot->getCoords().second - new_y,
-                                       QPen(outlineColor))
-                                   );
+                objects->push_back(
+                            scene->addLine(
+                                robot->getCoords().first / REAL_PIXEL_SIZE,
+                                robot->getCoords().second / REAL_PIXEL_SIZE,
+                                (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
+                                (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
+                                QPen(outlineColor)
+                                )
+                            );
             }
         }
 
@@ -256,17 +273,25 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ENV_OBJECTS; i++) {
             EnvObject *envObject = HubModule::modellingSystem->getEnvObject(i);
 
-            if (envObject->getCoords().first >= (int)envObject->getSize() / 2
-                    && envObject->getCoords().second >= (int)envObject->getSize() / 2) {
+            if (envObject->getCoords().first >= static_cast<int>(envObject->getSize() / 2)
+                   && envObject->getCoords().second >= static_cast<int>(envObject->getSize() / 2)) {
                 QColor outlineColor(255 - envObject->getColor().red(),
                                     255 - envObject->getColor().green(),
                                     255 - envObject->getColor().blue());
-                objects->push_back(scene->addEllipse(
-                                       envObject->getCoords().first - envObject->getSize() / 2,
-                                       envObject->getCoords().second - envObject->getSize() / 2,
-                                       envObject->getSize(), envObject->getSize(),
-                                       QPen(outlineColor), QBrush(envObject->getColor()))
-                                   );
+
+                int circle_x = (envObject->getCoords().first -
+                                envObject->getSize() / 2) / REAL_PIXEL_SIZE;
+                int circle_y = (envObject->getCoords().second -
+                                envObject->getSize() / 2) / REAL_PIXEL_SIZE;
+
+                objects->push_back(
+                            scene->addEllipse(
+                                circle_x, circle_y,
+                                envObject->getSize() / REAL_PIXEL_SIZE,
+                                envObject->getSize() / REAL_PIXEL_SIZE,
+                                QPen(outlineColor), QBrush(envObject->getColor())
+                                )
+                            );
 
                 // draw orientation line if object is movable
                 if (envObject->isMovable()) {
@@ -275,13 +300,15 @@ void MainWindow::onRefreshMap()
                     double new_y = envObject->getSize() / 2.0 *
                             cos(envObject->getOrientation() * PI / 180);
 
-                    objects->push_back(scene->addLine(
-                                           envObject->getCoords().first,
-                                           envObject->getCoords().second,
-                                           envObject->getCoords().first + new_x,
-                                           envObject->getCoords().second - new_y,
-                                           QPen(outlineColor))
-                                       );
+                    objects->push_back(
+                                scene->addLine(
+                                    envObject->getCoords().first / REAL_PIXEL_SIZE,
+                                    envObject->getCoords().second / REAL_PIXEL_SIZE,
+                                    (envObject->getCoords().first + new_x) / REAL_PIXEL_SIZE,
+                                    (envObject->getCoords().second - new_y) / REAL_PIXEL_SIZE,
+                                    QPen(outlineColor)
+                                    )
+                                );
                 }
             }
         }
@@ -297,22 +324,11 @@ void MainWindow::onRefreshMap()
     }
 }
 
-void MainWindow::drawMap()
+void MainWindow::drawMap(QImage *image)
 {
     scene->clear();
     objects->clear();
-    std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
-    for (int i = 0; i < size.first; i++) {
-        for (int j = 0; j < size.second; j++) {
-            int *height = new int(HubModule::modellingSystem->getWorld()->getHeight(i, j));
-            QColor *pixelColor = new QColor(*height, *height, *height);
-            scene->addRect(i * REAL_PIXEL_SIZE, j * REAL_PIXEL_SIZE,
-                           REAL_PIXEL_SIZE, REAL_PIXEL_SIZE,
-                           QPen(*pixelColor), QBrush(*pixelColor));
-            delete pixelColor;
-            delete height;
-        }
-    }
+    scene->addPixmap(QPixmap::fromImage(*image));
 }
 
 

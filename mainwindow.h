@@ -47,6 +47,7 @@ private:
     QGraphicsScene *scene;
     QVector<QGraphicsItem *> *objects;
     QList<RobotWindow *> robotWindows;
+    QImage *map;
 
     enum ButtonsState {Started, Paused, Stopped};
 
@@ -55,8 +56,8 @@ private:
     HubModule *hub;
 
     bool isMapCorrect(QImage image);
-    int** loadMap(QImage image);
-    void drawMap();
+    int ** loadMap(QImage image);
+    void drawMap(QImage *image);
     void stopModelling();
     void validateButtons(ButtonsState state);
     void closeEvent(QCloseEvent *event);

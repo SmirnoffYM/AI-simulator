@@ -20,6 +20,7 @@ public:
 private:
     Ui::RobotWindow *ui;
     QGraphicsScene* localMapScene;
+    QImage *fullMap;
 
     unsigned int robotId;                   //robot's number. It must be from 1 to ROBOTS
     std::pair<int, int> size;               //local map size
@@ -34,6 +35,7 @@ public slots:
 
 public:
     void setRobotId(int id);
+    void setMap(QImage *map);
     void setClosePermit(bool permission);
 
 private:
