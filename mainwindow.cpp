@@ -232,7 +232,8 @@ void MainWindow::onRefreshMap()
             Robot *robot = HubModule::modellingSystem->getRobot(i);
 
             if (robot->getCoords().first >= static_cast<int>(robot->getSize() / 2)
-                    && robot->getCoords().second >= static_cast<int>(robot->getSize() / 2)) {
+                    && robot->getCoords().second >= static_cast<int>(robot->getSize() / 2)
+                    && robot->getSize() > 0) {
                 QColor outlineColor(255 - robot->getColor().red(),
                                     255 - robot->getColor().green(),
                                     255 - robot->getColor().blue());
@@ -274,7 +275,8 @@ void MainWindow::onRefreshMap()
             EnvObject *envObject = HubModule::modellingSystem->getEnvObject(i);
 
             if (envObject->getCoords().first >= static_cast<int>(envObject->getSize() / 2)
-                   && envObject->getCoords().second >= static_cast<int>(envObject->getSize() / 2)) {
+                    && envObject->getCoords().second >= static_cast<int>(envObject->getSize() / 2)
+                    && envObject->getSize() > 0) {
                 QColor outlineColor(255 - envObject->getColor().red(),
                                     255 - envObject->getColor().green(),
                                     255 - envObject->getColor().blue());
