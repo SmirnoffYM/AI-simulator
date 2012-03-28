@@ -83,13 +83,14 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         ==========================
         0 - executable string
         1 - port number
-        2 - robot size
-        3 - local map size (currently isn't used)
-        4 - local map scaling (currently isn't used)
-        5 - intersection type (0, 1, 2)
-        6 - orientation
-        7 - robot color
-        8..inf - custom robot parameters
+        2 - robot's start position
+        3 - robot's size
+        4 - local map size (currently isn't used)
+        5 - local map scaling (currently isn't used)
+        6 - intersection type (0, 1, 2)
+        7 - orientation
+        8 - robot color
+        9..inf - custom robot parameters
     */
 
     //TODO: launch robot using executable string
@@ -103,8 +104,29 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         return;
     }
 
+    QString pos = configStringList.at(2);
+    if (!pos.contains(QRegExp("^(\\d)+;(\\d)+$"))) {
+        qDebug() << "Invalid start position (robot" << number << ")";
+        robots.push_back(robot);
+        return;
+    }
+
+    bool ok = true;
+    int x = pos.split(";").at(0).toInt(&ok);
+    if (!ok) {
+        qDebug() << "Invalid start position (robot" << number << ")";
+        robots.push_back(robot);
+        return;
+    }
+    int y = pos.split(";").at(1).toInt(&ok);
+    if (!ok) {
+        qDebug() << "Invalid start position (robot" << number << ")";
+        robots.push_back(robot);
+        return;
+    }
+
     // Check if size is a number and is over than zero
-    int size = configStringList.at(2).toInt();
+    int size = configStringList.at(3).toInt();
     if (size <= 0) {
         qDebug() << "Invalid size (robot" << number << ")";
         robots.push_back(robot);
@@ -115,7 +137,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     //TODO: parse and check local map scaling
 
     // Check intersection type
-    QString intersection = configStringList.at(5);
+    QString intersection = configStringList.at(6);
     if (intersection != "0" && intersection != "1" && intersection != "2") {
         qDebug() << "Invalid intersection type (robot" << number << ")";
         robots.push_back(robot);
@@ -123,8 +145,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     }
 
     // Check orientation
-    bool ok = true;
-    double orientation = configStringList.at(6).toDouble(&ok);
+    double orientation = configStringList.at(7).toDouble(&ok);
 
     if (!ok) {
         qDebug() << "Invalid orientation (robot" << number << ")";
@@ -133,7 +154,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     }
 
     // Check color
-    QColor color = QColor(configStringList.at(7));
+    QColor color = QColor(configStringList.at(8));
     if (!color.isValid()) {
         qDebug() << "Invalid color (robot" << number << ")";
         robots.push_back(robot);
@@ -142,6 +163,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
 
     // TODO: Load and check all custom parameters
 
+    robot->setCoords(x, y);
     robot->setSize(size);
     robot->setPortNumber(portFilename);
     robot->setOrientation(orientation);
