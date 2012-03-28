@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     objects = new QVector<QGraphicsItem *>();
 
     modellingPaused = false;
+    mapOpened = false;
 }
 
 MainWindow::~MainWindow()
@@ -87,6 +88,7 @@ void MainWindow::on_action_Open_map_triggered()
         drawMap();
         validateButtons(Stopped);
 
+        mapOpened = true;
     } else {
         QMessageBox::critical(this, tr("Error!"), tr("Invalid map file!"));
         delete image;
@@ -104,7 +106,7 @@ void MainWindow::on_actionRun_triggered()
 {
     // if modelling was stopped and then started again
     if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
-            && !modellingPaused) {
+            && !modellingPaused && !mapOpened) {
         int **map = HubModule::modellingSystem->getWorld()->getHeightsMap();
         std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
         HubModule::modellingSystem->~ModellingSystem();
@@ -139,6 +141,7 @@ void MainWindow::on_actionStop_triggered()
 {
     HubModule::modellingSystem->isModellingPerformed = false;
     modellingPaused = false;
+    mapOpened = false;
     stopModelling();
     validateButtons(Stopped);
 }

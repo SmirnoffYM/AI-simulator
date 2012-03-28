@@ -51,6 +51,7 @@ private:
     enum ButtonsState {Started, Paused, Stopped};
 
     bool modellingPaused;
+    bool mapOpened;             // this flag signals when map is already created and opened
     HubModule *hub;
 
     bool isMapCorrect(QImage image);

@@ -1,6 +1,9 @@
 #ifndef MODELLINGSYSTEM_H
 #define MODELLINGSYSTEM_H
 
+#include <QDebug>
+#include <QDir>
+#include <QTextStream>
 #include <vector>
 #include "constants.h"
 #include "robot.h"
@@ -12,6 +15,8 @@ class ModellingSystem
 public:
     ModellingSystem(int** map, std::pair<int, int>);
     ~ModellingSystem();
+
+    void LoadRobotParameters(unsigned int number);
 
     static bool isModellingPerformed;
 private:

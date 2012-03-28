@@ -81,6 +81,21 @@ public:
     {
         coords = std::pair<int, int>(x, y);
     }
+
+    void setPortNumber(unsigned int port)
+    {
+        portNumber = port;
+    }
+
+    void setIntersection(Intersection intersection)
+    {
+        this->intersection = intersection;
+    }
+
+    void setParameters()
+    {
+
+    }
 };
 
 #endif // ROBOT_H
