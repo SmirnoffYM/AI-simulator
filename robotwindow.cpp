@@ -39,6 +39,8 @@ void RobotWindow::onRefreshMap()
     if (leftmargin < 0) {
         localMapScene->addRect(leftmargin, 0, abs(leftmargin), fullMap->height(),
                                QPen(white), QBrush(white));
+    } else {
+        leftmargin = 0;
     }
 
     int rightmargin = robot->getCoords().first / REAL_PIXEL_SIZE
@@ -47,12 +49,15 @@ void RobotWindow::onRefreshMap()
         rightmargin -= - fullMap->width();
         localMapScene->addRect(fullMap->width(), 0, rightmargin, fullMap->height(),
                                QPen(white), QBrush(white));
+    } else {
+        rightmargin = 0;
     }
 
     int topmargin = robot->getCoords().second / REAL_PIXEL_SIZE
             - ui->robotGraphicsView->geometry().size().height() / 2;
     if (topmargin < 0) {
-        localMapScene->addRect(0, topmargin, fullMap->width(), abs(topmargin),
+        localMapScene->addRect(leftmargin, topmargin,
+                               fullMap->width() + abs(leftmargin) + rightmargin, abs(topmargin),
                                QPen(white), QBrush(white));
     }
 
@@ -60,7 +65,8 @@ void RobotWindow::onRefreshMap()
             + ui->robotGraphicsView->geometry().size().height() / 2;
     if (bottommargin > fullMap->height()) {
         bottommargin -= - fullMap->height();
-        localMapScene->addRect(0, fullMap->height(), fullMap->width(), bottommargin,
+        localMapScene->addRect(leftmargin, fullMap->height(),
+                               fullMap->width() + abs(leftmargin) + rightmargin, bottommargin,
                                QPen(white), QBrush(white));
     }
 
