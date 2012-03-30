@@ -45,7 +45,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
-    QVector<QGraphicsItem *> *objects;
     QList<RobotWindow *> robotWindows;
     QImage *map;
 
