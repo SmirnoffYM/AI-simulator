@@ -91,6 +91,9 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         7 - orientation
         8 - robot color
         9..inf - custom robot parameters and their names
+        ==========================
+        https://github.com/SmirnoffYM/AI-simulator/wiki/Robot-configuration-file
+        ==========================
     */
 
     //TODO: launch robot using executable string
@@ -104,13 +107,13 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         return;
     }
 
+    // Check start position
     QString pos = configStringList.at(2);
     if (!pos.contains(QRegExp("^(\\d)+;(\\d)+$"))) {
         qDebug() << "Invalid start position (robot" << number << ")";
         robots.push_back(robot);
         return;
     }
-
     bool ok = true;
     int x = pos.split(";").at(0).toInt(&ok);
     if (!ok) {
@@ -161,6 +164,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         return;
     }
 
+    // Check all custom parameters
     std::pair<std::string, double> *parameters =
             new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {

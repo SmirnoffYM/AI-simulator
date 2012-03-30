@@ -19,7 +19,7 @@ public:
 
 private:
     Ui::RobotWindow *ui;
-    QGraphicsScene* localMapScene;
+    QGraphicsScene *localMapScene;
     QImage *fullMap;
 
     unsigned int robotId;                   //robot's number. It must be from 1 to ROBOTS

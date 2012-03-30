@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < ROBOTS; i++)
     {
 
-        RobotWindow* robotWindow = new RobotWindow;
+        RobotWindow *robotWindow = new RobotWindow;
 
         int delta = robotWindow->frameGeometry().height() -
                     (screen.height() - ROBOT_WINDOWS_INDENT) / ROBOTS;

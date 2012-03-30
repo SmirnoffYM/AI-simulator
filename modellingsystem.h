@@ -13,25 +13,25 @@
 class ModellingSystem
 {
 public:
-    ModellingSystem(int** map, std::pair<int, int>);
+    ModellingSystem(int **map, std::pair<int, int>);
     ~ModellingSystem();
 
     void LoadRobotParameters(unsigned int number);
 
     static bool isModellingPerformed;
 private:
-    std::vector<Robot*> robots;
-    std::vector<EnvObject*> envObjects;
-    World* world;
+    std::vector<Robot *> robots;
+    std::vector<EnvObject *> envObjects;
+    World *world;
 
 public:
-    World* getWorld()
+    World * getWorld()
     {
         return world;
     }
 
     //number is between 0 and ROBOTS-1
-    Robot* getRobot(unsigned int number)
+    Robot * getRobot(unsigned int number)
     {
         if (number < robots.size() && number < ROBOTS)
             return robots.at(number);
@@ -40,7 +40,7 @@ public:
     }
 
     //number is between 0 and ENV_OBJECTS-1
-    EnvObject* getEnvObject(unsigned int number)
+    EnvObject * getEnvObject(unsigned int number)
     {
         if (number < envObjects.size() && number < ENV_OBJECTS)
             return envObjects.at(number);

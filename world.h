@@ -7,7 +7,7 @@
 class World
 {
 public:
-    World(int** map, std::pair<int, int> s);
+    World(int **map, std::pair<int, int> s);
 
     std::pair<int, int> getSize()
     {
