@@ -173,10 +173,9 @@ void RobotWindow::refreshRobotParams()
     params = params.arg(robot->getCoords().first).arg(robot->getCoords().second).
                     arg(robot->getOrientation(), 2, 'f', 1).arg(robot->getSize());
 
-    double *parameters = robot->getParameters();
-    const int letterCode = 65;
+    std::pair<std::string, double> *parameters = robot->getParameters();
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
-        params = params.arg(static_cast<char>(letterCode + i)).arg(parameters[i]);
+        params = params.arg(QString(parameters[i].first.c_str())).arg(parameters[i].second);
 
     if (!isIntersectionTypeDisplayed) {
         QString winTitle = windowTitle() + QString(" | ") + tr("Intersection type: ");

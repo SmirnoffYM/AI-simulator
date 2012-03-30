@@ -12,6 +12,7 @@
 #define REAL_PIXEL_SIZE             60          //number of cells in real pixel
 #define ROBOT_WINDOWS_INDENT        20          //indent from the top of the screen
 #define CUSTOM_PARAMETERS_QUANTITY  16          //number of custom robot params
+#define ROBOT_PARAMETER_MAX_LENGTH  15          //maximum length of robot's custom parameter name
 
 /*
 

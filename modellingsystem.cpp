@@ -90,7 +90,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         6 - intersection type (0, 1, 2)
         7 - orientation
         8 - robot color
-        9..inf - custom robot parameters
+        9..inf - custom robot parameters and their names
     */
 
     //TODO: launch robot using executable string
@@ -161,7 +161,25 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
         return;
     }
 
-    // TODO: Load and check all custom parameters
+    std::pair<std::string, double> *parameters =
+            new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
+    for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
+        QString line = configStringList.at(9+i);
+        if (!line.contains(QRegExp("^(\\d|\\.)+;(\\w|\\s)+$"))) {
+            qDebug() << "Invalid parameter" << i+1 << "(robot" << number << ")";
+            robots.push_back(robot);
+            return;
+        }
+        double value = line.left(line.indexOf(QString(";"))).toDouble(&ok);
+        if (!ok) {
+            qDebug() << "Invalid value of parameter" << i+1 << "(robot" << number << ")";
+            robots.push_back(robot);
+            return;
+        }
+        std::string name = line.mid(line.indexOf(QString(";")) + 1).
+                left(ROBOT_PARAMETER_MAX_LENGTH).toStdString();
+        parameters[i] = std::pair<std::string, double>(name, value);
+    }
 
     robot->setCoords(x, y);
     robot->setSize(size);
@@ -169,6 +187,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     robot->setOrientation(orientation);
     robot->setColor(color);
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
+    robot->setParameters(parameters);
 
     robots.push_back(robot);
 }

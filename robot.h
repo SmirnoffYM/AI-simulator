@@ -11,13 +11,13 @@ public:
     Robot(const Robot &copy);
 
 private:
-    unsigned int portNumber;         //also it's robot's id
-    QColor color;                    //object's color
-    unsigned int size;               //diameter in special pixels (1/60 of real pixel)
-    double orientation;              //orientation (in degrees)
-    Intersection intersection;       //type of intersection
-    std::pair<int, int> coords;      //robot coordinates, first - x, second - y;
-    double *parameters;              //custom robot parameters
+    unsigned int portNumber;                    //also it's robot's id
+    QColor color;                               //object's color
+    unsigned int size;                          //diameter in special pixels (1/60 of real pixel)
+    double orientation;                         //orientation (in degrees)
+    Intersection intersection;                  //type of intersection
+    std::pair<int, int> coords;                 //robot coordinates, first - x, second - y;
+    std::pair<std::string, double> *parameters; //custom robot parameters
 
 public:
     // getters
@@ -52,7 +52,7 @@ public:
         return coords;
     }
 
-    double* getParameters()
+    std::pair<std::string, double> * getParameters()
     {
         return parameters;
     }
@@ -92,10 +92,7 @@ public:
         this->intersection = intersection;
     }
 
-    void setParameters()
-    {
-
-    }
+    void setParameters(std::pair<std::string, double> *params);
 };
 
 #endif // ROBOT_H
