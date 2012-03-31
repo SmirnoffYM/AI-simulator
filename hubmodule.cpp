@@ -1,12 +1,8 @@
 #include "hubmodule.h"
-#include <QTimer>
-#include <QDebug>
-#include <iostream>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
 
-HubModule::HubModule(QObject *parent) :
-    QObject(parent)
+HubModule::HubModule()
 {
     messageQueue = new QQueue<Message *>();
     comModule = new ComModule(messageQueue);
@@ -17,7 +13,6 @@ HubModule::HubModule(QObject *parent) :
 */
 void HubModule::refresh()
 {
-   if (ModellingSystem::isModellingPerformed) {
         Message *m = NULL;
 
         while (!messageQueue->isEmpty())
@@ -54,8 +49,6 @@ void HubModule::refresh()
            }
         }
 
-        QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(refresh()));
-    }
 }
 
 /* Limit line length to 100 characters; highlight 99th column

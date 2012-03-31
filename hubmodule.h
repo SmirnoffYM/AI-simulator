@@ -2,23 +2,20 @@
 #define HUBMODULE_H
 
 #include <QtCore/QQueue>
-#include <QObject>
 
 #include "constants.h"
 #include "modellingsystem.h"
 #include "messages.h"
 #include "commodule.h"
 
-class HubModule : public QObject
+class HubModule
 {
-Q_OBJECT
 public:
-    HubModule(QObject *parent = 0);
+    HubModule();
     ~HubModule() {}
 
     static ModellingSystem *modellingSystem;
 
-public slots:
     void refresh();
 
 private:

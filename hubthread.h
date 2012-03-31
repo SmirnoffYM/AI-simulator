@@ -6,11 +6,15 @@
 
 class HubThread : public QThread
 {
+Q_OBJECT
 public:
     HubThread();
 
     void run();
     void stop();
+
+public slots:
+    void refresh();
 
 private:
     volatile bool stopped;

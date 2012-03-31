@@ -9,10 +9,18 @@ HubThread::HubThread()
 
 void HubThread::run()
 {
-    QTimer::singleShot(0, hub, SLOT(refresh()));
+    QTimer::singleShot(0, this, SLOT(refresh()));
 }
 
 void HubThread::stop()
 {
     stopped = true;
+}
+
+void HubThread::refresh()
+{
+    if (ModellingSystem::isModellingPerformed) {
+        hub->refresh();
+        QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(refresh()));
+    }
 }

@@ -11,7 +11,6 @@
 #include <QCloseEvent>
 #include "robotwindow.h"
 #include "constants.h"
-#include "hubmodule.h"
 #include "hubthread.h"
 
 namespace Ui {
