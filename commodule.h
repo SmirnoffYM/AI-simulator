@@ -2,7 +2,6 @@
 #define COMMODULE_H
 
 #include <QtCore/QObject>
-#include <QtCore/QQueue>
 #include <QtCore/QVariant>
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>

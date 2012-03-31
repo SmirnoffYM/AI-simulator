@@ -1,5 +1,4 @@
 #include "hubmodule.h"
-#include <QDebug>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
 
