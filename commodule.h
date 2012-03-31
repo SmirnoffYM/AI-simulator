@@ -6,9 +6,11 @@
 #include <QtCore/QVariant>
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>
+#include <queue>
 
 #include <qjson/parser.h>
 #include <qjson/qobjecthelper.h>
+
 
 #include "constants.h"
 #include "messages.h"
@@ -18,7 +20,7 @@ class ComModule : public QObject
     Q_OBJECT
 
 public:
-    ComModule(QQueue<Message *> *);
+    ComModule(std::queue<Message *> *);
     ~ComModule();
 
 private slots:
@@ -26,7 +28,7 @@ private slots:
 
 private:
     QUdpSocket *socket;
-    QQueue<Message *> *messageQueue;
+    std::queue<Message *> *messageQueue;
 };
 
 #endif // COMMODULE_H

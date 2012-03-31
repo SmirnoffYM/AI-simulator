@@ -1,11 +1,11 @@
 #include "hubmodule.h"
+#include <QDebug>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
 
 HubModule::HubModule()
 {
-    messageQueue = new QQueue<Message *>();
-    comModule = new ComModule(messageQueue);
+    comModule = new ComModule(&messageQueue);
 }
 /*
     refreshing system state
@@ -15,9 +15,9 @@ void HubModule::refresh()
 {
         Message *m = NULL;
 
-        while (!messageQueue->isEmpty())
+        while (!messageQueue.empty())
         {
-           m = messageQueue->dequeue();
+           m = messageQueue.front();
 
            if(m->type() == "move")
            {
@@ -47,6 +47,8 @@ void HubModule::refresh()
                HubModule::modellingSystem->getRobotByPort(messageChangeColor->id())
                        ->setColor(messageChangeColor->newColor());
            }
+
+           messageQueue.pop();
         }
 
 }

@@ -1,7 +1,7 @@
 #ifndef HUBMODULE_H
 #define HUBMODULE_H
 
-#include <QtCore/QQueue>
+#include <queue>
 
 #include "constants.h"
 #include "modellingsystem.h"
@@ -20,7 +20,7 @@ public:
 
 private:
     ComModule *comModule;
-    QQueue<Message *> *messageQueue;
+    std::queue<Message *> messageQueue;
 };
 
 #endif // HUBMODULE_H

@@ -1,6 +1,6 @@
 #include "commodule.h"
 
-ComModule::ComModule(QQueue<Message *> *q) : QObject()
+ComModule::ComModule(std::queue<Message *> *q) : QObject()
 {
     messageQueue = q;
 
@@ -46,7 +46,7 @@ void ComModule::handleMessage()
         }
         if(msg != NULL) {
             QJson::QObjectHelper::qvariant2qobject(message, msg);
-            messageQueue->enqueue(msg);
+            messageQueue->push(msg);
         } else {
             // FIXME: stick some QDebug in here
         }
