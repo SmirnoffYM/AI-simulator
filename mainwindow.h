@@ -12,6 +12,7 @@
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubmodule.h"
+#include "hubthread.h"
 
 namespace Ui {
 class MainWindow;
@@ -51,6 +52,7 @@ private:
     bool modellingPaused;
     bool mapOpened;             // this flag signals when map is already created and opened
     HubModule *hub;
+    HubThread *hubThread;
 
     bool isMapCorrect(QImage image);
     int ** loadMap(QImage image);

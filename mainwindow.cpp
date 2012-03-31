@@ -110,6 +110,7 @@ void MainWindow::on_actionRun_triggered()
     // if modelling was stopped and then started again
     if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
             && !modellingPaused && !mapOpened) {
+
         int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
         std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
         HubModule::modellingSystem->~ModellingSystem();
@@ -119,19 +120,23 @@ void MainWindow::on_actionRun_triggered()
 
     // if modelling was not paused, start hub and show all robowindows
     if (!modellingPaused) {
-        //TODO: start hub thread
-        hub = new HubModule();
+        // starting hub thread
+        hubThread = new HubThread();
+        hubThread->start();
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->setMap(map);
             robotWindows.at(i)->show();
         }
     }
+    else
+        hubThread->start();
 
     HubModule::modellingSystem->isModellingPerformed = true;
     modellingPaused = false;
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
+
 }
 
 void MainWindow::on_actionPause_triggered()
@@ -155,6 +160,8 @@ void MainWindow::stopModelling()
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->hide();
     }
+
+    hubThread->terminate();
 
     //TODO: close all threads
 }

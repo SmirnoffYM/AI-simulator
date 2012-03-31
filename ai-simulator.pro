@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     modellingsystem.cpp \
     world.cpp \
     robot.cpp \
-    envobject.cpp
+    envobject.cpp \
+    hubthread.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -29,7 +30,8 @@ HEADERS  += mainwindow.h \
     world.h \
     robot.h \
     envobject.h \
-    constants.h
+    constants.h \
+    hubthread.h
 
 LIBS += -lqjson
 

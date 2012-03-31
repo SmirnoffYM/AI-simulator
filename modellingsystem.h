@@ -39,6 +39,15 @@ public:
             return NULL;
     }
 
+    Robot * getRobotByPort(unsigned int number)
+    {
+        for (int i = 0; i < ROBOTS; i++)
+            if (robots.at(i)->getPortNumber() == number)
+                return robots.at(i);
+
+        return NULL;
+    }
+
     //number is between 0 and ENV_OBJECTS-1
     EnvObject * getEnvObject(unsigned int number)
     {

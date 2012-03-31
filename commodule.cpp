@@ -18,7 +18,7 @@ ComModule::~ComModule()
 
 void ComModule::handleMessage()
 {
-    while(socket->hasPendingDatagrams()) {
+   while(socket->hasPendingDatagrams()) {
         QByteArray datagram;
         datagram.resize(socket->pendingDatagramSize());
         QHostAddress sender;
