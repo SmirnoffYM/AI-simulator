@@ -13,6 +13,7 @@
 
 #include "constants.h"
 #include "messages.h"
+#include "messages-helpers.h"
 
 class ComModule : public QObject
 {

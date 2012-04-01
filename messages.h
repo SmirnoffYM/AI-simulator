@@ -6,6 +6,17 @@
 #include <QtCore/QLinkedList>
 #include <QtCore/QMetaType>
 
+enum MessageType {
+    MsgMove = 0,
+    MsgBump,
+    MsgTurn,
+    MsgChangeSize,
+    MsgChangeColor,
+    MsgWhoIsThere,
+    MsgThereYouSee,
+    MsgUndefined
+};
+
 class Message : public QObject
 {
     Q_OBJECT
@@ -21,6 +32,8 @@ public:
 
     QString type() const { return m_type; };
     void setType(QString type) { m_type = type; };
+
+    MessageType getMessageType() const;
 
 protected:
     int m_id;
@@ -104,16 +117,28 @@ class MessageChangeColor : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(qreal newColor READ newColor WRITE setNewColor)
+    Q_PROPERTY(QString newColor READ newColor WRITE setNewColor)
 
 public:
     MessageChangeColor(QObject *parent = 0) : Message(parent) { m_type = "change color"; };
 
-    qreal newColor() const { return m_newColor; };
-    void setNewColor(const qreal newColor) { m_newColor = newColor; };
+    QString newColor() const { return m_newColor; };
+    void setNewColor(const QString newColor)
+    {
+        m_newColor = newColor;
+        m_QColor.setNamedColor(m_newColor);
+    };
+
+    QColor getQColor() const { return m_QColor; };
+    void setQColor(const QColor c)
+    {
+        m_QColor = c;
+        m_newColor = m_QColor.name();
+    };
 
 private:
-    qreal m_newColor;
+    QString m_newColor;
+    QColor m_QColor;
 };
 
 class MessageWhoIsThere : public Message
@@ -182,6 +207,13 @@ public:
     int coordY() const { return m_coordY; };
     void setCoordY(const int y) { m_coordY = y; };
 
+    QColor getQColor() const { return m_qcolor; };
+    void setQColor(const QColor c)
+    {
+        m_qcolor = c;
+        m_color = m_qcolor.name();
+    };
+
 private:
     QString m_color;
     QColor m_qcolor;
@@ -204,6 +236,7 @@ public:
 private:
     QLinkedList<MessageObject> m_objects;
 };
+
 #endif // MESSAGES_H
 
 /* Limit line length to 100 characters; highlight 99th column

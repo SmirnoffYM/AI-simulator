@@ -14,12 +14,14 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     robotwindow.cpp \
     commodule.cpp \
+    messages.cpp \
     hubmodule.cpp \
     modellingsystem.cpp \
     world.cpp \
     robot.cpp \
     envobject.cpp \
-    hubthread.cpp
+    hubthread.cpp \
+    messages-helpers.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -31,7 +33,8 @@ HEADERS  += mainwindow.h \
     robot.h \
     envobject.h \
     constants.h \
-    hubthread.h
+    hubthread.h \
+    messages-helpers.h
 
 LIBS += -lqjson
 
