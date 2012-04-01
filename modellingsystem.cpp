@@ -1,4 +1,5 @@
 #include "modellingsystem.h"
+#include "hubmodule.h"
 
 bool ModellingSystem::isModellingPerformed = false;
 
@@ -64,7 +65,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     QFile config(QString("robots/") + configFilename);
     QStringList configStringList = QStringList();
     if (!config.open(QFile::ReadOnly)) {
-        qDebug() << "Cannot open first configuration file for robot" << number;
+        qDebug() << "Cannot open configuration file for robot" << number;
         robots.push_back(robot);
         return;
     }
@@ -169,7 +170,9 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
     robot->setParameters(parameters);
 
-    //TODO: launch robot using executable string
+    QString command = configStringList.at(0) + QString(" ") + configFilename;
+    qDebug() << "Robot" << number << "will be called by command" << command;
+    HubModule::AddApplication(command);
 
     robots.push_back(robot);
 }

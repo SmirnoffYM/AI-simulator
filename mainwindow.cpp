@@ -123,6 +123,7 @@ void MainWindow::on_actionRun_triggered()
         // starting hub thread
         hubThread = new HubThread();
         hubThread->start();
+        HubModule::LaunchApplications();
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->setMap(map);
@@ -141,9 +142,10 @@ void MainWindow::on_actionRun_triggered()
 
 void MainWindow::on_actionPause_triggered()
 {
-    HubModule::modellingSystem->isModellingPerformed = false;
-    modellingPaused = true;
-    validateButtons(Paused);
+    //FIXME: Issue #7
+//    HubModule::modellingSystem->isModellingPerformed = false;
+//    modellingPaused = true;
+//    validateButtons(Paused);
 }
 
 void MainWindow::on_actionStop_triggered()
@@ -162,8 +164,7 @@ void MainWindow::stopModelling()
     }
 
     hubThread->terminate();
-
-    //TODO: close all threads
+    HubModule::StopApplications();
 }
 
 void MainWindow::validateButtons(ButtonsState state)
