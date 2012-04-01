@@ -183,7 +183,8 @@ void RobotWindow::refreshRobotParams()
 
     std::pair<std::string, double> *parameters = robot->getParameters();
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
-        params = params.arg(QString(parameters[i].first.c_str())).arg(parameters[i].second);
+        params = params.arg(QString(parameters[i].first.c_str()).left(ROBOT_PARAMETER_MAX_LENGTH)).
+                        arg(parameters[i].second);
 
     if (!isIntersectionTypeDisplayed) {
         QString winTitle = windowTitle() + QString(" | ") + tr("Intersection type: ");

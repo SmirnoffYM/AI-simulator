@@ -77,30 +77,8 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     }
     config.close();
 
-    /*
-        ==========================
-        Configuration file format
-        ==========================
-        0 - executable string
-        1 - port number
-        2 - robot's start position
-        3 - robot's size
-        4 - local map size (currently isn't used)
-        5 - local map scaling (currently isn't used)
-        6 - intersection type (0, 1, 2)
-        7 - orientation
-        8 - robot color
-        9..inf - custom robot parameters and their names
-        ==========================
-        https://github.com/SmirnoffYM/AI-simulator/wiki/Robot-configuration-file
-        ==========================
-    */
-
-    //TODO: launch robot using executable string
-
     // Check if port in filename is equals to port in file body
     int portFilename = configFilename.left(4).toInt();
-
     if (portFilename == 0 || portFilename != configStringList.at(1).toInt()) {
         qDebug() << "Ports in filename and file body aren't equals (robot" << number << ")";
         robots.push_back(robot);
@@ -149,7 +127,6 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
 
     // Check orientation
     double orientation = configStringList.at(7).toDouble(&ok);
-
     if (!ok) {
         qDebug() << "Invalid orientation (robot" << number << ")";
         robots.push_back(robot);
@@ -180,8 +157,7 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
             robots.push_back(robot);
             return;
         }
-        std::string name = line.mid(line.indexOf(QString(";")) + 1).
-                left(ROBOT_PARAMETER_MAX_LENGTH).toStdString();
+        std::string name = line.mid(line.indexOf(QString(";")) + 1).toStdString();
         parameters[i] = std::pair<std::string, double>(name, value);
     }
 
@@ -192,6 +168,8 @@ void ModellingSystem::LoadRobotParameters(unsigned int number)
     robot->setColor(color);
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
     robot->setParameters(parameters);
+
+    //TODO: launch robot using executable string
 
     robots.push_back(robot);
 }
