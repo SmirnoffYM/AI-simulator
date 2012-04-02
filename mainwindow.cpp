@@ -36,7 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
         robotWindows.at(i)->setRobotId(i+1);
     }
 
-    modellingPaused = false;
     mapOpened = false;
     map = NULL;
 }
@@ -109,7 +108,7 @@ void MainWindow::on_actionRun_triggered()
 {
     // if modelling was stopped and then started again
     if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
-            && !modellingPaused && !mapOpened) {
+            && !mapOpened) {
 
         int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
         std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
@@ -118,40 +117,24 @@ void MainWindow::on_actionRun_triggered()
         drawMap(map);
     }
 
-    // if modelling was not paused, start hub and show all robowindows
-    if (!modellingPaused) {
-        // starting hub thread
-        hubThread = new HubThread();
-        hubThread->start();
-        HubModule::LaunchApplications();
+    // starting hub thread
+    hubThread = new HubThread();
+    hubThread->start();
+    HubModule::LaunchApplications();
 
-        for (int i = 0; i < ROBOTS; i++) {
-            robotWindows.at(i)->setMap(map);
-            robotWindows.at(i)->show();
-        }
+    for (int i = 0; i < ROBOTS; i++) {
+        robotWindows.at(i)->setMap(map);
+        robotWindows.at(i)->show();
     }
-    else
-        hubThread->start();
 
     HubModule::modellingSystem->isModellingPerformed = true;
-    modellingPaused = false;
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
-
-}
-
-void MainWindow::on_actionPause_triggered()
-{
-    //FIXME: Issue #7
-//    HubModule::modellingSystem->isModellingPerformed = false;
-//    modellingPaused = true;
-//    validateButtons(Paused);
 }
 
 void MainWindow::on_actionStop_triggered()
 {
     HubModule::modellingSystem->isModellingPerformed = false;
-    modellingPaused = false;
     mapOpened = false;
     stopModelling();
     validateButtons(Stopped);
@@ -173,19 +156,11 @@ void MainWindow::validateButtons(ButtonsState state)
     case Started:
         ui->action_Open_map->setEnabled(false);
         ui->actionRun->setEnabled(false);
-        ui->actionPause->setEnabled(true);
-        ui->actionStop->setEnabled(true);
-        break;
-    case Paused:
-        ui->action_Open_map->setEnabled(false);
-        ui->actionRun->setEnabled(true);
-        ui->actionPause->setEnabled(false);
         ui->actionStop->setEnabled(true);
         break;
     case Stopped:
         ui->action_Open_map->setEnabled(true);
         ui->actionRun->setEnabled(true);
-        ui->actionPause->setEnabled(false);
         ui->actionStop->setEnabled(false);
         break;
     }

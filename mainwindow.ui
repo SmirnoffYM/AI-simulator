@@ -61,7 +61,6 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionRun"/>
-   <addaction name="actionPause"/>
    <addaction name="actionStop"/>
    <addaction name="separator"/>
   </widget>
@@ -102,21 +101,6 @@
    </property>
    <property name="toolTip">
     <string>Run modelling</string>
-   </property>
-  </action>
-  <action name="actionPause">
-   <property name="enabled">
-    <bool>false</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/icons/pause.svg</normaloff>:/icons/icons/pause.svg</iconset>
-   </property>
-   <property name="text">
-    <string>Pause</string>
-   </property>
-   <property name="toolTip">
-    <string>Pause modelling</string>
    </property>
   </action>
   <action name="actionStop">

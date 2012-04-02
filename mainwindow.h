@@ -36,8 +36,6 @@ private slots:
 
     void on_actionRun_triggered();
 
-    void on_actionPause_triggered();
-
     void on_actionStop_triggered();
 
 private:
@@ -46,11 +44,9 @@ private:
     QList<RobotWindow *> robotWindows;
     QImage *map;
 
-    enum ButtonsState {Started, Paused, Stopped};
+    enum ButtonsState {Started, Stopped};
 
-    bool modellingPaused;
     bool mapOpened;             // this flag signals when map is already created and opened
-    HubModule *hub;
     HubThread *hubThread;
 
     bool isMapCorrect(QImage image);
