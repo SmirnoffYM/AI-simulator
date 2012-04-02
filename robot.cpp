@@ -2,7 +2,6 @@
 
 Robot::Robot():
     portNumber(0),
-    color(255, 255, 255),
     size(0),
     orientation(0),
     intersection(AllowedForSameColor),
@@ -14,6 +13,10 @@ Robot::Robot():
         char symbol = static_cast<char>(65 + i);
         parameters[i] = std::pair<std::string, double>(&symbol, 0);
     }
+
+    color.red = 255;
+    color.green = 255;
+    color.blue = 255;
 }
 
 

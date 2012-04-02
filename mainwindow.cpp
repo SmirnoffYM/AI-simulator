@@ -120,7 +120,7 @@ void MainWindow::on_actionRun_triggered()
     // starting hub thread
     hubThread = new HubThread();
     hubThread->start();
-    HubModule::LaunchApplications();
+    Servant::getInstance().launchApplications();
 
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->setMap(map);
@@ -147,7 +147,7 @@ void MainWindow::stopModelling()
     }
 
     hubThread->terminate();
-    HubModule::StopApplications();
+    Servant::getInstance().stopApplications();
 }
 
 void MainWindow::validateButtons(ButtonsState state)
@@ -212,9 +212,9 @@ void MainWindow::onRefreshMap()
                        HubModule::modellingSystem->getWorld()->getSize().first * REAL_PIXEL_SIZE
                     && robot->getCoords().second + static_cast<int>(robot->getSize() / 2) <=
                        HubModule::modellingSystem->getWorld()->getSize().second * REAL_PIXEL_SIZE) {
-                QColor outlineColor(255 - robot->getColor().red(),
-                                    255 - robot->getColor().green(),
-                                    255 - robot->getColor().blue());
+                QColor outlineColor(255 - robot->getColor().red,
+                                    255 - robot->getColor().green,
+                                    255 - robot->getColor().blue);
 
                 int circle_x = (robot->getCoords().first - robot->getSize() / 2) / REAL_PIXEL_SIZE;
                 int circle_y = (robot->getCoords().second - robot->getSize() / 2) / REAL_PIXEL_SIZE;
@@ -223,7 +223,7 @@ void MainWindow::onRefreshMap()
                                   robot->getSize() / REAL_PIXEL_SIZE,
                                   robot->getSize() / REAL_PIXEL_SIZE,
                                   QPen(outlineColor),
-                                  QBrush(robot->getColor()));
+                                  QBrush(Servant::getInstance().colorTransform(robot->getColor())));
 
                 double new_x = robot->getSize() / 2.0 * sin(robot->getOrientation() * PI / 180);
                 double new_y = robot->getSize() / 2.0 * cos(robot->getOrientation() * PI / 180);
@@ -251,9 +251,9 @@ void MainWindow::onRefreshMap()
                        HubModule::modellingSystem->getWorld()->getSize().first * REAL_PIXEL_SIZE
                     && envObject->getCoords().second + static_cast<int>(envObject->getSize() / 2) <=
                        HubModule::modellingSystem->getWorld()->getSize().second * REAL_PIXEL_SIZE) {
-                QColor outlineColor(255 - envObject->getColor().red(),
-                                    255 - envObject->getColor().green(),
-                                    255 - envObject->getColor().blue());
+                QColor outlineColor(255 - envObject->getColor().red,
+                                    255 - envObject->getColor().green,
+                                    255 - envObject->getColor().blue);
 
                 int circle_x = (envObject->getCoords().first -
                                 envObject->getSize() / 2) / REAL_PIXEL_SIZE;
@@ -263,7 +263,9 @@ void MainWindow::onRefreshMap()
                 scene->addEllipse(circle_x, circle_y,
                                   envObject->getSize() / REAL_PIXEL_SIZE,
                                   envObject->getSize() / REAL_PIXEL_SIZE,
-                                  QPen(outlineColor), QBrush(envObject->getColor()));
+                                  QPen(outlineColor),
+                                  QBrush(Servant::getInstance().
+                                         colorTransform(envObject->getColor())));
 
                 // draw orientation line if object is movable
                 if (envObject->isMovable()) {

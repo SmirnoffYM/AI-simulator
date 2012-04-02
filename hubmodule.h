@@ -1,9 +1,7 @@
 #ifndef HUBMODULE_H
 #define HUBMODULE_H
 
-#include <QProcess>
 #include <queue>
-
 #include "constants.h"
 #include "modellingsystem.h"
 #include "messages.h"
@@ -19,13 +17,9 @@ public:
 
     void refresh();
 
-    static void LaunchApplications();
-    static void StopApplications();
-    static void AddApplication(QString command);
 private:
     ComModule *comModule;
     std::queue<Message *> messageQueue;
-    static std::vector<std::pair<QString, QProcess *> > applications;
 };
 
 #endif // HUBMODULE_H

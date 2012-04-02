@@ -4,7 +4,6 @@ unsigned int EnvObject::portNumber = 8512;
 
 EnvObject::EnvObject():
     objectId(0),
-    color(255, 255, 255),
     size(0),
     orientation(0),
     intersection(AllowedForSameColor),
@@ -12,6 +11,9 @@ EnvObject::EnvObject():
     coords(0, 0)
 {
     //default constructor
+    color.red = 255;
+    color.green = 255;
+    color.blue = 255;
 }
 
 EnvObject::EnvObject(const EnvObject &copy)

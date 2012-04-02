@@ -1,7 +1,8 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
-#include <QColor>
+#include <algorithm>
+#include <string>
 #include "constants.h"
 
 class Robot
@@ -12,7 +13,7 @@ public:
 
 private:
     unsigned int portNumber;                    //also it's robot's id
-    QColor color;                               //object's color
+    Color color;                               //object's color
     unsigned int size;                          //diameter in special pixels (1/60 of real pixel)
     double orientation;                         //orientation (in degrees)
     Intersection intersection;                  //type of intersection
@@ -27,7 +28,7 @@ public:
         return portNumber;
     }
 
-    QColor getColor()
+    Color getColor()
     {
         return color;
     }
@@ -72,7 +73,7 @@ public:
             this->orientation = orientation;
     }
 
-    void setColor(QColor color)
+    void setColor(Color color)
     {
         this->color = color;
     }

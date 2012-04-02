@@ -17,6 +17,12 @@
 //TODO: define MAX_MAP_SIDE
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 
+struct Color {
+    int red;
+    int green;
+    int blue;
+};
+
 /* Define some non-crossplatform math constants: */
 
 #define PI 3.14159265358979323846

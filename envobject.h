@@ -1,7 +1,7 @@
 #ifndef ENVOBJECT_H
 #define ENVOBJECT_H
 
-#include <QColor>
+#include <algorithm>
 #include "constants.h"
 
 class EnvObject
@@ -13,9 +13,8 @@ public:
 private:
     unsigned int objectId;           //as one controller controls all envObjects,
                                      //each of them must has own id
-
     static unsigned int portNumber;  //controller's port number
-    QColor color;                    //object's color
+    Color color;                    //object's color
     unsigned int size;               //diameter in special pixels (1/60 of real pixel)
     double orientation;              //orientation (in degrees)
     Intersection intersection;       //type of intersection
@@ -35,7 +34,7 @@ public:
         return portNumber;
     }
 
-    QColor getColor()
+    Color getColor()
     {
         return color;
     }
@@ -80,7 +79,7 @@ public:
             this->orientation = orientation;
     }
 
-    void setColor(QColor color)
+    void setColor(Color color)
     {
         this->color = color;
     }

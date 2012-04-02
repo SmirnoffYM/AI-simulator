@@ -12,6 +12,7 @@
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubthread.h"
+#include "servant.h"
 
 namespace Ui {
 class MainWindow;

@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     robot.cpp \
     envobject.cpp \
     hubthread.cpp \
-    messages-helpers.cpp
+    messages-helpers.cpp \
+    servant.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -34,7 +35,8 @@ HEADERS  += mainwindow.h \
     envobject.h \
     constants.h \
     hubthread.h \
-    messages-helpers.h
+    messages-helpers.h \
+    servant.h
 
 LIBS += -lqjson
 
