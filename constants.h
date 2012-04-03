@@ -11,6 +11,8 @@
 #define SCREEN_REFRESH_RATE         30          //screen refresh rate in times per second
 #define REAL_PIXEL_SIZE             60          //number of cells in real pixel
 
+#define SIMULATOR_PORT              9000        // port simulator binds to
+
 
 /*
 
