@@ -6,7 +6,7 @@ ComModule::ComModule(QQueue<Message *> *q) : QObject()
 
     socket = new QUdpSocket(this);
     // FIXME: use the port specified in config
-    socket->bind(QHostAddress::Any, 9000);
+    socket->bind(QHostAddress::LocalHost, 9000);
 
     connect(socket, SIGNAL(readyRead()), this, SLOT(handleMessage()));
 }
