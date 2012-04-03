@@ -44,15 +44,15 @@ type look like.
 
 Header contains:
 
-* message's sequential number, *4 bytes*, unsigned integer
-* agent's port, *2 bytes*, unsigned integer
-* message type, *1 byte*
+* message's sequential number, *4 octets*, unsigned integer
+* agent's port, *2 octets*, unsigned integer
+* message type, *1 octet*
 
 Sequential numbers are set by the agent and required by him to make
 sense out of responses. Simulator should just copy that field from the
 message it is responding to.
 
-Message types are mapped from names to bytes as follows:
+Message types are mapped from names to numbers as follows:
 
 * 0: `acknowledge`
 * 1: `move`
@@ -69,8 +69,8 @@ Agent sends that message to move to somewhere else.
 
 Message contains:
 
-* X coordinate, *4 bytes*, unsigned integer
-* Y coordinate, *4 bytes*, unsigned integer
+* X coordinate, *4 octets*, unsigned integer
+* Y coordinate, *4 octets*, unsigned integer
 
 ## `turn` message
 
@@ -78,7 +78,7 @@ Agent sends that message to change its orientation.
 
 Message contains:
 
-* seconds, *4 bytes*, signed integer
+* seconds, *4 octets*, signed integer
 
 seconds are 1/60 of minute, and minute is in turn 1/60 of degree.  That
 field specify number of seconds agent should turn clockwise.  To turn
@@ -90,7 +90,7 @@ Agent sends that message to change its size.
 
 Message contains:
 
-* new diameter, *4 bytes*, unsigned integer
+* new diameter, *4 octets*, unsigned integer
 
 ## `change color` message
 
@@ -98,9 +98,9 @@ Agent sends that message to change its color.
 
 Message contains:
 
-* red value, *1 byte*
-* green value, *1 byte*
-* blue value, *1 byte*
+* red value, *1 octet*
+* green value, *1 octet*
+* blue value, *1 octet*
 
 ## `what is there?` message
 
@@ -109,9 +109,9 @@ circle with the given centre and radius.
 
 Message contains:
 
-* X coordinate, *4 bytes*, unsigned integer
-* Y coordinate, *4 bytes*, unsigned integer
-* radius, *4 bytes*, unsigned integer
+* X coordinate, *4 octets*, unsigned integer
+* Y coordinate, *4 octets*, unsigned integer
+* radius, *4 octets*, unsigned integer
 
 ## `acknowledge` message
 
@@ -132,8 +132,8 @@ coordinates of the agent.
 
 Message contains:
 
-* X coordinate, *4 bytes*, unsigned integer
-* Y coordinate, *4 bytes*, unsigned integer
+* X coordinate, *4 octets*, unsigned integer
+* Y coordinate, *4 octets*, unsigned integer
 
 ## `there you see` message
 
@@ -141,15 +141,15 @@ Simulator sends that message in response to `who is there?` message.
 
 Message contains:
 
-* number of objects found, *4 bytes*, unsigned integer
+* number of objects found, *4 octets*, unsigned integer
 * list of objects
 
 Each object is represented as follows:
 
-* X coordinate, *4 bytes*, unsigned integer
-* Y coordinate, *4 bytes*, unsigned integer
-* diameter, *4 bytes*, unsigned integer
-* red, green and blue components of color, *1 byte* each
+* X coordinate, *4 octets*, unsigned integer
+* Y coordinate, *4 octets*, unsigned integer
+* diameter, *4 octets*, unsigned integer
+* red, green and blue components of color, *1 octet* each
 
 List of objects is just a stream of objects descriptions.
 
@@ -228,5 +228,5 @@ List of objects is just a stream of objects descriptions.
 
 ## Note about endianness
 
-All integer values larger than a byte should be converted to network
+All integer values larger than an octet should be converted to network
 byte order (big endian).
