@@ -51,6 +51,15 @@ public:
         else
             return NULL;
     }
+
+    // return serial number by port number
+    int getSerialByPortNumber(unsigned int number)
+    {
+        for  (int i = 0; i < ROBOTS; i++)
+            if (robots.at(i)->getPortNumber() == number)
+                return i;
+        return -1; // error value
+    }
 };
 
 #endif // MODELLINGSYSTEM_H

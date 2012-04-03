@@ -21,6 +21,6 @@ void HubThread::refresh()
 {
     if (ModellingSystem::isModellingPerformed) {
         hub->refresh();
-        QTimer::singleShot(1000 / SCREEN_REFRESH_RATE, this, SLOT(refresh()));
+        QTimer::singleShot(HUB_REFRESH_TIME, this, SLOT(refresh()));
     }
 }

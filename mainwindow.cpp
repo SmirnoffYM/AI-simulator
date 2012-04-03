@@ -47,7 +47,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    stopModelling();
+    if (HubModule::modellingSystem->isModellingPerformed)
+        stopModelling();
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->setClosePermit(true);
         robotWindows.at(i)->close();
@@ -196,6 +197,13 @@ int ** MainWindow::loadMap(QImage image)
 void MainWindow::onRefreshMap()
 {
     if (ModellingSystem::isModellingPerformed) {
+
+        // hide non active robot windows if any
+        double *idleTime = HubModule::getIdleTime();
+        for (int i = 0; i < ROBOTS; i++)
+            if (idleTime[i] > ROBOT_TIMEOUT)
+                robotWindows[i]->hide();
+
 
         drawMap(map);
 

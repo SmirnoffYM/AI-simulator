@@ -15,11 +15,16 @@ public:
 
     static ModellingSystem *modellingSystem;
 
+    static double* getIdleTime();
+
     void refresh();
 
 private:
     ComModule *comModule;
     std::queue<Message *> messageQueue;
+
+    // Shows how much time each robot was passive
+    static double* idleTime;
 };
 
 #endif // HUBMODULE_H

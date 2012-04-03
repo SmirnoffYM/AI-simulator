@@ -3,10 +3,15 @@
 #include <cmath>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
+double* HubModule::idleTime = NULL;
 
 HubModule::HubModule()
 {
     comModule = new ComModule(&messageQueue);
+
+    HubModule::idleTime = new double[ROBOTS];
+    for (int i = 0; i < ROBOTS; i++)
+        HubModule::idleTime[i] = START_IDLE_TIME;
 }
 /*
     refreshing system state
@@ -19,6 +24,9 @@ void HubModule::refresh()
     while (!messageQueue.empty())
     {
         m = messageQueue.front();
+
+        // set idle time for current robot equal 0
+        HubModule::idleTime[HubModule::modellingSystem->getSerialByPortNumber(m->id())] = 0;
 
         if(m->type() == "move")
         {
@@ -177,6 +185,17 @@ void HubModule::refresh()
         messageQueue.pop();
     }
 
+    // add time between hub refresh to those robots
+    // which were idle in current refresh cycle
+    for (int i = 0; i < ROBOTS; i++)
+        if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT)
+             HubModule::idleTime[i] += HUB_REFRESH_TIME;
+
+}
+
+double* HubModule::getIdleTime()
+{
+    return HubModule::idleTime;
 }
 
 /* Limit line length to 100 characters; highlight 99th column
