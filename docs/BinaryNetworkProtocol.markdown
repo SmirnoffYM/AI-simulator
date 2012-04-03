@@ -23,18 +23,19 @@ be either some dull message (see "`acknowledge` message") or answer to
 the question that agent asked (see "`there you see` message" and "`bump`
 message").
 
-There are 8 types of messages:
+There are 9 types of messages:
 
 * `move`
 * `turn`
 * `change size`
 * `change color`
 * `what is there?`
+* `parameter report`
 * `acknowledge`
 * `bump`
 * `there you see`
 
-Out of those, only first 5 can be sent by agent, and the last three
+Out of those, only first 6 can be sent by agent, and the last three
 can be sent only by the simulator.
 
 Following are formal specification of how does header and each message
@@ -62,6 +63,7 @@ Message types are mapped from names to numbers as follows:
 * 5: `what is there?`
 * 6: `bump`
 * 7: `there you see`
+* 8: `parameter report`
 
 ## `move` message
 
@@ -112,6 +114,20 @@ Message contains:
 * X coordinate, *4 octets*, unsigned integer
 * Y coordinate, *4 octets*, unsigned integer
 * radius, *4 octets*, unsigned integer
+
+## `parameter report` message
+
+Agent sends that message to report the state of one of his current
+parameters.
+
+Mesage contains:
+
+* string length, *1 octet*, unsigned
+* string containing value of the parameter, *varying length*
+
+String should have a format "%.15e", i.e. scientific format with 15 digits
+after decimal point, e.g. 1.214509386098369e-308, 2.354635736300000e+32 and
+\0.000000000000000e+00.
 
 ## `acknowledge` message
 
