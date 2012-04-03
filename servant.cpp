@@ -173,6 +173,11 @@ QColor Servant::colorTransform(Color col)
     return QColor(col.red, col.green, col.blue);
 }
 
+QString Servant::getColorName(Color col)
+{
+    return colorTransform(col).name();
+}
+
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:
  */

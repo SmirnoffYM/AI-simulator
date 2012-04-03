@@ -29,6 +29,9 @@ class Servant
         // Transform from QColor to Color
         Color colorTransform(QColor col);
         QColor colorTransform(Color col);
+
+        // Get color name
+        QString getColorName(Color col);
     private:
         Servant();
         Servant(Servant const&);

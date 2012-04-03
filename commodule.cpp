@@ -67,6 +67,11 @@ void ComModule::handleMessage()
     }
 }
 
+void ComModule::sendMessageToRobot(int portNumber, Message *message)
+{
+    // TODO: implement
+}
+
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:
  */

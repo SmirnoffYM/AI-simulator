@@ -5,6 +5,7 @@
 #include <QtGui/QColor>
 #include <QtCore/QLinkedList>
 #include <QtCore/QMetaType>
+#include <list>
 
 enum MessageType {
     MsgMove = 0,
@@ -225,16 +226,16 @@ class MessageThereYouSee : public Message
 {
     Q_OBJECT
 
-    Q_PROPERTY(QLinkedList<MessageObject> objects READ objects WRITE setObjects)
+    Q_PROPERTY(std::list<MessageObject *> objects READ objects WRITE setObjects)
 
 public:
-    MessageThereYouSee(QObject *parent = 0) : Message(parent) { m_type = "there you see"; };
+    MessageThereYouSee(QObject *parent = 0) : Message(parent) { m_type = "there you see"; }
 
-    QLinkedList<MessageObject> objects() const { return m_objects; };
-    void setObjects(const QLinkedList<MessageObject> objects) { m_objects = objects; };
+    std::list<MessageObject *> objects() const { return m_objects; }
+    void setObjects(const std::list<MessageObject *> objects) { m_objects = objects; }
 
 private:
-    QLinkedList<MessageObject> m_objects;
+    std::list<MessageObject *> m_objects;
 };
 
 #endif // MESSAGES_H

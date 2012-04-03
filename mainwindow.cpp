@@ -47,6 +47,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
+    stopModelling();
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->setClosePermit(true);
         robotWindows.at(i)->close();

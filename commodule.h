@@ -23,6 +23,8 @@ public:
     ComModule(std::queue<Message *> *);
     ~ComModule();
 
+    void sendMessageToRobot(int portNumber, Message *message);
+
 private slots:
     void handleMessage();
 
