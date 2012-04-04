@@ -29,7 +29,7 @@ There are 9 types of messages:
 * `turn`
 * `change size`
 * `change color`
-* `what is there?`
+* `who is there?`
 * `parameter report`
 * `acknowledge`
 * `bump`
@@ -60,7 +60,7 @@ Message types are mapped from names to numbers as follows:
 * 2: `turn`
 * 3: `change size`
 * 4: `change color`
-* 5: `what is there?`
+* 5: `who is there?`
 * 6: `bump`
 * 7: `there you see`
 * 8: `parameter report`
@@ -104,7 +104,7 @@ Message contains:
 * green value, *1 octet*
 * blue value, *1 octet*
 
-## `what is there?` message
+## `who is there?` message
 
 Agent sends that message to get a list of object situated inside a
 circle with the given centre and radius.
