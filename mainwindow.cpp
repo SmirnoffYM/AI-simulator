@@ -149,6 +149,7 @@ void MainWindow::stopModelling()
     }
 
     hubThread->terminate();
+    hubThread->~HubThread();
     Servant::getInstance().stopApplications();
 }
 

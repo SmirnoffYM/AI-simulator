@@ -9,6 +9,10 @@ class HubThread : public QThread
 Q_OBJECT
 public:
     HubThread();
+    ~HubThread()
+    {
+        delete hub;
+    }
 
     void run();
     void stop();

@@ -11,7 +11,10 @@ class HubModule
 {
 public:
     HubModule();
-    ~HubModule() {}
+    ~HubModule()
+    {
+        delete comModule;
+    }
 
     static ModellingSystem *modellingSystem;
 
