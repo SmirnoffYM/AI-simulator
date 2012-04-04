@@ -92,7 +92,7 @@ Agent sends that message to change its size.
 
 Message contains:
 
-* new diameter, *4 octets*, unsigned integer
+* diameter, *4 octets*, unsigned integer
 
 ## `change color` message
 
@@ -165,7 +165,10 @@ Each object is represented as follows:
 * X coordinate, *4 octets*, unsigned integer
 * Y coordinate, *4 octets*, unsigned integer
 * diameter, *4 octets*, unsigned integer
+* seconds, *4 octets*, integer
 * red, green and blue components of color, *1 octet* each
+
+Seconds field indidates orientation of object.
 
 List of objects is just a stream of objects descriptions.
 
