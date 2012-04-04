@@ -11,16 +11,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
+    mainwindow.cpp \
     robotwindow.cpp \
     commodule.cpp \
-    messages.cpp \
     hubmodule.cpp \
     modellingsystem.cpp \
     world.cpp \
     robot.cpp \
-    envobject.cpp \
-    messages-helpers.cpp
+    envobject.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -31,8 +29,7 @@ HEADERS  += mainwindow.h \
     world.h \
     robot.h \
     envobject.h \
-    constants.h \
-    messages-helpers.h
+    constants.h
 
 LIBS += -lqjson
 
