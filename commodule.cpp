@@ -27,6 +27,7 @@ void ComModule::handleMessage()
         socket->readDatagram(datagram.data(), datagram.size(),
                         &sender, &senderPort);
         
+        Message *msg = new Message();
         // FIXME: QQueue is not thread-safe, we need a mutex here once com module is moved to
         // separate thread
         // messageQueue->enqueue(msg);
