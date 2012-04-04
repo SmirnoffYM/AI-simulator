@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include "constants.h"
+#include "object.h"
 
 namespace Ui {
 class RobotWindow;

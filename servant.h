@@ -6,8 +6,11 @@
 #include <QDebug>
 #include <QDir>
 #include <QTextStream>
+#include <QGraphicsScene>
+#include <math.h>
 #include "constants.h"
 #include "robot.h"
+#include "hubmodule.h"
 
 class Servant
 {
@@ -32,6 +35,9 @@ class Servant
 
         // Get color name
         QString getColorName(Color col);
+
+        // Draw some object on some scene
+        void drawObject(Object *object, QGraphicsScene *scene);
     private:
         Servant();
         Servant(Servant const&);
