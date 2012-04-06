@@ -10,6 +10,8 @@ Robot::Robot():
         parameters[i] = std::pair<std::string, double>(&symbol, 0);
     }
     movable = true;
+    visibiltyRadius = 0;
+    type = Normal;
 }
 
 /* Limit line length to 100 characters; highlight 99th column

@@ -19,6 +19,7 @@ RobotWindow::RobotWindow(QWidget *parent) :
     ui->robotGraphicsView->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     isIntersectionTypeDisplayed = false;
     fullMap = NULL;
+    scaling = 1;
 }
 
 RobotWindow::~RobotWindow()
@@ -141,11 +142,6 @@ void RobotWindow::closeEvent(QCloseEvent *event)
         event->ignore();
 }
 
-void RobotWindow::setClosePermit(bool permission)
-{
-    closePermit = permission;
-}
-
 QString RobotWindow::buildParametersLabel()
 {
     const int prevParamsCount = 4;  //number of default params displayed before custom params
@@ -174,6 +170,13 @@ void RobotWindow::setMap(QImage *map)
     if (fullMap != NULL)
         delete fullMap;
     fullMap = new QImage(*map);
+}
+
+void RobotWindow::setScaling(unsigned int scaling)
+{
+    ui->robotGraphicsView->scale(1.0 / this->scaling, 1.0 / this->scaling);
+    this->scaling = scaling;
+    ui->robotGraphicsView->scale(scaling, scaling);
 }
 
 /* Limit line length to 100 characters; highlight 99th column

@@ -7,7 +7,9 @@
 #include <QDir>
 #include <QTextStream>
 #include <QGraphicsScene>
+#include <QGraphicsEllipseItem>
 #include <math.h>
+#include <algorithm>
 #include "constants.h"
 #include "robot.h"
 #include "hubmodule.h"
@@ -38,12 +40,24 @@ class Servant
 
         // Draw some object on some scene
         void drawObject(Object *object, QGraphicsScene *scene);
+
+        // Get local map scaling for some robot
+        // Robot number must be in range 0..ROBOTS-1
+        unsigned int getScaling(unsigned int robotNumber)
+        {
+            if (scaling.find(robotNumber) != scaling.end())
+                return scaling.find(robotNumber)->second;
+            else
+                return 1;
+        }
+
     private:
         Servant();
         Servant(Servant const&);
         void operator=(Servant const&);
 
         std::vector<std::pair<QString, QProcess *> > applications;
+        std::map<unsigned int, int> scaling;
 };
 
 #endif // SERVANT_H

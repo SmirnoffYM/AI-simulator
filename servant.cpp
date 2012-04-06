@@ -98,25 +98,43 @@ Robot * Servant::buildRobot(unsigned int number)
         return robot;
     }
 
-    //TODO: parse and check local map size
-    //TODO: parse and check local map scaling
+    // Check robot type
+    int type = configStringList.at(4).toInt(&ok);
+    if (!ok || (type != 0 && type != 1)) {
+        qDebug() << "Invalid robot type (robot" << number << ")";
+        return robot;
+    }
+
+    // Check visibility radius
+    int visibilityRadius = configStringList.at(5).toInt(&ok);
+    if (!ok || visibilityRadius < 0) {
+        qDebug() << "Invalid visibilty radius (robot" << number << ")";
+        return robot;
+    }
+
+    // Check local map scaling
+    int scaling = configStringList.at(6).toInt(&ok);
+    if (!ok || scaling < 1) {
+        qDebug() << "Invalid local map scaling (robot" << number << ")";
+        return robot;
+    }
 
     // Check intersection type
-    QString intersection = configStringList.at(6);
+    QString intersection = configStringList.at(7);
     if (intersection != "0" && intersection != "1" && intersection != "2") {
         qDebug() << "Invalid intersection type (robot" << number << ")";
         return robot;
     }
 
     // Check orientation
-    double orientation = configStringList.at(7).toDouble(&ok);
-    if (!ok) {
+    double orientation = configStringList.at(8).toDouble(&ok);
+    if (!ok || orientation < 0) {
         qDebug() << "Invalid orientation (robot" << number << ")";
         return robot;
     }
 
     // Check color
-    QColor color = QColor(configStringList.at(8));
+    QColor color = QColor(configStringList.at(9));
     if (!color.isValid()) {
         qDebug() << "Invalid color (robot" << number << ")";
         return robot;
@@ -130,7 +148,7 @@ Robot * Servant::buildRobot(unsigned int number)
     std::pair<std::string, double> *parameters =
             new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
-        QString line = configStringList.at(9+i);
+        QString line = configStringList.at(10+i);
         if (!line.contains(QRegExp("^(\\d|\\.)+;(\\w|\\s)+$"))) {
             qDebug() << "Invalid parameter" << i+1 << "(robot" << number << ")";
             return robot;
@@ -147,10 +165,14 @@ Robot * Servant::buildRobot(unsigned int number)
     robot->setCoords(x, y);
     robot->setSize(size);
     robot->setPortNumber(portFilename);
+    robot->setType(static_cast<RobotType>(type));
+    robot->setVisibilityRadius(visibilityRadius);
     robot->setOrientation(orientation);
     robot->setColor(transformedColor);
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
     robot->setParameters(parameters);
+
+    this->scaling[number] = scaling;
 
     QString command = configStringList.at(0) + QString(" ") + configFilename;
     qDebug() << "Robot" << number << "will be called by command" << command;
@@ -182,7 +204,7 @@ void Servant::drawObject(Object *object, QGraphicsScene *scene)
         int circle_y = (object->getCoords().second -
                         object->getSize() / 2) / REAL_PIXEL_SIZE;
 
-        scene->addEllipse(circle_x, circle_y,
+        QGraphicsEllipseItem *ellipse = scene->addEllipse(circle_x, circle_y,
                           object->getSize() / REAL_PIXEL_SIZE,
                           object->getSize() / REAL_PIXEL_SIZE,
                           QPen(outlineColor),
@@ -191,16 +213,9 @@ void Servant::drawObject(Object *object, QGraphicsScene *scene)
 
         // draw orientation line if object is movable
         if (object->isMovable()) {
-            double new_x = object->getSize() / 2.0 *
-                    sin(object->getOrientation() * PI / 180);
-            double new_y = object->getSize() / 2.0 *
-                    cos(object->getOrientation() * PI / 180);
-
-            scene->addLine(object->getCoords().first / REAL_PIXEL_SIZE,
-                           object->getCoords().second / REAL_PIXEL_SIZE,
-                           (object->getCoords().first + new_x) / REAL_PIXEL_SIZE,
-                           (object->getCoords().second - new_y) / REAL_PIXEL_SIZE,
-                           QPen(outlineColor));
+            const int accuracy = 16;    //qt's accuracy for degree values
+            ellipse->setStartAngle((90 - object->getOrientation()) * accuracy);
+            ellipse->setSpanAngle(360 * accuracy - 1);
         }
     }
 }

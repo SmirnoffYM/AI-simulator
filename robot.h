@@ -14,6 +14,8 @@ public:
 private:
     unsigned int portNumber;                    //also it's robot's id
     std::pair<std::string, double> *parameters; //custom robot parameters
+    unsigned int visibiltyRadius;               //in this radius robot can see other objects
+    RobotType type;                             //type of the robot
 
 public:
     std::pair<std::string, double> * getParameters()
@@ -24,6 +26,16 @@ public:
     bool isMovable()
     {
         return true;
+    }
+
+    unsigned int getVisibilityRadius()
+    {
+        return visibiltyRadius;
+    }
+
+    RobotType getType()
+    {
+        return type;
     }
 
     void setParameters(std::pair<std::string, double> *params)
@@ -42,6 +54,17 @@ public:
     {
         portNumber = port;
     }
+
+    void setVisibilityRadius(unsigned int radius)
+    {
+        visibiltyRadius = radius;
+    }
+
+    void setType(RobotType robotType)
+    {
+        type = robotType;
+    }
+
 };
 
 #endif // ROBOT_H

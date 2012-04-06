@@ -21,6 +21,7 @@
                                                 // will be closed
 //TODO: define MAX_MAP_SIDE
 enum Intersection { Allowed, Denied, AllowedForSameColor };
+enum RobotType { Normal, Flying };              // Flying robot can observe the whole map
 
 struct Color {
     int red;

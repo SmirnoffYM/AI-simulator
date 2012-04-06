@@ -24,8 +24,7 @@ private:
     QImage *fullMap;
 
     unsigned int robotId;                   //robot's number. It must be from 1 to ROBOTS
-    std::pair<int, int> size;               //local map size
-    double scaling;
+    unsigned int scaling;
 
     bool closePermit;
 
@@ -34,15 +33,22 @@ private:
 public slots:
     void onRefreshMap();
 
-public:
-    void setRobotId(int id);
-    void setMap(QImage *map);
-    void setClosePermit(bool permission);
-
 private:
     void closeEvent(QCloseEvent *event);
     void refreshRobotParams();
     QString buildParametersLabel();
+
+public:
+    void setRobotId(int id);
+    void setMap(QImage *map);
+
+    void setClosePermit(bool permission)
+    {
+        closePermit = permission;
+    }
+
+    void setScaling(unsigned int scaling);
+
 };
 
 #endif // ROBOTWINDOW_H

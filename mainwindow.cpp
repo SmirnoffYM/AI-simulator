@@ -126,6 +126,7 @@ void MainWindow::on_actionRun_triggered()
 
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->setMap(map);
+        robotWindows.at(i)->setScaling(Servant::getInstance().getScaling(i));
         robotWindows.at(i)->show();
     }
 
