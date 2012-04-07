@@ -73,9 +73,9 @@ void HubModule::refresh()
             } else if (m->type() == "change color")
             {
                 MessageChangeColor *messageChangeColor = static_cast<MessageChangeColor *>(m);
+                QColor col = QColor(messageChangeColor->newColor());
                 HubModule::modellingSystem->getRobotByPort(messageChangeColor->id())
-                        ->setColor(Servant::getInstance().colorTransform(
-                                       messageChangeColor->newColor()));
+                        ->setColor(Color(col.red(), col.green(), col.blue()));
             }
 
             messageQueue.pop();
@@ -87,9 +87,9 @@ void HubModule::refresh()
         } else if (m->type() == "change color")
         {
             MessageChangeColor *messageChangeColor = static_cast<MessageChangeColor *>(m);
+            QColor col = QColor(messageChangeColor->newColor());
             HubModule::modellingSystem->getRobotByPort(messageChangeColor->id())
-                    ->setColor(Servant::getInstance().colorTransform(messageChangeColor
-                                                                     ->newColor()));
+                    ->setColor(Color(col.red(), col.green(), col.blue()));
         } else if (m->type() == "who is there?")
         {
             // I feel a tremor in the Force.
@@ -127,8 +127,7 @@ void HubModule::refresh()
                         )
                 {
                     MessageObject *messageObject = new MessageObject();
-                    messageObject->setColor(Servant::getInstance().getColorName(robot
-                                                                                ->getColor()));
+                    messageObject->setColor(QString::fromStdString(robot->getColor().toString()));
                     messageObject->setCoordX(robot->getCoords().first);
                     messageObject->setCoordY(robot->getCoords().second);
                     messageObject->setDiameter(robot->getSize());
@@ -164,8 +163,8 @@ void HubModule::refresh()
                         )
                 {
                     MessageObject *messageObject = new MessageObject();
-                    messageObject->setColor(Servant::getInstance().getColorName(envObject
-                                                                                ->getColor()));
+                    messageObject->setColor(QString::fromStdString(envObject->getColor().
+                                                                   toString()));
                     messageObject->setCoordX(envObject->getCoords().first);
                     messageObject->setCoordY(envObject->getCoords().second);
                     messageObject->setDiameter(envObject->getSize());

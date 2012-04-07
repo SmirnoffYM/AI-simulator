@@ -23,12 +23,6 @@
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 enum RobotType { Normal, Flying };              // Flying robot can observe the whole map
 
-struct Color {
-    int red;
-    int green;
-    int blue;
-};
-
 /* Define some non-crossplatform math constants: */
 
 #define PI 3.14159265358979323846

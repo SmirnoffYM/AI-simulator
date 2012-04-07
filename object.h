@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include "constants.h"
+#include "color.h"
 
 class Object
 {

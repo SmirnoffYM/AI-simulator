@@ -31,13 +31,6 @@ class Servant
         // Loading robot profile
         Robot * buildRobot(unsigned int number);
 
-        // Transform from QColor to Color
-        Color colorTransform(QColor col);
-        QColor colorTransform(Color col);
-
-        // Get color name
-        QString getColorName(Color col);
-
         // Draw some object on some scene
         void drawObject(Object *object, QGraphicsScene *scene);
 

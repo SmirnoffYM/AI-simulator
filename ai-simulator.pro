@@ -23,7 +23,8 @@ SOURCES += main.cpp\
     hubthread.cpp \
     messages-helpers.cpp \
     servant.cpp \
-    object.cpp
+    object.cpp \
+    color.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -38,7 +39,8 @@ HEADERS  += mainwindow.h \
     hubthread.h \
     messages-helpers.h \
     servant.h \
-    object.h
+    object.h \
+    color.h
 
 LIBS += -lqjson
 

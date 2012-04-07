@@ -139,10 +139,6 @@ Robot * Servant::buildRobot(unsigned int number)
         qDebug() << "Invalid color (robot" << number << ")";
         return robot;
     }
-    Color transformedColor;
-    transformedColor.red = color.red();
-    transformedColor.green = color.green();
-    transformedColor.blue = color.blue();
 
     // Check all custom parameters
     std::pair<std::string, double> *parameters =
@@ -168,7 +164,7 @@ Robot * Servant::buildRobot(unsigned int number)
     robot->setType(static_cast<RobotType>(type));
     robot->setVisibilityRadius(visibilityRadius);
     robot->setOrientation(orientation);
-    robot->setColor(transformedColor);
+    robot->setColor(Color(color.red(), color.green(), color.blue()));
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));
     robot->setParameters(parameters);
 
@@ -195,9 +191,9 @@ void Servant::drawObject(Object *object, QGraphicsScene *scene)
             HubModule::modellingSystem->getWorld()->getSize().first * REAL_PIXEL_SIZE
             && object->getCoords().second + static_cast<int>(object->getSize() / 2) <=
             HubModule::modellingSystem->getWorld()->getSize().second * REAL_PIXEL_SIZE) {
-        QColor outlineColor(255 - object->getColor().red,
-                            255 - object->getColor().green,
-                            255 - object->getColor().blue);
+        QColor outlineColor(255 - object->getColor().red(),
+                            255 - object->getColor().green(),
+                            255 - object->getColor().blue());
 
         int circle_x = (object->getCoords().first -
                         object->getSize() / 2) / REAL_PIXEL_SIZE;
@@ -208,8 +204,9 @@ void Servant::drawObject(Object *object, QGraphicsScene *scene)
                           object->getSize() / REAL_PIXEL_SIZE,
                           object->getSize() / REAL_PIXEL_SIZE,
                           QPen(outlineColor),
-                          QBrush(Servant::getInstance().
-                                 colorTransform(object->getColor())));
+                          QBrush(QColor(object->getColor().red(),
+                                        object->getColor().green(),
+                                        object->getColor().blue())));
 
         // draw orientation line if object is movable
         if (object->isMovable()) {
@@ -218,25 +215,6 @@ void Servant::drawObject(Object *object, QGraphicsScene *scene)
             ellipse->setSpanAngle(360 * accuracy - 1);
         }
     }
-}
-
-Color Servant::colorTransform(QColor col)
-{
-    Color color;
-    color.red = col.red();
-    color.green = col.green();
-    color.blue = col.blue();
-    return color;
-}
-
-QColor Servant::colorTransform(Color col)
-{
-    return QColor(col.red, col.green, col.blue);
-}
-
-QString Servant::getColorName(Color col)
-{
-    return colorTransform(col).name();
 }
 
 /* Limit line length to 100 characters; highlight 99th column

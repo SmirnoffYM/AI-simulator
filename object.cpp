@@ -4,9 +4,7 @@ Object::Object():
     size(0),
     orientation(0),
     intersection(AllowedForSameColor),
-    coords(0, 0)
+    coords(0, 0),
+    color(255, 255, 255)
 {
-    color.red = 255;
-    color.green = 255;
-    color.blue = 255;
 }
