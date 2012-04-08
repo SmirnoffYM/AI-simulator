@@ -54,7 +54,16 @@ MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
 
 MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
 {
-    return NULL;
+    MessageWhoIsThere *msg = new MessageWhoIsThere();
+
+    quint32 x, y, r;
+    stream >> x >> y >> r;
+
+    msg->coordX = x;
+    msg->coordY = y;
+    msg->radius = r;
+
+    return msg;
 };
 
 MessageParameterReport * parseMessageParameterReport(QDataStream & stream)
