@@ -49,14 +49,19 @@ void ComModule::handleMessage()
             msg = parseMessageMove(stream);
             break;
         case MsgTurn:
+            msg = parseMessageTurn(stream);
             break;
         case MsgChangeSize:
+            msg = parseMessageChangeSize(stream);
             break;
         case MsgChangeColor:
+            msg = parseMessageChangeColor(stream);
             break;
         case MsgWhoIsThere:
+            msg = parseMessageWhoIsThere(stream);
             break;
         case MsgParameterReport:
+            msg = parseMessageParameterReport(stream);
             break;
         default:
             // FIXME: qDebug
