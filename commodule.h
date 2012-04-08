@@ -22,6 +22,8 @@ public:
     ComModule(QQueue<Message *> *);
     ~ComModule();
 
+    void sendMessageToRobot(int portNumber, Message *message);
+
 private slots:
     void handleMessage();
 
