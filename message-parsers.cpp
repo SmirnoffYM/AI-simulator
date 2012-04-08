@@ -15,7 +15,15 @@ MessageMove * parseMessageMove(QDataStream & stream)
 
 MessageTurn * parseMessageTurn(QDataStream & stream)
 {
-    return NULL;
+    MessageTurn *msg = new MessageTurn();
+
+    qint32 seconds;
+    stream >> seconds;
+
+    // 60 seconds is a minute, and 60 minutes is a degree
+    msg->degrees = static_cast<double>(seconds) / 3600;
+
+    return msg;
 };
 
 MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
