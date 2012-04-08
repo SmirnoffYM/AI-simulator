@@ -46,6 +46,7 @@ void ComModule::handleMessage()
 
         switch(msg->type) {
         case MsgMove:
+            msg = parseMessageMove(stream);
             break;
         case MsgTurn:
             break;

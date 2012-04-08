@@ -2,10 +2,15 @@
 
 MessageMove * parseMessageMove(QDataStream & stream)
 {
+    MessageMove *msg = new MessageMove();
+
     quint32 x, y;
     stream >> x >> y;
 
-    return NULL;
+    msg->coordX = x;
+    msg->coordY = y;
+
+    return msg;
 };
 
 MessageTurn * parseMessageTurn(QDataStream & stream)
