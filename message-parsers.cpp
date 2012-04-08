@@ -68,6 +68,16 @@ MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
 
 MessageParameterReport * parseMessageParameterReport(QDataStream & stream)
 {
-    return NULL;
+    MessageParameterReport *msg = new MessageParameterReport();
+
+    quint8 id;
+    quint32 integral, real;
+    stream >> id >> integral >> real;
+
+    msg->id = id;
+    msg->integral = integral;
+    msg->real = real;
+
+    return msg;
 };
 
