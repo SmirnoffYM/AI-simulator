@@ -30,7 +30,7 @@ void ComModule::handleMessage()
         Message *msg = NULL;
 
         /* QDataStream would handle endianness for us */
-        QDataStream stream(&datagram, QIODevice::WriteOnly);
+        QDataStream stream(&datagram, QIODevice::ReadOnly);
 
         quint8 version;
         stream >> version;
