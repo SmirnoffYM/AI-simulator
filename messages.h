@@ -75,6 +75,14 @@ public:
     unsigned int radius;
 };
 
+class MessageParameterReport : public Message
+{
+public:
+   char id;
+   unsigned int integral;
+   int real; 
+};
+
 /* Excuse me for awkward name - I really couldn't come up with anything better */
 struct MessageObject {
     char red, green, blue;

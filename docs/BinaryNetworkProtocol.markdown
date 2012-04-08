@@ -126,12 +126,14 @@ parameters.
 
 Mesage contains:
 
-* string length, *1 octet*, unsigned
-* string containing value of the parameter, *varying length*
+* parameter id, *1 octet*
+* integral part of the value, *4 octets*, signed integer
+* real part of the value, *4 octets*, unsigned integer
 
-String should have a format "%.15e", i.e. scientific format with 15 digits
-after decimal point, e.g. 1.214509386098369e-308, 2.354635736300000e+32 and
-\0.000000000000000e+00.
+Parameter id is an unsigned integer number in the range of [0; 15].
+
+Parameter's value is split into integral part and first 6 digits of real part.
+Note that real part is unsigned - sign is carried with integral part.
 
 ## `acknowledge` message
 
