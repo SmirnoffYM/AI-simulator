@@ -22,7 +22,7 @@ public:
     ComModule(QQueue<Message *> *);
     ~ComModule();
 
-    void sendMessageToRobot(int portNumber, Message *message);
+    void sendMessage(int, Message *);
 
 private slots:
     void handleMessage();

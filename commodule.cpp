@@ -78,7 +78,7 @@ void ComModule::handleMessage()
     }
 }
 
-void ComModule::sendMessageToRobot(int portNumber, Message *message)
+void ComModule::sendMessage(int port, Message *msg)
 {
     // TODO: implement
 }
