@@ -28,7 +28,14 @@ MessageTurn * parseMessageTurn(QDataStream & stream)
 
 MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
 {
-    return NULL;
+    MessageChangeSize *msg = new MessageChangeSize();
+
+    quint32 diameter;
+    stream >> diameter;
+
+    msg->diameter = diameter;
+
+    return msg;
 };
 
 MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
