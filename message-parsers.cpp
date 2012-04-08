@@ -40,7 +40,16 @@ MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
 
 MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
 {
-    return NULL;
+    MessageChangeColor *msg = new MessageChangeColor();
+
+    quint8 red, green, blue;
+    stream >> red >> green >> blue;
+
+    msg->red = red;
+    msg->green = green;
+    msg->blue = blue;
+
+    return msg;
 };
 
 MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
