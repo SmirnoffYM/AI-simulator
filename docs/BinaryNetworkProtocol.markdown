@@ -1,4 +1,4 @@
-# Binary network protocol specification
+# Binary network protocol specification (version 1)
 
 ## Motivation
 
@@ -45,9 +45,13 @@ type look like.
 
 Header contains:
 
+* protocol version, *1 octet*
 * message's sequential number, *4 octets*, unsigned integer
 * agent's port, *2 octets*, unsigned integer
 * message type, *1 octet*
+
+This document describes protocol version 1, so the first octet of the
+message should contain 1.
 
 Sequential numbers are set by the agent and required by him to make
 sense out of responses. Simulator should just copy that field from the
