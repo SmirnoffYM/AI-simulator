@@ -83,7 +83,8 @@ struct MessageObject {
     int seconds;
 };
 
-class MessageThereYouSee : public Message {
+class MessageThereYouSee : public Message
+{
 public:
     MessageThereYouSee() { type = MsgThereYouSee; };
 
