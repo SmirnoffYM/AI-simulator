@@ -27,7 +27,7 @@ void ComModule::handleMessage()
         socket->readDatagram(datagram.data(), datagram.size(),
                         &sender, &senderPort);
         
-        Message *msg = new Message();
+        Message *msg = NULL;
 
         /* QDataStream would handle endianness for us */
         QDataStream stream(&datagram, QIODevice::WriteOnly);
@@ -43,13 +43,8 @@ void ComModule::handleMessage()
         quint16 port;
         quint8 msg_type;
         stream >> seq_num >> port >> msg_type;
-        msg->num = seq_num;
-        msg->port = port;
-        msg->type = (MessageType)msg_type;
 
         switch(msg->type) {
-        case MsgAcknowledge:
-            break;
         case MsgMove:
             break;
         case MsgTurn:
@@ -60,16 +55,16 @@ void ComModule::handleMessage()
             break;
         case MsgWhoIsThere:
             break;
-        case MsgBump:
-            break;
-        case MsgThereYouSee:
-            break;
         case MsgParameterReport:
             break;
         default:
             // FIXME: qDebug
             break;
         }
+
+        msg->num = seq_num;
+        msg->port = port;
+        msg->type = (MessageType)msg_type;
 
         // FIXME: QQueue is not thread-safe, we need a mutex here once com module is moved to
         // separate thread

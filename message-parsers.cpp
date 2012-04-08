@@ -1,26 +1,35 @@
 #include "message-parsers.h"
 
-MessageMove parseMessageMove(QDataStream *)
+MessageMove * parseMessageMove(QDataStream & stream)
 {
+    quint32 x, y;
+    stream >> x >> y;
+
+    return NULL;
 };
 
-MessageMove parseMessageTurn(QDataStream *)
+MessageTurn * parseMessageTurn(QDataStream & stream)
 {
+    return NULL;
 };
 
-MessageMove parseMessageChangeSize(QDataStream *)
+MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
 {
+    return NULL;
 };
 
-MessageMove parseMessageChangeColor(QDataStream *)
+MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
 {
+    return NULL;
 };
 
-MessageMove parseMessageWhoIsThere(QDataStream *)
+MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
 {
+    return NULL;
 };
 
-MessageMove parseMessageParameterReport(QDataStream *)
+MessageParameterReport * parseMessageParameterReport(QDataStream & stream)
 {
+    return NULL;
 };
 
