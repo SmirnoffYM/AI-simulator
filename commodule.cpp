@@ -8,6 +8,8 @@ ComModule::ComModule(QQueue<Message *> *q) : QObject()
     // FIXME: use the port specified in config
     socket->bind(QHostAddress::LocalHost, SIMULATOR_PORT);
 
+    /* Call handleMessage() every time there's something to read in socket - i.e. when message is
+     * received */
     connect(socket, SIGNAL(readyRead()), this, SLOT(handleMessage()));
 }
 
@@ -18,15 +20,24 @@ ComModule::~ComModule()
 
 void ComModule::handleMessage()
 {
+    /* More messages may appear one we process the first one, so let's wrap the core into the loop
+     * which would iterate while there's something in the socket to read */
     while(socket->hasPendingDatagrams()) {
+        /* We represent message as an array of bytes, for which Qt has a handy class */
         QByteArray datagram;
+        /* QByteArray can grow as data is added, but we can speed things up by explicitly asking for
+         * the space we would need */
         datagram.resize(socket->pendingDatagramSize());
+
         QHostAddress sender;
         quint16 senderPort;
 
+        /* Read the message */
         socket->readDatagram(datagram.data(), datagram.size(),
                         &sender, &senderPort);
         
+        /* The point of all this method is to put message into the queue
+         * This variable would point to that message */
         Message *msg = NULL;
 
         /* QDataStream would handle endianness for us */
@@ -36,14 +47,17 @@ void ComModule::handleMessage()
         stream >> version;
         if(version != 1) {
             // FIXME: stick qDebug in here
+            // VERSION MISMATCH, CAN'T HANDLE THAT
             return;
         }
 
+        /* Read some service info */
         quint32 seq_num;
         quint16 port;
         quint8 msg_type;
         stream >> seq_num >> port >> msg_type;
 
+        /* Dispatch depending on the message type */
         switch(msg->type) {
         case MsgMove:
             msg = parseMessageMove(stream);
@@ -65,22 +79,27 @@ void ComModule::handleMessage()
             break;
         default:
             // FIXME: qDebug
+            // Receiving anything else than the messages specified above is kind of an error
             break;
         }
 
+        /* At this point, we have 'msg' pointing at the parsed message represented by some subclass
+         * of Message class (see messages.h). All we need to do now is to put service info in and
+         * then put the message into the queue */
         msg->num = seq_num;
         msg->port = port;
         msg->type = (MessageType)msg_type;
 
-        // FIXME: QQueue is not thread-safe, we need a mutex here once com module is moved to
-        // separate thread
+        // FIXME: is std::queue thread-safe? Should we use mutex here?
         messageQueue->push(msg);
     }
 }
 
 void ComModule::sendMessage(Message *msg)
 {
+    /* datagram would contain the message to send */
     QByteArray datagram;
+    /* Use QDataStream to populate datagram with data because it would handle endianness for us */
     QDataStream stream(&datagram, QIODevice::WriteOnly);
 
     // version: 1
@@ -100,6 +119,7 @@ void ComModule::sendMessage(Message *msg)
         MessageThereYouSee *m = (MessageThereYouSee *)msg;
         quint32 count = (quint32)m->objects.size();
         stream << count;
+        /* For each object, put its description into the stream */
         for(quint32 i = 0; i < count; i++) {
             MessageObject o = m->objects.takeFirst();
             stream << (quint32)o.coordX << (quint32)o.coordY
@@ -109,6 +129,7 @@ void ComModule::sendMessage(Message *msg)
         break;
     }
 
+    /* Send the message */
     socket->writeDatagram(datagram, QHostAddress::LocalHost, msg->port);
 }
 

@@ -19,12 +19,16 @@ class ComModule : public QObject
     Q_OBJECT
 
 public:
+    /* Constructor receives a pointer to the queue of messages where he would put everything he
+     * receives */
     ComModule(QQueue<Message *> *);
     ~ComModule();
 
+    /* This function is getting called from hub module when it's time to send a response */
     void sendMessage(Message *);
 
 private slots:
+    /* This slot is getting called when there's UDP messages waiting to be read */
     void handleMessage();
 
 private:
