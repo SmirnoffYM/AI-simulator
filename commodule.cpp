@@ -78,7 +78,7 @@ void ComModule::handleMessage()
     }
 }
 
-void ComModule::sendMessage(int port, Message *msg)
+void ComModule::sendMessage(Message *msg)
 {
     // TODO: implement
 }

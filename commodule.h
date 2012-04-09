@@ -22,7 +22,7 @@ public:
     ComModule(QQueue<Message *> *);
     ~ComModule();
 
-    void sendMessage(int, Message *);
+    void sendMessage(Message *);
 
 private slots:
     void handleMessage();
