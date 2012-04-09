@@ -80,7 +80,36 @@ void ComModule::handleMessage()
 
 void ComModule::sendMessage(Message *msg)
 {
-    // TODO: implement
+    QByteArray datagram;
+    QDataStream stream(&datagram, QIODevice::WriteOnly);
+
+    // version: 1
+    stream << (quint8)1;
+    // other header infortmation
+    stream << (quint32)msg->num << (quint16)msg->port << (quint8)msg->type;
+
+    switch(msg->type) {
+    case MsgAcknowledge:
+        // "acknowledge" doesn't have any payload
+        break;
+    case MsgBump:
+        stream << (quint32)((MessageBump *)msg)->coordX
+               << (quint32)((MessageBump *)msg)->coordY;
+        break;
+    case MsgThereYouSee:
+        MessageThereYouSee *m = (MessageThereYouSee *)msg;
+        quint32 count = (quint32)m->objects.size();
+        stream << count;
+        for(quint32 i = 0; i < count; i++) {
+            MessageObject o = m->objects.takeFirst();
+            stream << (quint32)o.coordX << (quint32)o.coordY
+                   << (quint32)o.diameter << (quint32)o.seconds
+                   << (quint8)o.red << (quint8)o.green << (quint8)o.blue;
+        }
+        break;
+    }
+
+    socket->writeDatagram(datagram, QHostAddress::LocalHost, msg->port);
 }
 
 /* Limit line length to 100 characters; highlight 99th column
