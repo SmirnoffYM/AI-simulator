@@ -1,6 +1,7 @@
 #include "hubmodule.h"
 #include "servant.h"
 #include <cmath>
+#include <QDebug>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
 double* HubModule::idleTime = NULL;
@@ -24,73 +25,52 @@ void HubModule::refresh()
     while (!messageQueue.empty())
     {
         m = messageQueue.front();
+        messageQueue.pop();
 
         // set idle time for current robot equal 0
-        HubModule::idleTime[HubModule::modellingSystem->getSerialByPortNumber(m->id())] = 0;
+        HubModule::idleTime[HubModule::modellingSystem->getSerialByPortNumber(m->port)] = 0;
 
-        if(m->type() == "move")
+        switch (m->type) {
+        case MsgMove:
         {
+            qDebug() << "test";
             MessageMove *messageMove = static_cast<MessageMove *>(m);
-            HubModule::modellingSystem->getRobotByPort(messageMove->id())
-                    ->setCoords(messageMove->coordX(), messageMove->coordY());
+            HubModule::modellingSystem->getRobotByPort(messageMove->port)
+                    ->setCoords(messageMove->coordX, messageMove->coordY);
+        }
+            break;
 
-        } else if (m->type() == "turn")
+        case MsgTurn:
         {
             MessageTurn *messageTurn = static_cast<MessageTurn *>(m);
 
-            double prevOrientation = HubModule::modellingSystem->getRobotByPort(messageTurn->id())
+            double prevOrientation = HubModule::modellingSystem->getRobotByPort(messageTurn->port)
                     ->getOrientation();
 
-            HubModule::modellingSystem->getRobotByPort(messageTurn->id())
-                    ->setOrientation(prevOrientation + messageTurn->degrees());
+            HubModule::modellingSystem->getRobotByPort(messageTurn->port)
+                    ->setOrientation(prevOrientation + messageTurn->degrees);
+        }
+            break;
 
-        } else if (m->type() == "change size")
+        case MsgChangeSize:
         {
-            m = messageQueue.front();
-
-            if(m->type() == "move")
-            {
-                MessageMove *messageMove = static_cast<MessageMove *>(m);
-                HubModule::modellingSystem->getRobotByPort(messageMove->id())
-                        ->setCoords(messageMove->coordX(), messageMove->coordY());
-
-            } else if (m->type() == "turn")
-            {
-                MessageTurn *messageTurn = static_cast<MessageTurn *>(m);
-
-                double prevOrientation = HubModule::modellingSystem->getRobotByPort(messageTurn->id())
-                        ->getOrientation();
-
-                HubModule::modellingSystem->getRobotByPort(messageTurn->id())
-                        ->setOrientation(prevOrientation + messageTurn->degrees());
-
-            } else if (m->type() == "change size")
-            {
-                MessageChangeSize *messageChangeSize = static_cast<MessageChangeSize *>(m);
-                HubModule::modellingSystem->getRobotByPort(messageChangeSize->id())
-                        ->setSize(messageChangeSize->newDiameter());
-
-            } else if (m->type() == "change color")
-            {
-                MessageChangeColor *messageChangeColor = static_cast<MessageChangeColor *>(m);
-                QColor col = QColor(messageChangeColor->newColor());
-                HubModule::modellingSystem->getRobotByPort(messageChangeColor->id())
-                        ->setColor(Color(col.red(), col.green(), col.blue()));
-            }
-
-            messageQueue.pop();
-
             MessageChangeSize *messageChangeSize = static_cast<MessageChangeSize *>(m);
-            HubModule::modellingSystem->getRobotByPort(messageChangeSize->id())
-                    ->setSize(messageChangeSize->newDiameter());
+            HubModule::modellingSystem->getRobotByPort(messageChangeSize->port)
+                    ->setSize(messageChangeSize->diameter);
+        }
+            break;
 
-        } else if (m->type() == "change color")
+        case MsgChangeColor:
         {
             MessageChangeColor *messageChangeColor = static_cast<MessageChangeColor *>(m);
-            QColor col = QColor(messageChangeColor->newColor());
-            HubModule::modellingSystem->getRobotByPort(messageChangeColor->id())
-                    ->setColor(Color(col.red(), col.green(), col.blue()));
-        } else if (m->type() == "who is there?")
+            HubModule::modellingSystem->getRobotByPort(messageChangeColor->port)
+                    ->setColor(Color(messageChangeColor->red,
+                                     messageChangeColor->green,
+                                     messageChangeColor->blue));
+        }
+            break;
+
+        case MsgWhoIsThere:
         {
             // I feel a tremor in the Force.
             // Something is wrong down there
@@ -102,7 +82,7 @@ void HubModule::refresh()
             MessageThereYouSee *messageThereYouSee = new MessageThereYouSee();
 
             // we also need a list of those objects
-            std::list<MessageObject *> objectsInRange;
+            std::list<MessageObject> objectsInRange;
 
             // look through all robots and put into list those,
             // which are in received radius
@@ -115,23 +95,29 @@ void HubModule::refresh()
                 // and
                 // check if distance between them is not bigger then
                 // received radius
-                if ((robot->getPortNumber() != messageWhoIsThere->id())
+                if ((robot->getPortNumber() != messageWhoIsThere->port)
                         && (sqrt(
                                 pow(robot->getCoords().first
-                                    - messageWhoIsThere->coordX(), 2)
+                                    - messageWhoIsThere->coordX, 2)
                                 +
                                 pow(robot->getCoords().second
-                                    - messageWhoIsThere->coordY(), 2)
-                                ) <= messageWhoIsThere->radius()
+                                    - messageWhoIsThere->coordY, 2)
+                                ) <= messageWhoIsThere->radius
                             )
                         )
                 {
-                    MessageObject *messageObject = new MessageObject();
-                    messageObject->setColor(QString::fromStdString(robot->getColor().toString()));
-                    messageObject->setCoordX(robot->getCoords().first);
-                    messageObject->setCoordY(robot->getCoords().second);
-                    messageObject->setDiameter(robot->getSize());
-                    messageObject->setOrientation(robot->getOrientation());
+                    MessageObject messageObject;
+                    // set color
+                    messageObject.red = robot->getColor().red();
+                    messageObject.green = robot->getColor().green();
+                    messageObject.blue = robot->getColor().blue();
+                    // set coordinates
+                    messageObject.coordX = robot->getCoords().first;
+                    messageObject.coordX = robot->getCoords().second;
+                    // set diameter
+                    messageObject.diameter = robot->getSize();
+                    // set orientation
+                    messageObject.seconds = robot->getOrientation();
 
                     objectsInRange.push_front(messageObject);
 
@@ -151,44 +137,48 @@ void HubModule::refresh()
                 // and
                 // check if distance between them is not bigger then
                 // received radius
-                if ((envObject->getPortNumber() != messageWhoIsThere->id())
+                if ((envObject->getPortNumber() != messageWhoIsThere->port)
                         && (sqrt(
                                 pow(envObject->getCoords().first
-                                    - messageWhoIsThere->coordX(), 2)
+                                    - messageWhoIsThere->coordX, 2)
                                 +
                                 pow(envObject->getCoords().second
-                                    - messageWhoIsThere->coordY(), 2)
-                                ) <= messageWhoIsThere->radius()
+                                    - messageWhoIsThere->coordY, 2)
+                                ) <= messageWhoIsThere->radius
                             )
                         )
                 {
-                    MessageObject *messageObject = new MessageObject();
-                    messageObject->setColor(QString::fromStdString(envObject->getColor().
-                                                                   toString()));
-                    messageObject->setCoordX(envObject->getCoords().first);
-                    messageObject->setCoordY(envObject->getCoords().second);
-                    messageObject->setDiameter(envObject->getSize());
-                    messageObject->setOrientation(envObject->getOrientation());
+                    MessageObject messageObject;
+                    // set color
+                    messageObject.red = envObject->getColor().red();
+                    messageObject.green = envObject->getColor().green();
+                    messageObject.blue = envObject->getColor().blue();
+                    // set coordinates
+                    messageObject.coordX = envObject->getCoords().first;
+                    messageObject.coordX = envObject->getCoords().second;
+                    // set diameter
+                    messageObject.diameter = envObject->getSize();
+                    // set orientation
+                    messageObject.seconds = envObject->getOrientation();
 
                     objectsInRange.push_front(messageObject);
-
                     // FIXME: messageObject destructor here
                 }
             }
 
-            messageThereYouSee->setObjects(objectsInRange);
+            messageThereYouSee->objects = objectsInRange;
             // send message to robot
-            comModule->sendMessageToRobot(messageThereYouSee->id(), messageThereYouSee);
         }
+            break;
 
-        messageQueue.pop();
+        }
     }
 
     // add time between hub refresh to those robots
     // which were idle in current refresh cycle
     for (int i = 0; i < ROBOTS; i++)
         if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT)
-             HubModule::idleTime[i] += HUB_REFRESH_TIME;
+            HubModule::idleTime[i] += HUB_REFRESH_TIME;
 
 }
 
