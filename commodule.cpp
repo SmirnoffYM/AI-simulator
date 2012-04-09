@@ -74,7 +74,7 @@ void ComModule::handleMessage()
 
         // FIXME: QQueue is not thread-safe, we need a mutex here once com module is moved to
         // separate thread
-        messageQueue->enqueue(msg);
+        messageQueue->push(msg);
     }
 }
 
