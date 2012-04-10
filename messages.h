@@ -78,9 +78,11 @@ public:
 class MessageParameterReport : public Message
 {
 public:
-   char id;
-   unsigned int integral;
-   int real; 
+    MessageParameterReport() { type = MsgParameterReport; };
+    
+    char id;
+    unsigned int integral;
+    int real; 
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
