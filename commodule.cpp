@@ -91,7 +91,7 @@ void ComModule::handleMessage()
         msg->type = (MessageType)msg_type;
 
         // FIXME: is std::queue thread-safe? Should we use mutex here?
-        messageQueue->push(msg);
+        messageQueue->enqueue(msg);
     }
 }
 
