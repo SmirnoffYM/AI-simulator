@@ -81,8 +81,8 @@ public:
     MessageParameterReport() { type = MsgParameterReport; };
     
     char id;
-    unsigned int integral;
-    int real; 
+    int integral;
+    unsigned int real; 
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
