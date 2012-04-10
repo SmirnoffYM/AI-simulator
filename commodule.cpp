@@ -58,7 +58,7 @@ void ComModule::handleMessage()
         stream >> seq_num >> port >> msg_type;
 
         /* Dispatch depending on the message type */
-        switch(msg->type) {
+        switch(msg_type) {
         case MsgMove:
             msg = parseMessageMove(stream);
             break;
