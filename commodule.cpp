@@ -123,7 +123,7 @@ void ComModule::sendMessage(Message *msg)
         for(quint32 i = 0; i < count; i++) {
             MessageObject o = m->objects.takeFirst();
             stream << (quint32)o.coordX << (quint32)o.coordY
-                   << (quint32)o.diameter << (quint32)o.seconds
+                   << (quint32)o.diameter << (quint32)(o.degrees / 3600)
                    << (quint8)o.red << (quint8)o.green << (quint8)o.blue;
         }
         break;

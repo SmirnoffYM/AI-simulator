@@ -90,7 +90,7 @@ struct MessageObject {
     char red, green, blue;
     unsigned int diameter;
     unsigned int coordX, coordY;
-    int seconds;
+    double degrees;
 };
 
 class MessageThereYouSee : public Message
