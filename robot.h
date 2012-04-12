@@ -45,6 +45,15 @@ public:
         }
     }
 
+    void setParametersByID(int id, double paramValue)
+    {
+        std::pair<std::string, double> params;
+        params.first = parameters[id].first;
+        params.second = paramValue;
+
+        parameters[id] = params;
+    }
+
     unsigned int getPortNumber()
     {
         return portNumber;
