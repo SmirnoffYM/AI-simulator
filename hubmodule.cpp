@@ -167,7 +167,7 @@ void HubModule::refresh()
                     // set diameter
                     messageObject.diameter = robot->getSize();
                     // set orientation
-                    messageObject.seconds = robot->getOrientation();
+                    messageObject.degrees = robot->getOrientation();
 
                     objectsInRange.push_front(messageObject);
 
@@ -209,7 +209,7 @@ void HubModule::refresh()
                     // set diameter
                     messageObject.diameter = envObject->getSize();
                     // set orientation
-                    messageObject.seconds = envObject->getOrientation();
+                    messageObject.degrees = envObject->getOrientation();
 
                     objectsInRange.push_front(messageObject);
                     // FIXME: messageObject destructor here

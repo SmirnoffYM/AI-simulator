@@ -79,9 +79,11 @@ public:
 class MessageParameterReport : public Message
 {
 public:
-   char id;
-   unsigned int integral;
-   int real; 
+    MessageParameterReport() { type = MsgParameterReport; };
+
+    char id;
+    int integral;
+    unsigned int real;
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
@@ -89,7 +91,7 @@ struct MessageObject {
     char red, green, blue;
     unsigned int diameter;
     unsigned int coordX, coordY;
-    int seconds;
+    double degrees;
 };
 
 class MessageThereYouSee : public Message
