@@ -80,10 +80,10 @@ class MessageParameterReport : public Message
 {
 public:
     MessageParameterReport() { type = MsgParameterReport; };
-
+    
     char id;
     int integral;
-    unsigned int real;
+    unsigned int real; 
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */

@@ -7,10 +7,6 @@
 #include <QtNetwork/QHostAddress>
 #include <queue>
 
-#include <qjson/parser.h>
-#include <qjson/qobjecthelper.h>
-
-
 #include "constants.h"
 #include "messages.h"
 #include "message-parsers.h"
