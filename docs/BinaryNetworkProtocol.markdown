@@ -232,6 +232,7 @@ List of objects is just a stream of objects descriptions.
 0x00 0x00 0x00 0x10   --     x coordinate, 16
 0x00 0x00 0x00 0x12   --     y coordinate, 18
 0x00 0x00 0x00 0x15   --     diameter, 21
+0x00 0x00 0x01 0x68   --     seconds, 360 (one degree)
 0x7f                  --     red component, 127
 0xda                  --     green component, 218
 0x3d                  --     blue component, 61
@@ -239,6 +240,7 @@ List of objects is just a stream of objects descriptions.
 0x00 0x00 0x00 0x5d   --     x coordinate, 93
 0x00 0x00 0x09 0x2a   --     y coordinate, 2346
 0x00 0x00 0x00 0x03   --     diameter, 3
+0x00 0x01 0xa5 0xe0   --     seconds, 108000 (30 degrees)
 0x05                  --     red component, 5
 0x07                  --     green component, 7
 0x0b                  --     blue component, 11
@@ -246,6 +248,7 @@ List of objects is just a stream of objects descriptions.
 0x00 0x0d 0xa6 0x3b   --     x coordinate, 894523
 0x00 0x08 0xa7 0xfb   --     y coordinate, 567291
 0x00 0x00 0x08 0x6c   --     diameter, 2165
+0x00 0x03 0x4b 0xc0   --     seconds, 216000 (60 degrees)
 0x5c                  --     red component, 92
 0x41                  --     green component, 65
 0x04                  --     blue component, 4
