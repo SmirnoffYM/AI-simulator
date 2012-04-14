@@ -41,8 +41,6 @@ HEADERS  += mainwindow.h \
     object.h \
     color.h
 
-LIBS += qjson0.dll
-
 FORMS    += mainwindow.ui \
     robotwindow.ui
 
