@@ -7,9 +7,6 @@
 #include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>
 
-#include <qjson/parser.h>
-#include <qjson/qobjecthelper.h>
-
 #include "constants.h"
 #include "messages.h"
 #include "message-parsers.h"

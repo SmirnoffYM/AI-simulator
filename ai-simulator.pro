@@ -33,8 +33,6 @@ HEADERS  += mainwindow.h \
     envobject.h \
     constants.h
 
-LIBS += -lqjson
-
 FORMS    += mainwindow.ui \
     robotwindow.ui
 
