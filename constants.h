@@ -15,7 +15,6 @@
 #define ROBOT_PARAMETER_MAX_LENGTH  15          //maximum length of robot's custom parameter name
 #define SIMULATOR_PORT              9000        // port simulator binds to
 #define MIN_MAP_SIDE                24          //minimum length of the map's side
-#define ENV_OBJECT_DEFAULT_PORT     8512        //default portNumber for all envObjects
 #define START_IDLE_TIME             0.0000001   //start idle time for robot
 #define HUB_REFRESH_TIME            1000 / SCREEN_REFRESH_RATE  // time between hub refresh
 #define ROBOT_TIMEOUT               5000        // after this time being idle robot windows

@@ -208,11 +208,13 @@ void MainWindow::onRefreshMap()
         drawMap(map);
         for (int i = 0; i < ROBOTS; i++) {
             Object *robot = HubModule::modellingSystem->getRobot(i);
-            Servant::getInstance().drawObject(robot, scene);
+            if (robot != NULL)
+                Servant::getInstance().drawObject(robot, scene);
         }
         for (int i = 0; i < ENV_OBJECTS; i++) {
             Object *envObject = HubModule::modellingSystem->getEnvObject(i);
-            Servant::getInstance().drawObject(envObject, scene);
+            if (envObject != NULL)
+                Servant::getInstance().drawObject(envObject, scene);
         }
 
         // Refresh robotWindows

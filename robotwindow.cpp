@@ -84,12 +84,14 @@ void RobotWindow::onRefreshMap()
     // Draw robots
     for (int i = 0; i < ROBOTS; i++) {
         Object *robot = HubModule::modellingSystem->getRobot(i);
-        Servant::getInstance().drawObject(robot, localMapScene);
+        if (robot != NULL)
+            Servant::getInstance().drawObject(robot, localMapScene);
     }
     // Draw envObjects
     for (int i = 0; i < ENV_OBJECTS; i++) {
         Object *envObject = HubModule::modellingSystem->getEnvObject(i);
-        Servant::getInstance().drawObject(envObject, localMapScene);
+        if (envObject != NULL)
+            Servant::getInstance().drawObject(envObject, localMapScene);
     }
 
     refreshRobotParams();

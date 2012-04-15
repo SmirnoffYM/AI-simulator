@@ -13,13 +13,7 @@ ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
         robots.push_back(robot);
     }
 
-    for (int i = 0; i < ENV_OBJECTS; i++) {
-        EnvObject *envObject = new EnvObject();
-
-        //TODO: load envObject parameters from environment setting file
-
-        envObjects.push_back(envObject);
-    }
+    envObjects = Servant::getInstance().buildEnvironment(size);
 
     isModellingPerformed = false;
 }

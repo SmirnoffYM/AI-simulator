@@ -31,6 +31,9 @@ class Servant
         // Loading robot profile
         Robot * buildRobot(unsigned int number);
 
+        // Loading enviroment profile
+        std::vector<EnvObject *> buildEnvironment(std::pair<int, int> mapSize);
+
         // Draw some object on some scene
         void drawObject(Object *object, QGraphicsScene *scene);
 

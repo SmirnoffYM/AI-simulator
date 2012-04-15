@@ -61,11 +61,11 @@ void HubModule::refresh()
                     collision = true;
             }
             // check for collisions with env objects
-            for (int i = 0; i < ROBOTS; i++) {
+            for (int i = 0; i < ENV_OBJECTS; i++) {
                 EnvObject* tmpEnvObject = HubModule::modellingSystem->getEnvObject(i);
                 // check if distance between two points is
                 // bigger then robots size sum
-                if (sqrt(
+                if (tmpEnvObject != NULL && sqrt(
                             pow(messageMove->coordX
                                 - tmpEnvObject->getCoords().first, 2)
                             +
