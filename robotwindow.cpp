@@ -79,6 +79,8 @@ void RobotWindow::onRefreshMap()
     ui->robotGraphicsView->centerOn(robot->getCoords().first / REAL_PIXEL_SIZE,
                                     robot->getCoords().second / REAL_PIXEL_SIZE);
 
+    paintVisibiltyCircle(robot);
+
     // Draw robots
     for (int i = 0; i < ROBOTS; i++) {
         Object *robot = HubModule::modellingSystem->getRobot(i);
@@ -91,6 +93,60 @@ void RobotWindow::onRefreshMap()
     }
 
     refreshRobotParams();
+}
+
+void RobotWindow::paintVisibiltyCircle(Robot *robot)
+{
+    if (robot->getType() == Flying)
+    {
+        bool flag = false;              // is first circle coordinate valid?
+        double prev_x;
+        double prev_y;
+        std::pair<int, int> worldSize = HubModule::modellingSystem->getWorld()->getSize();
+
+        for (int angle = 0; angle <= 360; angle++) {
+            double new_x = robot->getVisibilityRadius() * sin(angle * PI / 180);
+            double new_y = robot->getVisibilityRadius() * cos(angle * PI / 180);
+
+            if (!flag) {
+                if (robot->getCoords().first + new_x >= 0
+                        && robot->getCoords().second - new_y >= 0
+                        && robot->getCoords().first + new_x < worldSize.first * REAL_PIXEL_SIZE
+                        && robot->getCoords().second - new_y < worldSize.second * REAL_PIXEL_SIZE) {
+                    prev_x = new_x;
+                    prev_y = new_y;
+                    flag = true;
+                }
+                continue;
+            }
+
+            if (robot->getCoords().first + new_x < 0)
+                new_x = - robot->getCoords().first;
+            if (robot->getCoords().first + new_x >= worldSize.first * REAL_PIXEL_SIZE)
+                new_x = worldSize.first * REAL_PIXEL_SIZE - robot->getCoords().first;
+            if (robot->getCoords().second - new_y < 0)
+                new_y = robot->getCoords().second;
+            if (robot->getCoords().second - new_y >= worldSize.second * REAL_PIXEL_SIZE)
+                new_y = - worldSize.second * REAL_PIXEL_SIZE + robot->getCoords().second;
+
+            localMapScene->addLine(
+                        (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
+                        QPen(QColor(robot->getColor().red(),
+                                    robot->getColor().green(),
+                                    robot->getColor().blue())));
+
+            prev_x = new_x;
+            prev_y = new_y;
+        }
+
+
+    } else {    // if robot type is "Normal"
+        //TODO: draw visibilty region
+
+    }
 }
 
 void RobotWindow::setRobotId(int id) {

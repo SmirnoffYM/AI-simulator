@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include "constants.h"
 #include "object.h"
+#include "robot.h"
 
 namespace Ui {
 class RobotWindow;
@@ -37,6 +38,7 @@ private:
     void closeEvent(QCloseEvent *event);
     void refreshRobotParams();
     QString buildParametersLabel();
+    void paintVisibiltyCircle(Robot *robot);
 
 public:
     void setRobotId(int id);

@@ -13,27 +13,7 @@
 #define ROBOT_WINDOWS_INDENT        20          //indent from the top of the screen
 #define CUSTOM_PARAMETERS_QUANTITY  16          //number of custom robot params
 #define ROBOT_PARAMETER_MAX_LENGTH  15          //maximum length of robot's custom parameter name
-
 #define SIMULATOR_PORT              9000        // port simulator binds to
-
-
-/*
-
-    For performance improving and memory consumption decreasing just save
-    hightMap as array of integers with dimension like source grayscale map.
-    But when sending messages to robot programs and environment control program
-    we must use other coordinates:
-
-        Grayscale map coordinates:      (X, Y)
-
-                                        are equals to
-
-        Real world map coordinates:     (X * REAL_PIXEL_SIZE, Y * REAL_PIXEL_SIZE)
-
-    Plz, remember it when developing hub module and displaying objects on GraphicsView
-
-*/
-
 #define MIN_MAP_SIDE                24          //minimum length of the map's side
 #define ENV_OBJECT_DEFAULT_PORT     8512        //default portNumber for all envObjects
 #define START_IDLE_TIME             0.0000001   //start idle time for robot
