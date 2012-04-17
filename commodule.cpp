@@ -111,6 +111,12 @@ void ComModule::sendMessage(Message *msg)
     case MsgAcknowledge:
         // "acknowledge" doesn't have any payload
         break;
+    case MsgStart:
+        break;
+    case MsgPause:
+        break;
+    case MsgStop:
+        break;
     case MsgBump:
         stream << (quint32)((MessageBump *)msg)->coordX
                << (quint32)((MessageBump *)msg)->coordY;
