@@ -15,8 +15,7 @@ enum MessageType {
     MsgWhoIsThere,
     MsgBump,
     MsgThereYouSee,
-    MsgParameterReport,
-    MsgUndefined
+    MsgParameterReport
 };
 
 class Message
