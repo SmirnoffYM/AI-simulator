@@ -92,9 +92,9 @@ Message contains:
 
 * seconds, *4 octets*, signed integer
 
-seconds are 1/60 of minute, and minute is in turn 1/60 of degree.  That
-field specify number of seconds agent should turn clockwise.  To turn
-counterclockwise, one should specify negative number of seconds.
+second is 1/60 of minute, and minute is, in turn, 1/60 of degree. That
+field specify new orientation of the agent. It is an absolute value
+counted from the north direction, which is at the top of the map.
 
 ## `change size` message
 
