@@ -6,3 +6,4 @@ ai-simulator.pro.user
 ui_*.h
 moc_*.cpp
 qrc_resource.cpp
+robots/*
