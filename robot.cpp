@@ -10,7 +10,8 @@ Robot::Robot():
         parameters[i] = std::pair<std::string, double>(&symbol, 0);
     }
     movable = true;
-    visibiltyRadius = 0;
+    visibilityRadius = 0;
+    visibilityAngle = 0;
     type = Normal;
 }
 

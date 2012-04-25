@@ -117,29 +117,35 @@ Robot * Servant::buildRobot(unsigned int number)
         return robot;
     }
 
+    double visibilityAngle = configStringList.at(6).toDouble(&ok);
+    if (!ok || visibilityAngle <= 0 || visibilityAngle > 360) {
+        qDebug() << "Invalid visibility angle (robot" << number << ")";
+        return robot;
+    }
+
     // Check local map scaling
-    int scaling = configStringList.at(6).toInt(&ok);
+    int scaling = configStringList.at(7).toInt(&ok);
     if (!ok || scaling < 1) {
         qDebug() << "Invalid local map scaling (robot" << number << ")";
         return robot;
     }
 
     // Check intersection type
-    QString intersection = configStringList.at(7);
+    QString intersection = configStringList.at(8);
     if (intersection != "0" && intersection != "1" && intersection != "2") {
         qDebug() << "Invalid intersection type (robot" << number << ")";
         return robot;
     }
 
     // Check orientation
-    double orientation = configStringList.at(8).toDouble(&ok);
+    double orientation = configStringList.at(9).toDouble(&ok);
     if (!ok || orientation < 0) {
         qDebug() << "Invalid orientation (robot" << number << ")";
         return robot;
     }
 
     // Check color
-    QColor color = QColor(configStringList.at(9));
+    QColor color = QColor(configStringList.at(10));
     if (!color.isValid()) {
         qDebug() << "Invalid color (robot" << number << ")";
         return robot;
@@ -149,7 +155,7 @@ Robot * Servant::buildRobot(unsigned int number)
     std::pair<std::string, double> *parameters =
             new std::pair<std::string, double>[CUSTOM_PARAMETERS_QUANTITY];
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++) {
-        QString line = configStringList.at(10+i);
+        QString line = configStringList.at(11+i);
         if (!line.contains(QRegExp("^(\\d|\\.)+;(\\w|\\s)+$"))) {
             qDebug() << "Invalid parameter" << i+1 << "(robot" << number << ")";
             return robot;
@@ -168,6 +174,7 @@ Robot * Servant::buildRobot(unsigned int number)
     robot->setPortNumber(portFilename);
     robot->setType(static_cast<RobotType>(type));
     robot->setVisibilityRadius(visibilityRadius);
+    robot->setVisibilityAngle(visibilityAngle);
     robot->setOrientation(orientation);
     robot->setColor(Color(color.red(), color.green(), color.blue()));
     robot->setIntersection(static_cast<Intersection>(intersection.toInt()));

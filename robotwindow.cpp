@@ -99,27 +99,14 @@ void RobotWindow::onRefreshMap()
 
 void RobotWindow::paintVisibiltyCircle(Robot *robot)
 {
-    bool flag = false;              // is first circle coordinate valid?
-    bool correctFlag = false;       // used by "normal" robot for skiping first point
-    double prev_x;
-    double prev_y;
+    double prev_x = 0;
+    double prev_y = 0;
     std::pair<int, int> worldSize = HubModule::modellingSystem->getWorld()->getSize();
 
-    for (int angle = 0; angle <= 361; angle++) {
+    for (int angle = robot->getOrientation() - robot->getVisibilityAngle() / 2;
+         angle <= robot->getOrientation() + robot->getVisibilityAngle() / 2; angle++) {
         double new_x = robot->getVisibilityRadius() * sin(angle * PI / 180);
         double new_y = robot->getVisibilityRadius() * cos(angle * PI / 180);
-
-        if (!flag) {
-            if (robot->getCoords().first + new_x >= 0
-                    && robot->getCoords().second - new_y >= 0
-                    && robot->getCoords().first + new_x < worldSize.first * REAL_PIXEL_SIZE
-                    && robot->getCoords().second - new_y < worldSize.second * REAL_PIXEL_SIZE) {
-                prev_x = new_x;
-                prev_y = new_y;
-                flag = true;
-            }
-            continue;
-        }
 
         if (robot->getCoords().first + new_x < 0)
             new_x = - robot->getCoords().first;
@@ -188,22 +175,28 @@ void RobotWindow::paintVisibiltyCircle(Robot *robot)
                 }
             }
 
-            if (correctFlag)
-                localMapScene->addLine(
-                            (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
-                            (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
-                            (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
-                            (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
-                            QPen(QColor(robot->getColor().red(),
-                                        robot->getColor().green(),
-                                        robot->getColor().blue())));
-            else
-                correctFlag = true;
+            localMapScene->addLine(
+                        (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
+                        (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
+                        QPen(QColor(robot->getColor().red(),
+                                    robot->getColor().green(),
+                                    robot->getColor().blue())));
 
             prev_x = new_x;
             prev_y = new_y;
         }
     }
+
+    localMapScene->addLine(
+                (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
+                (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
+                robot->getCoords().first / REAL_PIXEL_SIZE,
+                robot->getCoords().second / REAL_PIXEL_SIZE,
+                QPen(QColor(robot->getColor().red(),
+                            robot->getColor().green(),
+                            robot->getColor().blue())));
 }
 
 void RobotWindow::setRobotId(int id) {
