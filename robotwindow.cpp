@@ -154,21 +154,13 @@ void RobotWindow::paintVisibiltyCircle(Robot *robot)
             if (xFaster) {
 
                 //find each point of the line and check is it a mount
-                for (int i = robot->getSize() / 2; i < static_cast<int>(fabs(new_x)) - 1; i++) {
+                for (int i = 0; i < static_cast<int>(fabs(new_x)) - 1; i++) {
 
                     double temp_x = pow(-1, static_cast<int>(!signX)) * i;
                     double temp_y = (temp_x - new_x) * (0 - new_y) / (0 - new_x) + new_y;
 
-                    double temp_x_next = pow(-1, static_cast<int>(!signX)) * (i+1);
-                    double temp_y_next = (temp_x_next - new_x) * (0 - new_y) / (0 - new_x) + new_y;
-
                     World *world = HubModule::modellingSystem->getWorld();
                     if (world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
-                        world->getHeight((robot->getCoords().first + temp_x_next) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y_next) / REAL_PIXEL_SIZE)
-                            &&
-                        world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
                                          (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
                         world->getHeight(robot->getCoords().first / REAL_PIXEL_SIZE,
                                          robot->getCoords().second / REAL_PIXEL_SIZE)) {
@@ -179,21 +171,13 @@ void RobotWindow::paintVisibiltyCircle(Robot *robot)
                 }
             } else {
 
-                for (int j = robot->getSize() / 2; j < static_cast<int>(fabs(new_y)) - 1; j++) {
+                for (int j = 0; j < static_cast<int>(fabs(new_y)) - 1; j++) {
 
                     double temp_y = pow(-1, static_cast<int>(!signY)) * j;
                     double temp_x = (temp_y - new_y) * (0 - new_x) / (0 - new_y) + new_x;
 
-                    double temp_y_next = pow(-1, static_cast<int>(!signY)) * (j+1);
-                    double temp_x_next = (temp_y_next - new_y) * (0 - new_x) / (0 - new_y) + new_x;
-
                     World *world = HubModule::modellingSystem->getWorld();
                     if (world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
-                        world->getHeight((robot->getCoords().first + temp_x_next) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y_next) / REAL_PIXEL_SIZE)
-                            &&
-                        world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
                                          (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
                         world->getHeight(robot->getCoords().first / REAL_PIXEL_SIZE,
                                          robot->getCoords().second / REAL_PIXEL_SIZE)) {
