@@ -229,7 +229,7 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
     }
     config.close();
 
-    // check laucnh command
+    // check launch command
     if (configStringList.at(0).isEmpty()) {
         qDebug() << "Launch command is empty!";
         return *environment;
@@ -355,7 +355,9 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
         environment->push_back(envObject);
     }
 
-    //TODO: launch environment app
+    QString command = configStringList.at(0) + QString(" ") + configFilename;
+    qDebug() << "Environment will be called by command" << command;
+    addApplication(command);
 
     return *environment;
 }
