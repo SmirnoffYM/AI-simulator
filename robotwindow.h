@@ -38,7 +38,6 @@ private:
     void closeEvent(QCloseEvent *event);
     void refreshRobotParams();
     QString buildParametersLabel();
-    void paintVisibiltyCircle(Robot *robot);
 
 public:
     void setRobotId(int id);

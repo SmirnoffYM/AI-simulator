@@ -1,6 +1,7 @@
 #ifndef ROBOT_H
 #define ROBOT_H
 
+#include <vector>
 #include <algorithm>
 #include <string>
 #include "constants.h"
@@ -12,13 +13,16 @@ public:
     Robot();
 
 private:
-    unsigned int portNumber;                    //also it's robot's id
-    std::pair<std::string, double> *parameters; //custom robot parameters
-    unsigned int visibilityRadius;               //in this radius robot can see other objects
-    double visibilityAngle;                     //visibility angle
-    RobotType type;                             //type of the robot
+    unsigned int portNumber;                    // also it's robot's id
+    std::pair<std::string, double> *parameters; // custom robot parameters
+    unsigned int visibilityRadius;              // in this radius robot can see other objects
+    double visibilityAngle;                     // visibility angle
+    RobotType type;                             // type of the robot
 
 public:
+
+    std::vector<Object *> iCanSee();            // objects that robot sees
+
     std::pair<std::string, double> * getParameters()
     {
         return parameters;

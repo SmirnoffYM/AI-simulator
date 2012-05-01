@@ -11,7 +11,7 @@ MessageMove * parseMessageMove(QDataStream & stream)
     msg->coordY = y;
 
     return msg;
-};
+}
 
 MessageTurn * parseMessageTurn(QDataStream & stream)
 {
@@ -24,7 +24,7 @@ MessageTurn * parseMessageTurn(QDataStream & stream)
     msg->degrees = static_cast<double>(seconds) / 3600;
 
     return msg;
-};
+}
 
 MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
 {
@@ -36,7 +36,7 @@ MessageChangeSize * parseMessageChangeSize(QDataStream & stream)
     msg->diameter = diameter;
 
     return msg;
-};
+}
 
 MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
 {
@@ -50,7 +50,7 @@ MessageChangeColor * parseMessageChangeColor(QDataStream & stream)
     msg->blue = blue;
 
     return msg;
-};
+}
 
 MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
 {
@@ -64,7 +64,7 @@ MessageWhoIsThere * parseMessageWhoIsThere(QDataStream & stream)
     msg->radius = r;
 
     return msg;
-};
+}
 
 MessageParameterReport * parseMessageParameterReport(QDataStream & stream)
 {
@@ -79,5 +79,5 @@ MessageParameterReport * parseMessageParameterReport(QDataStream & stream)
     msg->real = real;
 
     return msg;
-};
+}
 

@@ -79,124 +79,15 @@ void RobotWindow::onRefreshMap()
     ui->robotGraphicsView->centerOn(robot->getCoords().first / REAL_PIXEL_SIZE,
                                     robot->getCoords().second / REAL_PIXEL_SIZE);
 
-    paintVisibiltyCircle(robot);
+    Servant::getInstance().drawObject(robot, localMapScene);
 
-    // Draw robots
-    for (int i = 0; i < ROBOTS; i++) {
-        Object *robot = HubModule::modellingSystem->getRobot(i);
-        if (robot != NULL)
-            Servant::getInstance().drawObject(robot, localMapScene);
-    }
-    // Draw envObjects
-    for (int i = 0; i < ENV_OBJECTS; i++) {
-        Object *envObject = HubModule::modellingSystem->getEnvObject(i);
-        if (envObject != NULL)
-            Servant::getInstance().drawObject(envObject, localMapScene);
+    std::vector<Object *> visibleObjects = robot->iCanSee();
+    for (unsigned int i = 0; i < visibleObjects.size(); i++) {
+        if (visibleObjects.at(i) != NULL)
+            Servant::getInstance().drawObject(visibleObjects.at(i), localMapScene);
     }
 
     refreshRobotParams();
-}
-
-void RobotWindow::paintVisibiltyCircle(Robot *robot)
-{
-    double prev_x = 0;
-    double prev_y = 0;
-    std::pair<int, int> worldSize = HubModule::modellingSystem->getWorld()->getSize();
-
-    for (int angle = robot->getOrientation() - robot->getVisibilityAngle() / 2;
-         angle <= robot->getOrientation() + robot->getVisibilityAngle() / 2; angle++) {
-        double new_x = robot->getVisibilityRadius() * sin(angle * PI / 180);
-        double new_y = robot->getVisibilityRadius() * cos(angle * PI / 180);
-
-        if (robot->getCoords().first + new_x < 0)
-            new_x = - robot->getCoords().first;
-        if (robot->getCoords().first + new_x >= worldSize.first * REAL_PIXEL_SIZE)
-            new_x = worldSize.first * REAL_PIXEL_SIZE - robot->getCoords().first;
-        if (robot->getCoords().second - new_y < 0)
-            new_y = robot->getCoords().second;
-        if (robot->getCoords().second - new_y >= worldSize.second * REAL_PIXEL_SIZE)
-            new_y = - worldSize.second * REAL_PIXEL_SIZE + robot->getCoords().second;
-
-        if (robot->getType() == Flying)
-        {
-            localMapScene->addLine(
-                        (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
-                        QPen(QColor(robot->getColor().red(),
-                                    robot->getColor().green(),
-                                    robot->getColor().blue())));
-
-            prev_x = new_x;
-            prev_y = new_y;
-
-        } else {    // if robot type is "Normal"
-
-            bool signX = new_x > 0;
-            bool signY = new_y > 0;
-            bool xFaster = fabs(new_x) > fabs(new_y);
-
-            // if x is increasinf faster than y
-            if (xFaster) {
-
-                //find each point of the line and check is it a mount
-                for (int i = 0; i < static_cast<int>(fabs(new_x)) - 1; i++) {
-
-                    double temp_x = pow(-1, static_cast<int>(!signX)) * i;
-                    double temp_y = (temp_x - new_x) * (0 - new_y) / (0 - new_x) + new_y;
-
-                    World *world = HubModule::modellingSystem->getWorld();
-                    if (world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
-                        world->getHeight(robot->getCoords().first / REAL_PIXEL_SIZE,
-                                         robot->getCoords().second / REAL_PIXEL_SIZE)) {
-                        new_x = temp_x;
-                        new_y = temp_y;
-                        break;
-                    }
-                }
-            } else {
-
-                for (int j = 0; j < static_cast<int>(fabs(new_y)) - 1; j++) {
-
-                    double temp_y = pow(-1, static_cast<int>(!signY)) * j;
-                    double temp_x = (temp_y - new_y) * (0 - new_x) / (0 - new_y) + new_x;
-
-                    World *world = HubModule::modellingSystem->getWorld();
-                    if (world->getHeight((robot->getCoords().first + temp_x) / REAL_PIXEL_SIZE,
-                                         (robot->getCoords().second - temp_y) / REAL_PIXEL_SIZE) >
-                        world->getHeight(robot->getCoords().first / REAL_PIXEL_SIZE,
-                                         robot->getCoords().second / REAL_PIXEL_SIZE)) {
-                        new_x = temp_x;
-                        new_y = temp_y;
-                        break;
-                    }
-                }
-            }
-
-            localMapScene->addLine(
-                        (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().first + new_x) / REAL_PIXEL_SIZE,
-                        (robot->getCoords().second - new_y) / REAL_PIXEL_SIZE,
-                        QPen(QColor(robot->getColor().red(),
-                                    robot->getColor().green(),
-                                    robot->getColor().blue())));
-
-            prev_x = new_x;
-            prev_y = new_y;
-        }
-    }
-
-    localMapScene->addLine(
-                (robot->getCoords().first + prev_x) / REAL_PIXEL_SIZE,
-                (robot->getCoords().second - prev_y) / REAL_PIXEL_SIZE,
-                robot->getCoords().first / REAL_PIXEL_SIZE,
-                robot->getCoords().second / REAL_PIXEL_SIZE,
-                QPen(QColor(robot->getColor().red(),
-                            robot->getColor().green(),
-                            robot->getColor().blue())));
 }
 
 void RobotWindow::setRobotId(int id) {

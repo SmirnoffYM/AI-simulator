@@ -30,7 +30,7 @@ public:
 class MessageMove : public Message
 {
 public:
-    MessageMove() { type = MsgMove; };
+    MessageMove() { type = MsgMove; }
 
     unsigned int coordX, coordY;
 };
@@ -38,7 +38,7 @@ public:
 class MessageBump : public Message
 {
 public:
-    MessageBump() { type = MsgBump; };
+    MessageBump() { type = MsgBump; }
 
     unsigned int coordX, coordY;
 };
@@ -46,7 +46,7 @@ public:
 class MessageTurn : public Message
 {
 public:
-    MessageTurn() { type = MsgTurn; };
+    MessageTurn() { type = MsgTurn; }
 
     double degrees; 
 };
@@ -54,7 +54,7 @@ public:
 class MessageChangeSize : public Message
 {
 public:
-    MessageChangeSize() { type = MsgChangeSize; };
+    MessageChangeSize() { type = MsgChangeSize; }
 
     unsigned int diameter; 
 };
@@ -62,7 +62,7 @@ public:
 class MessageChangeColor : public Message
 {
 public:
-    MessageChangeColor() { type = MsgChangeColor; };
+    MessageChangeColor() { type = MsgChangeColor; }
 
     char red, green, blue; 
 };
@@ -70,7 +70,7 @@ public:
 class MessageWhoIsThere : public Message
 {
 public:
-    MessageWhoIsThere() { type = MsgWhoIsThere; };
+    MessageWhoIsThere() { type = MsgWhoIsThere; }
 
     unsigned int coordX, coordY; 
     unsigned int radius;
@@ -79,7 +79,7 @@ public:
 class MessageParameterReport : public Message
 {
 public:
-    MessageParameterReport() { type = MsgParameterReport; };
+    MessageParameterReport() { type = MsgParameterReport; }
     
     char id;
     int integral;
@@ -97,7 +97,7 @@ struct MessageObject {
 class MessageThereYouSee : public Message
 {
 public:
-    MessageThereYouSee() { type = MsgThereYouSee; };
+    MessageThereYouSee() { type = MsgThereYouSee; }
 
     std::list<MessageObject> objects;
 };
