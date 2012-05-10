@@ -131,7 +131,8 @@ void ComModule::sendMessage(Message *msg)
         stream << count;
         /* For each object, put its description into the stream */
         for(quint32 i = 0; i < count; i++) {
-            MessageObject o = m->objects.takeFirst();
+            MessageObject o = m->objects.front();
+            m->objects.pop_front();
             stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
                    << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees / 3600)
                    << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
