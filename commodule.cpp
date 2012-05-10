@@ -88,7 +88,7 @@ void ComModule::handleMessage()
          * then put the message into the queue */
         msg->num = seq_num;
         msg->port = port;
-        msg->type = (MessageType)msg_type;
+        msg->type = static_cast<MessageType>(msg_type);
 
         // FIXME: is std::queue thread-safe? Should we use mutex here?
         messageQueue->push(msg);
@@ -103,30 +103,41 @@ void ComModule::sendMessage(Message *msg)
     QDataStream stream(&datagram, QIODevice::WriteOnly);
 
     // version: 1
-    stream << (quint8)1;
+    stream << static_cast<quint8>(1);
     // other header infortmation
-    stream << (quint32)msg->num << (quint16)msg->port << (quint8)msg->type;
+    stream << static_cast<quint32>(msg->num) << static_cast<quint16>(msg->port)
+           << static_cast<quint8>(msg->type);
 
     switch(msg->type) {
     case MsgAcknowledge:
         // "acknowledge" doesn't have any payload
         break;
+    case MsgStart:
+        break;
+    case MsgPause:
+        break;
+    case MsgStop:
+        break;
     case MsgBump:
-        stream << (quint32)((MessageBump *)msg)->coordX
-               << (quint32)((MessageBump *)msg)->coordY;
+        {
+        MessageBump *m = static_cast<MessageBump *>(msg);
+        stream << static_cast<quint32>(m->coordX) << static_cast<quint32>(m->coordY);
+        };
         break;
     case MsgThereYouSee:
-        MessageThereYouSee *m = (MessageThereYouSee *)msg;
-        quint32 count = (quint32)m->objects.size();
+        {
+        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
+        quint32 count = static_cast<quint32>(m->objects.size());
         stream << count;
         /* For each object, put its description into the stream */
         for(quint32 i = 0; i < count; i++) {
-            MessageObject o = m->objects.front();
-            m->objects.pop_front();
-            stream << (quint32)o.coordX << (quint32)o.coordY
-                   << (quint32)o.diameter << (quint32)(o.degrees / 3600)
-                   << (quint8)o.red << (quint8)o.green << (quint8)o.blue;
+            MessageObject o = m->objects.takeFirst();
+            stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
+                   << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees / 3600)
+                   << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
+                   << static_cast<quint8>(o.blue);
         }
+        };
         break;
     }
 
