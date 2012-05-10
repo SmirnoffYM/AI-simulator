@@ -134,92 +134,36 @@ void HubModule::refresh()
             // we also need a list of those objects
             std::list<MessageObject> objectsInRange;
 
-            // look through all robots and put into list those,
-            // which are in received radius
-            for (int i = 0; i < ROBOTS; i++)
-            {
-                Robot *robot = HubModule::modellingSystem->getRobot(i);
 
-                // check if message parent's id not equal
-                // to current 'i' robot
-                // and
-                // check if distance between them is not bigger then
-                // received radius
-                if ((robot->getPortNumber() != messageWhoIsThere->port)
-                        && (sqrt(
-                                pow(robot->getCoords().first
-                                    - messageWhoIsThere->coordX, 2)
-                                +
-                                pow(robot->getCoords().second
-                                    - messageWhoIsThere->coordY, 2)
-                                ) <= messageWhoIsThere->radius
-                            )
-                        )
-                {
-                    MessageObject messageObject;
-                    // set color
-                    messageObject.red = robot->getColor().red();
-                    messageObject.green = robot->getColor().green();
-                    messageObject.blue = robot->getColor().blue();
-                    // set coordinates
-                    messageObject.coordX = robot->getCoords().first;
-                    messageObject.coordX = robot->getCoords().second;
-                    // set diameter
-                    messageObject.diameter = robot->getSize();
-                    // set orientation
-                    messageObject.degrees = robot->getOrientation();
+            Robot *robot = HubModule::modellingSystem->getRobotByPort(messageWhoIsThere->port);
 
-                    objectsInRange.push_front(messageObject);
+            std::vector<Object *> objVector = std::vector<Object *>();
+            objVector = robot->iCanSee();
 
-                    // FIXME: messageObject destructor here
-                }
+            for (int i = 0; i < objVector.size(); i++) {
+
+                MessageObject messageObject;
+                // set color
+                messageObject.red = objVector.at(i)->getColor().red();
+                messageObject.green = objVector.at(i)->getColor().green();
+                messageObject.blue = objVector.at(i)->getColor().blue();
+                // set coordinates
+                messageObject.coordX = objVector.at(i)->getCoords().first;
+                messageObject.coordX = objVector.at(i)->getCoords().second;
+                // set diameter
+                messageObject.diameter = objVector.at(i)->getSize();
+                // set orientation
+                messageObject.degrees = objVector.at(i)->getOrientation();
+
+                objectsInRange.push_front(messageObject);
             }
 
-
-            // look through all environment objects and put into list those,
-            // which are in received radius
-            for (int i = 0; i < ENV_OBJECTS; i++)
-            {
-                EnvObject *envObject = HubModule::modellingSystem->getEnvObject(i);
-
-                // check if message parent's id not equal
-                // to current 'i' robot
-                // and
-                // check if distance between them is not bigger then
-                // received radius
-                if ((envObject->getPortNumber() != messageWhoIsThere->port)
-                        && (sqrt(
-                                pow(envObject->getCoords().first
-                                    - messageWhoIsThere->coordX, 2)
-                                +
-                                pow(envObject->getCoords().second
-                                    - messageWhoIsThere->coordY, 2)
-                                ) <= messageWhoIsThere->radius
-                            )
-                        )
-                {
-                    MessageObject messageObject;
-                    // set color
-                    messageObject.red = envObject->getColor().red();
-                    messageObject.green = envObject->getColor().green();
-                    messageObject.blue = envObject->getColor().blue();
-                    // set coordinates
-                    messageObject.coordX = envObject->getCoords().first;
-                    messageObject.coordX = envObject->getCoords().second;
-                    // set diameter
-                    messageObject.diameter = envObject->getSize();
-                    // set orientation
-                    messageObject.degrees = envObject->getOrientation();
-
-                    objectsInRange.push_front(messageObject);
-                    // FIXME: messageObject destructor here
-                }
-            }
+            objVector.clear();
 
             messageThereYouSee->objects = objectsInRange;
             messageThereYouSee->port = messageWhoIsThere->port;
-            comModule->sendMessage(messageThereYouSee);
             // send message to robot
+            comModule->sendMessage(messageThereYouSee);
         }
             break;
 

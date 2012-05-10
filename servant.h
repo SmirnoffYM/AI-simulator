@@ -9,6 +9,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsEllipseItem>
 #include <math.h>
+#include <time.h>
 #include <algorithm>
 #include "constants.h"
 #include "robot.h"

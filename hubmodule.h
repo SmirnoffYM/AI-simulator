@@ -2,6 +2,7 @@
 #define HUBMODULE_H
 
 #include <queue>
+#include <vector>
 #include "constants.h"
 #include "modellingsystem.h"
 #include "messages.h"
