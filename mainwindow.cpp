@@ -107,6 +107,9 @@ void MainWindow::on_actionAbout_Program_triggered()
 
 void MainWindow::on_actionRun_triggered()
 {
+    //TODO: don't create new modelling if current modelling is paused, only continue it
+
+
     // if modelling was stopped and then started again
     if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
             && !mapOpened) {
@@ -132,6 +135,15 @@ void MainWindow::on_actionRun_triggered()
     HubModule::modellingSystem->isModellingPerformed = true;
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
+}
+
+
+void MainWindow::on_actionPause_triggered()
+{
+    //TODO: pause modelling
+
+
+    validateButtons(Paused);
 }
 
 void MainWindow::on_actionStop_triggered()
@@ -160,11 +172,19 @@ void MainWindow::validateButtons(ButtonsState state)
         ui->action_Open_map->setEnabled(false);
         ui->actionRun->setEnabled(false);
         ui->actionStop->setEnabled(true);
+        ui->actionPause->setEnabled(true);
+        break;
+    case Paused:
+        ui->action_Open_map->setEnabled(false);
+        ui->actionRun->setEnabled(true);
+        ui->actionStop->setEnabled(true);
+        ui->actionPause->setEnabled(false);
         break;
     case Stopped:
         ui->action_Open_map->setEnabled(true);
         ui->actionRun->setEnabled(true);
         ui->actionStop->setEnabled(false);
+        ui->actionPause->setEnabled(false);
         break;
     }
 }

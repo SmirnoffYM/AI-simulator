@@ -39,13 +39,15 @@ private slots:
 
     void on_actionStop_triggered();
 
+    void on_actionPause_triggered();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QList<RobotWindow *> robotWindows;
     QImage *map;
 
-    enum ButtonsState {Started, Stopped};
+    enum ButtonsState {Started, Paused, Stopped};
 
     bool mapOpened;             // this flag signals when map is already created and opened
     HubThread *hubThread;

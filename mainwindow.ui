@@ -51,6 +51,9 @@
    <addaction name="menu_About"/>
   </widget>
   <widget class="QToolBar" name="toolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="windowTitle">
     <string>toolBar</string>
    </property>
@@ -61,6 +64,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionRun"/>
+   <addaction name="actionPause"/>
    <addaction name="actionStop"/>
    <addaction name="separator"/>
   </widget>
@@ -116,6 +120,21 @@
    </property>
    <property name="toolTip">
     <string>Stop modelling</string>
+   </property>
+  </action>
+  <action name="actionPause">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/icons/icons/pause.svg</normaloff>:/icons/icons/pause.svg</iconset>
+   </property>
+   <property name="text">
+    <string>Pause</string>
+   </property>
+   <property name="toolTip">
+    <string>Pause modelling</string>
    </property>
   </action>
  </widget>
