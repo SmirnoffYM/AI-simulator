@@ -107,30 +107,28 @@ void MainWindow::on_actionAbout_Program_triggered()
 
 void MainWindow::on_actionRun_triggered()
 {
-    //TODO: don't create new modelling if current modelling is paused, only continue it
+    if (HubModule::modellingSystem->modellingState == Stopped) {
 
+        // if modelling was stopped and then started again
+        if (HubModule::modellingSystem != NULL && !mapOpened) {
 
-    // if modelling was stopped and then started again
-    if (HubModule::modellingSystem != NULL
-            && !(HubModule::modellingSystem->modellingState == Started)
-            && !mapOpened) {
+            int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
+            std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
+            HubModule::modellingSystem->~ModellingSystem();
+            HubModule::modellingSystem = new ModellingSystem(heightMap, size);
+            drawMap(map);
+        }
 
-        int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
-        std::pair<int, int> size = HubModule::modellingSystem->getWorld()->getSize();
-        HubModule::modellingSystem->~ModellingSystem();
-        HubModule::modellingSystem = new ModellingSystem(heightMap, size);
-        drawMap(map);
-    }
+        // starting hub thread
+        hubThread = new HubThread();
+        hubThread->start();
+        Servant::getInstance().launchApplications();
 
-    // starting hub thread
-    hubThread = new HubThread();
-    hubThread->start();
-    Servant::getInstance().launchApplications();
-
-    for (int i = 0; i < ROBOTS; i++) {
-        robotWindows.at(i)->setMap(map);
-        robotWindows.at(i)->setScaling(Servant::getInstance().getScaling(i));
-        robotWindows.at(i)->show();
+        for (int i = 0; i < ROBOTS; i++) {
+            robotWindows.at(i)->setMap(map);
+            robotWindows.at(i)->setScaling(Servant::getInstance().getScaling(i));
+            robotWindows.at(i)->show();
+        }
     }
 
     HubModule::modellingSystem->modellingState = Started;
@@ -142,10 +140,8 @@ void MainWindow::on_actionRun_triggered()
 
 void MainWindow::on_actionPause_triggered()
 {
-    //TODO: pause modelling
     HubModule::modellingSystem->modellingState = Paused;
     HubModule::modellingSystem->isModellingStateChanged = true;
-
     validateButtons(Paused);
 }
 
