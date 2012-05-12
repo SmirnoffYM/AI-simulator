@@ -18,7 +18,8 @@ enum MessageType {
     MsgParameterReport,
     MsgStart,
     MsgPause,
-    MsgStop
+    MsgStop,
+    MsgUndefined
 };
 
 class Message
