@@ -173,6 +173,7 @@ void HubModule::refresh()
 
             messageThereYouSee->objects = objectsInRange;
             messageThereYouSee->port = messageWhoIsThere->port;
+            messageThereYouSee->num = messageWhoIsThere->num;
             // send message to robot
             comModule->sendMessage(messageThereYouSee);
         }
