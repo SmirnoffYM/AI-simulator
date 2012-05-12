@@ -8,8 +8,7 @@
 #include <list>
 
 enum MessageType {
-    MsgAcknowledge = 0,
-    MsgMove,
+    MsgMove = 0,
     MsgTurn,
     MsgChangeSize,
     MsgChangeColor,

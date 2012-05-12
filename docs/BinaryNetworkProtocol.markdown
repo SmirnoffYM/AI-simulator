@@ -18,12 +18,12 @@ Each message consists of two parts: the header and the body. Header
 carries information about sender, while body contains command and some
 parameters.
 
-Upon processing the message simulator should send some response. It may
-be either some dull message (see "`acknowledge` message") or answer to
-the question that agent asked (see "`there you see` message" and "`bump`
-message").
+Upon processing the message simulator may send some response. For
+`move` it may be either `bump` or nothing (if bump didn't happen). For
+`who is there?` it would be `there you see`. Look up relevant sections
+for details on those messages.
 
-There are 12 types of messages:
+There are 11 types of messages:
 
 * `move`
 * `turn`
@@ -31,15 +31,14 @@ There are 12 types of messages:
 * `change color`
 * `who is there?`
 * `parameter report`
-* `acknowledge`
 * `bump`
 * `there you see`
 * `start`
 * `pause`
 * `stop`
 
-Out of those, only first 6 can be sent by agent, and the last six can
-be sent only by the simulator.
+Out of those, only first 6 can be sent by agent, and the last 5 can be
+sent only by the simulator.
 
 Following are formal specification of how does header and each message
 type look like.
@@ -62,18 +61,17 @@ message it is responding to.
 
 Message types are mapped from names to numbers as follows:
 
-* 0: `acknowledge`
-* 1: `move`
-* 2: `turn`
-* 3: `change size`
-* 4: `change color`
-* 5: `who is there?`
-* 6: `bump`
-* 7: `there you see`
-* 8: `parameter report`
-* 9: `start`
-* 10: `pause`
-* 11: `stop`
+* 0: `move`
+* 1: `turn`
+* 2: `change size`
+* 3: `change color`
+* 4: `who is there?`
+* 5: `bump`
+* 6: `there you see`
+* 7: `parameter report`
+* 8: `start`
+* 9: `pause`
+* 10: `stop`
 
 ## `move` message
 
@@ -140,17 +138,6 @@ Parameter id is an unsigned integer number in the range of [0; 15].
 
 Parameter's value is split into integral part and first 6 digits of real part.
 Note that real part is unsigned - sign is carried with integral part.
-
-## `acknowledge` message
-
-Just a dumb message simulator sends in response to messages that doesn't
-require any meaningful answer. Those messages are:
-
-* `turn`
-* `change size`
-* `change color`
-
-Message doesn't contain anything.
 
 ## `bump` message
 
@@ -226,14 +213,6 @@ Those messages doesn't contain anything other than header.
 0xa1                  -- red component, 161
 0xb2                  -- green component, 178
 0xc3                  -- blue component, 195
-```
-
-### `acknowledge` message
-
-```
-0x00 0x00 0x00 0x01   -- message's sequential number, 1
-0x04 0x01             -- agent's port, 1025
-0x00                  -- "acknowledge" message
 ```
 
 ### `there you see` message

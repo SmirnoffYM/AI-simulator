@@ -109,9 +109,6 @@ void ComModule::sendMessage(Message *msg)
            << static_cast<quint8>(msg->type);
 
     switch(msg->type) {
-    case MsgAcknowledge:
-        // "acknowledge" doesn't have any payload
-        break;
     case MsgStart:
         break;
     case MsgPause:
