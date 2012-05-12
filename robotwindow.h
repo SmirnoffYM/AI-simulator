@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QGraphicsScene>
 #include "constants.h"
+#include "mapgraphicsscene.h"
 #include "object.h"
 #include "robot.h"
 
@@ -21,7 +22,7 @@ public:
 
 private:
     Ui::RobotWindow *ui;
-    QGraphicsScene *localMapScene;
+    MapGraphicsScene *localMapScene;
     QImage *fullMap;
 
     unsigned int robotId;                   //robot's number. It must be from 1 to ROBOTS

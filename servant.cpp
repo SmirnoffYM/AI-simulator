@@ -1,29 +1,8 @@
 #include "servant.h"
+#include "processcontainer.h"
 
 Servant::Servant()
 {
-    applications = std::vector<std::pair<QString, QProcess *> >();
-}
-
-void Servant::addApplication(QString command)
-{
-    QProcess *application = new QProcess();
-    applications.push_back(std::pair<QString, QProcess*>(command, application));
-}
-
-void Servant::launchApplications()
-{
-    for (unsigned int i = 0; i < applications.size(); i++) {
-        applications.at(i).second->start(applications.at(i).first);
-    }
-}
-
-void Servant::stopApplications()
-{
-    for (unsigned int i = 0; i < applications.size(); i++) {
-        applications.at(i).second->kill();
-    }
-    applications.clear();
 }
 
 Robot * Servant::buildRobot(unsigned int number)
@@ -184,7 +163,7 @@ Robot * Servant::buildRobot(unsigned int number)
 
     QString command = configStringList.at(0) + QString(" ") + configFilename;
     qDebug() << "Robot" << number << "will be called by command" << command;
-    addApplication(command);
+    ProcessContainer::getInstance().addApplication(command);
 
     return robot;
 }
@@ -357,49 +336,9 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
 
     QString command = configStringList.at(0) + QString(" ") + configFilename;
     qDebug() << "Environment will be called by command" << command;
-    addApplication(command);
+    ProcessContainer::getInstance().addApplication(command);
 
     return *environment;
-}
-
-// Draw all objects
-// Each object is a circle colored with getColor()
-// If object is movable, it has orientation
-// Orientation is indicated by line with inverted circle color
-// Line links circle's center and circle's outline
-void Servant::drawObject(Object *object, QGraphicsScene *scene)
-{
-    if (object->getCoords().first >= static_cast<int>(object->getSize() / 2)
-            && object->getCoords().second >= static_cast<int>(object->getSize() / 2)
-            && object->getSize() > 0
-            && object->getCoords().first + static_cast<int>(object->getSize() / 2) <=
-            HubModule::modellingSystem->getWorld()->getSize().first * REAL_PIXEL_SIZE
-            && object->getCoords().second + static_cast<int>(object->getSize() / 2) <=
-            HubModule::modellingSystem->getWorld()->getSize().second * REAL_PIXEL_SIZE) {
-        QColor outlineColor(255 - object->getColor().red(),
-                            255 - object->getColor().green(),
-                            255 - object->getColor().blue());
-
-        int circle_x = (object->getCoords().first -
-                        object->getSize() / 2) / REAL_PIXEL_SIZE;
-        int circle_y = (object->getCoords().second -
-                        object->getSize() / 2) / REAL_PIXEL_SIZE;
-
-        QGraphicsEllipseItem *ellipse = scene->addEllipse(circle_x, circle_y,
-                          object->getSize() / REAL_PIXEL_SIZE,
-                          object->getSize() / REAL_PIXEL_SIZE,
-                          QPen(outlineColor),
-                          QBrush(QColor(object->getColor().red(),
-                                        object->getColor().green(),
-                                        object->getColor().blue())));
-
-        // draw orientation line if object is movable
-        if (object->isMovable()) {
-            const int accuracy = 16;    //qt's accuracy for degree values
-            ellipse->setStartAngle((90 - object->getOrientation()) * accuracy);
-            ellipse->setSpanAngle(360 * accuracy - 1);
-        }
-    }
 }
 
 /* Limit line length to 100 characters; highlight 99th column

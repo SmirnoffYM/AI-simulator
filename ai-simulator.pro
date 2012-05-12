@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     hubthread.cpp \
     servant.cpp \
     object.cpp \
-    color.cpp
+    color.cpp \
+    processcontainer.cpp \
+    mapgraphicsscene.cpp
 
 HEADERS  += mainwindow.h \
     robotwindow.h \
@@ -39,7 +41,9 @@ HEADERS  += mainwindow.h \
     hubthread.h \
     servant.h \
     object.h \
-    color.h
+    color.h \
+    processcontainer.h \
+    mapgraphicsscene.h
 
 FORMS    += mainwindow.ui \
     robotwindow.ui

@@ -1,13 +1,17 @@
 #ifndef SERVANT_H
 #define SERVANT_H
 
+/*
+
+    This class is designed for performing some qt-dependent actions for ModellingSystem class.
+    Please, DO NOT write here other code if you don't know where put it.
+
+*/
+
 #include <QColor>
-#include <QProcess>
 #include <QDebug>
 #include <QDir>
 #include <QTextStream>
-#include <QGraphicsScene>
-#include <QGraphicsEllipseItem>
 #include <math.h>
 #include <time.h>
 #include <algorithm>
@@ -17,44 +21,35 @@
 
 class Servant
 {
-    public:
-        static Servant& getInstance()
-        {
-            static Servant instance;
-            return instance;
-        }
+public:
+    static Servant& getInstance()
+    {
+        static Servant instance;
+        return instance;
+    }
 
-        // Managing robot apps
-        void launchApplications();
-        void stopApplications();
-        void addApplication(QString command);
+    // Loading robot profile
+    Robot * buildRobot(unsigned int number);
 
-        // Loading robot profile
-        Robot * buildRobot(unsigned int number);
+    // Loading enviroment profile
+    std::vector<EnvObject *> buildEnvironment(std::pair<int, int> mapSize);
 
-        // Loading enviroment profile
-        std::vector<EnvObject *> buildEnvironment(std::pair<int, int> mapSize);
+    // Get local map scaling for some robot
+    // Robot number must be in range 0..ROBOTS-1
+    unsigned int getScaling(unsigned int robotNumber)
+    {
+        if (scaling.find(robotNumber) != scaling.end())
+            return scaling.find(robotNumber)->second;
+        else
+            return 1;
+    }
 
-        // Draw some object on some scene
-        void drawObject(Object *object, QGraphicsScene *scene);
+private:
+    Servant();
+    Servant(Servant const&);
+    void operator=(Servant const&);
 
-        // Get local map scaling for some robot
-        // Robot number must be in range 0..ROBOTS-1
-        unsigned int getScaling(unsigned int robotNumber)
-        {
-            if (scaling.find(robotNumber) != scaling.end())
-                return scaling.find(robotNumber)->second;
-            else
-                return 1;
-        }
-
-    private:
-        Servant();
-        Servant(Servant const&);
-        void operator=(Servant const&);
-
-        std::vector<std::pair<QString, QProcess *> > applications;
-        std::map<unsigned int, int> scaling;
+    std::map<unsigned int, int> scaling;
 };
 
 #endif // SERVANT_H

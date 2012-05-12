@@ -12,7 +12,7 @@ RobotWindow::RobotWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    localMapScene = new QGraphicsScene();
+    localMapScene = new MapGraphicsScene();
     setWindowFlags(Qt::CustomizeWindowHint | Qt::WindowTitleHint | Qt::WindowStaysOnTopHint );
     ui->robotGraphicsView->setScene(localMapScene);
     ui->robotGraphicsView->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -79,12 +79,12 @@ void RobotWindow::onRefreshMap()
     ui->robotGraphicsView->centerOn(robot->getCoords().first / REAL_PIXEL_SIZE,
                                     robot->getCoords().second / REAL_PIXEL_SIZE);
 
-    Servant::getInstance().drawObject(robot, localMapScene);
+    localMapScene->drawObject(robot);
 
     std::vector<Object *> visibleObjects = robot->iCanSee();
     for (unsigned int i = 0; i < visibleObjects.size(); i++) {
         if (visibleObjects.at(i) != NULL)
-            Servant::getInstance().drawObject(visibleObjects.at(i), localMapScene);
+            localMapScene->drawObject(visibleObjects.at(i));
     }
 
     refreshRobotParams();

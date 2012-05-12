@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGraphicsScene>
 #include <QDesktopWidget>
 #include <QMessageBox>
 #include <QFileDialog>
@@ -12,6 +11,8 @@
 #include "robotwindow.h"
 #include "constants.h"
 #include "hubthread.h"
+#include "mapgraphicsscene.h"
+#include "processcontainer.h"
 #include "servant.h"
 
 namespace Ui {
@@ -43,7 +44,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    QGraphicsScene *scene;
+    MapGraphicsScene *scene;
     QList<RobotWindow *> robotWindows;
     QImage *map;
 

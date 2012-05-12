@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    scene = new QGraphicsScene();
+    scene = new MapGraphicsScene();
     ui->graphicsView->setScene(scene);
 
     const QRect screen = QApplication::desktop()->screenGeometry();
@@ -56,7 +56,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_action_Exit_triggered()
 {
-    stopModelling();
     this->close();
 }
 
@@ -122,7 +121,7 @@ void MainWindow::on_actionRun_triggered()
         // starting hub thread
         hubThread = new HubThread();
         hubThread->start();
-        Servant::getInstance().launchApplications();
+        ProcessContainer::getInstance().launchApplications();
 
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->setMap(map);
@@ -162,7 +161,7 @@ void MainWindow::stopModelling()
 
     hubThread->terminate();
     hubThread->~HubThread();
-    Servant::getInstance().stopApplications();
+    ProcessContainer::getInstance().stopApplications();
 }
 
 void MainWindow::validateButtons(ModellingState state)
@@ -229,12 +228,12 @@ void MainWindow::onRefreshMap()
         for (int i = 0; i < ROBOTS; i++) {
             Object *robot = HubModule::modellingSystem->getRobot(i);
             if (robot != NULL)
-                Servant::getInstance().drawObject(robot, scene);
+                scene->drawObject(robot);
         }
         for (int i = 0; i < ENV_OBJECTS; i++) {
             Object *envObject = HubModule::modellingSystem->getEnvObject(i);
             if (envObject != NULL)
-                Servant::getInstance().drawObject(envObject, scene);
+                scene->drawObject(envObject);
         }
 
         // Refresh robotWindows
