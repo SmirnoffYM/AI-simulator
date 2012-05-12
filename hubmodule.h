@@ -30,8 +30,6 @@ private:
 
     // Shows how much time each robot was passive
     static double* idleTime;
-
-    ModellingState currentModellingState;
 };
 
 #endif // HUBMODULE_H

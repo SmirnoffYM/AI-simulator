@@ -14,6 +14,7 @@ public:
     ~ModellingSystem();
 
     static ModellingState modellingState;
+    static bool isModellingStateChanged;
 private:
     std::vector<Robot *> robots;
     std::vector<EnvObject *> envObjects;

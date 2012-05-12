@@ -3,6 +3,7 @@
 #include "servant.h"
 
 ModellingState ModellingSystem::modellingState = Stopped;
+bool ModellingSystem::isModellingStateChanged = false;
 
 ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
 {
@@ -16,6 +17,7 @@ ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
     envObjects = Servant::getInstance().buildEnvironment(size);
 
     modellingState = Stopped;
+    isModellingStateChanged = false;
 }
 
 ModellingSystem::~ModellingSystem()

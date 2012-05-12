@@ -13,7 +13,6 @@ HubModule::HubModule()
     for (int i = 0; i < ROBOTS; i++)
         HubModule::idleTime[i] = START_IDLE_TIME;
 
-    currentModellingState = Stopped;
 }
 /*
     refreshing system state
@@ -21,13 +20,13 @@ HubModule::HubModule()
 */
 void HubModule::refresh()
 {
-    // check if current modelling state differs from
-    // modelling system state. if yes, change
+    // check if modelling state changed
+    // if yes, change
     // current modelling state and send messages to all robots
 
-    if (currentModellingState != HubModule::modellingSystem->modellingState) {
-        currentModellingState = HubModule::modellingSystem->modellingState;
-        sendModellingStateMessage(currentModellingState);
+    if (HubModule::modellingSystem->isModellingStateChanged) {
+        HubModule::modellingSystem->isModellingStateChanged = false;
+        sendModellingStateMessage(HubModule::modellingSystem->modellingState);
     }
 
 
@@ -200,6 +199,8 @@ void HubModule::refresh()
     for (int i = 0; i < ROBOTS; i++)
         if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT)
             HubModule::idleTime[i] += HUB_REFRESH_TIME;
+        else if (HubModule::idleTime[i] == 0)
+            HubModule::idleTime[i] = START_IDLE_TIME;
 
 }
 

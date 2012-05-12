@@ -134,6 +134,7 @@ void MainWindow::on_actionRun_triggered()
     }
 
     HubModule::modellingSystem->modellingState = Started;
+    HubModule::modellingSystem->isModellingStateChanged = true;
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 }
@@ -143,6 +144,7 @@ void MainWindow::on_actionPause_triggered()
 {
     //TODO: pause modelling
     HubModule::modellingSystem->modellingState = Paused;
+    HubModule::modellingSystem->isModellingStateChanged = true;
 
     validateButtons(Paused);
 }
@@ -150,6 +152,7 @@ void MainWindow::on_actionPause_triggered()
 void MainWindow::on_actionStop_triggered()
 {
     HubModule::modellingSystem->modellingState = Stopped;
+    HubModule::modellingSystem->isModellingStateChanged = true;
     mapOpened = false;
     stopModelling();
     validateButtons(Stopped);
