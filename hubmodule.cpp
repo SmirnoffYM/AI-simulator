@@ -105,11 +105,8 @@ void HubModule::refresh()
         {
             MessageTurn *messageTurn = static_cast<MessageTurn *>(m);
 
-            double prevOrientation = HubModule::modellingSystem->getRobotByPort(messageTurn->port)
-                    ->getOrientation();
-
             HubModule::modellingSystem->getRobotByPort(messageTurn->port)
-                    ->setOrientation(prevOrientation + messageTurn->degrees);
+                    ->setOrientation(messageTurn->degrees);
         }
             break;
 
