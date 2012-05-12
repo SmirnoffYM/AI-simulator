@@ -1,4 +1,4 @@
-# Binary network protocol specification (version 1)
+# Binary network protocol specification (version 2)
 
 ## Motivation
 
@@ -50,15 +50,19 @@ Header contains:
 
 * protocol version, *1 octet*
 * message's sequential number, *4 octets*, unsigned integer
+* environment object's ID, *1 octet*, unsigned integer
 * agent's port, *2 octets*, unsigned integer
 * message type, *1 octet*
 
-This document describes protocol version 1, so the first octet of the
-message should contain 1.
+This document describes protocol version 2, so the first octet of the
+message should contain 2.
 
 Sequential numbers are set by the agent and required by him to make
 sense out of responses. Simulator should just copy that field from the
 message it is responding to.
+
+Environment object's ID should be 0 when message is sent by/to the robot and
+non-zero when message is sent by/to the environment controller.
 
 Message types are mapped from names to numbers as follows:
 
@@ -200,6 +204,7 @@ Those messages doesn't contain anything other than header.
 
 ```
 0x00 0x00 0x00 0x00   -- message's sequential number
+0x00                  -- env. obj. ID is 0, thus message is for robot
 0x04 0x01             -- agent's port, 1025
 0x01                  -- "move" message
 0x00 0x00 0x00 0x15   -- x coordinate, 21
@@ -211,6 +216,7 @@ Those messages doesn't contain anything other than header.
 ```
 0x00 0x00 0x00 0x00   -- message's sequential number, copied from the
                       -- original message
+0x00                  -- env. obj. ID, zero means we're talking about robot
 0x04 0x01             -- agent's port, 1025
 0x06                  -- "bump" message
 0x00 0x00 0x00 0x0b   -- x coordinate, 11
@@ -221,7 +227,9 @@ Those messages doesn't contain anything other than header.
 
 ```
 0x00 0x00 0x00 0x01   -- message's sequential number, 1
-0x04 0x01             -- agent's port, 1025
+0x03                  -- 3, env. object's ID
+0x04 0x01             -- agent's port, 1026
+                      -- agent here is environment controller application
 0x04                  -- "change color" message
 0xa1                  -- red component, 161
 0xb2                  -- green component, 178
