@@ -22,7 +22,7 @@
 //TODO: define MAX_MAP_SIDE
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 enum RobotType { Normal, Flying };              // Flying robot can observe the whole map
-
+enum ModellingState {Started, Paused, Stopped};
 /* Define some non-crossplatform math constants: */
 
 #define PI 3.14159265358979323846

@@ -47,8 +47,6 @@ private:
     QList<RobotWindow *> robotWindows;
     QImage *map;
 
-    enum ButtonsState {Started, Paused, Stopped};
-
     bool mapOpened;             // this flag signals when map is already created and opened
     HubThread *hubThread;
 
@@ -56,7 +54,7 @@ private:
     int ** loadMap(QImage image);
     void drawMap(QImage *image);
     void stopModelling();
-    void validateButtons(ButtonsState state);
+    void validateButtons(ModellingState state);
     void closeEvent(QCloseEvent *event);
 
 };

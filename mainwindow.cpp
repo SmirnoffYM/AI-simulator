@@ -46,7 +46,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (HubModule::modellingSystem->isModellingPerformed)
+    if (HubModule::modellingSystem->modellingState == Started)
         stopModelling();
     for (int i = 0; i < ROBOTS; i++) {
         robotWindows.at(i)->setClosePermit(true);
@@ -111,7 +111,8 @@ void MainWindow::on_actionRun_triggered()
 
 
     // if modelling was stopped and then started again
-    if (HubModule::modellingSystem != NULL && !HubModule::modellingSystem->isModellingPerformed
+    if (HubModule::modellingSystem != NULL
+            && !(HubModule::modellingSystem->modellingState == Started)
             && !mapOpened) {
 
         int **heightMap = HubModule::modellingSystem->getWorld()->getHeightsMap();
@@ -132,7 +133,7 @@ void MainWindow::on_actionRun_triggered()
         robotWindows.at(i)->show();
     }
 
-    HubModule::modellingSystem->isModellingPerformed = true;
+    HubModule::modellingSystem->modellingState = Started;
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 }
@@ -141,14 +142,14 @@ void MainWindow::on_actionRun_triggered()
 void MainWindow::on_actionPause_triggered()
 {
     //TODO: pause modelling
-
+    HubModule::modellingSystem->modellingState = Paused;
 
     validateButtons(Paused);
 }
 
 void MainWindow::on_actionStop_triggered()
 {
-    HubModule::modellingSystem->isModellingPerformed = false;
+    HubModule::modellingSystem->modellingState = Stopped;
     mapOpened = false;
     stopModelling();
     validateButtons(Stopped);
@@ -165,7 +166,7 @@ void MainWindow::stopModelling()
     Servant::getInstance().stopApplications();
 }
 
-void MainWindow::validateButtons(ButtonsState state)
+void MainWindow::validateButtons(ModellingState state)
 {
     switch(state) {
     case Started:
@@ -217,7 +218,7 @@ int ** MainWindow::loadMap(QImage image)
 
 void MainWindow::onRefreshMap()
 {
-    if (ModellingSystem::isModellingPerformed) {
+    if (ModellingSystem::modellingState == Started) {
 
         // hide non active robot windows if any
         double *idleTime = HubModule::getIdleTime();

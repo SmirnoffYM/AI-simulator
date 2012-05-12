@@ -13,7 +13,7 @@ public:
     ModellingSystem(int **map, std::pair<int, int>);
     ~ModellingSystem();
 
-    static bool isModellingPerformed;
+    static ModellingState modellingState;
 private:
     std::vector<Robot *> robots;
     std::vector<EnvObject *> envObjects;
@@ -52,6 +52,14 @@ public:
             return NULL;
     }
 
+    int getEnvObjectPortNumber()
+    {
+        if (envObjects.size() > 0)
+            return envObjects.at(0)->getPortNumber();
+        else
+            return -1; // error value
+    }
+
     // return serial number by port number
     int getSerialByPortNumber(unsigned int number)
     {
@@ -59,6 +67,15 @@ public:
             if (robots.at(i)->getPortNumber() == number)
                 return i;
         return -1; // error value
+    }
+
+    // return port number by serial
+    int getPortBySerialNumber(unsigned int number)
+    {
+        if (number < robots.size() && number < ROBOTS)
+            return robots.at(number)->getPortNumber();
+        else
+            return -1; // error value
     }
 };
 

@@ -2,7 +2,7 @@
 #include "hubmodule.h"
 #include "servant.h"
 
-bool ModellingSystem::isModellingPerformed = false;
+ModellingState ModellingSystem::modellingState = Stopped;
 
 ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
 {
@@ -15,7 +15,7 @@ ModellingSystem::ModellingSystem(int **map, std::pair<int, int> size)
 
     envObjects = Servant::getInstance().buildEnvironment(size);
 
-    isModellingPerformed = false;
+    modellingState = Stopped;
 }
 
 ModellingSystem::~ModellingSystem()

@@ -20,6 +20,7 @@ public:
     static ModellingSystem *modellingSystem;
 
     static double* getIdleTime();
+    void sendModellingStateMessage(ModellingState state);
 
     void refresh();
 
@@ -29,6 +30,8 @@ private:
 
     // Shows how much time each robot was passive
     static double* idleTime;
+
+    ModellingState currentModellingState;
 };
 
 #endif // HUBMODULE_H

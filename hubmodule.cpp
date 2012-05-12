@@ -12,6 +12,8 @@ HubModule::HubModule()
     HubModule::idleTime = new double[ROBOTS];
     for (int i = 0; i < ROBOTS; i++)
         HubModule::idleTime[i] = START_IDLE_TIME;
+
+    currentModellingState = Stopped;
 }
 /*
     refreshing system state
@@ -19,6 +21,16 @@ HubModule::HubModule()
 */
 void HubModule::refresh()
 {
+    // check if current modelling state differs from
+    // modelling system state. if yes, change
+    // current modelling state and send messages to all robots
+
+    if (currentModellingState != HubModule::modellingSystem->modellingState) {
+        currentModellingState = HubModule::modellingSystem->modellingState;
+        sendModellingStateMessage(currentModellingState);
+    }
+
+
     Message *m = NULL;
 
     while (!messageQueue.empty())
@@ -194,6 +206,35 @@ void HubModule::refresh()
 double* HubModule::getIdleTime()
 {
     return HubModule::idleTime;
+}
+
+void HubModule::sendModellingStateMessage(ModellingState state)
+{
+    Message *message = new Message();
+    message->num = 0;
+
+    switch(state) {
+    case Started:
+        message->type = MsgStart;
+        break;
+    case Stopped:
+        message->type = MsgStop;
+        break;
+    case Paused:
+        message->type = MsgPause;
+        break;
+    }
+    // send message about modelling state
+    // to all robots
+    for (int i = 0; i < ROBOTS; i++) {
+        message->port = HubModule::modellingSystem->getPortBySerialNumber(i);
+        comModule->sendMessage(message);
+    }
+
+    // send message to env object control program
+    message->port = HubModule::modellingSystem->getEnvObjectPortNumber();
+    comModule->sendMessage(message);
+
 }
 
 /* Limit line length to 100 characters; highlight 99th column
