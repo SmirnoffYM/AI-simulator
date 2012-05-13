@@ -69,15 +69,15 @@ void HubModule::refresh()
                             +
                             pow(messageMove->coordY
                                 - tmpRobot->getCoords().second, 2)
-                            ) < (tmpRobot->getSize() + tmpClientRobot->getSize())
+                            ) < (tmpRobot->getSize() / 2 + tmpClientRobot->getSize() / 2)
                         ) {
                     collision = true;
-                    // send message to collided robot
-     //               messageBump->port = tmpRobot->getPortNumber();
-                    // set collided robot coords
-     //               messageBump->coordX = tmpRobot->getCoords().first;
-     //               messageBump->coordY = tmpRobot->getCoords().second;
-    //                comModule->sendMessage(messageBump);
+//                    // send message to collided robot
+//                    messageBump->port = tmpRobot->getPortNumber();
+//                    // set collided robot coords
+//                    messageBump->coordX = tmpRobot->getCoords().first;
+//                    messageBump->coordY = tmpRobot->getCoords().second;
+//                    comModule->sendMessage(messageBump);
                 }
             }
             // check for collisions with env objects
@@ -91,15 +91,15 @@ void HubModule::refresh()
                             +
                             pow(messageMove->coordY
                                 - tmpEnvObject->getCoords().second, 2)
-                            ) < (tmpEnvObject->getSize() + tmpClientRobot->getSize())
+                            ) < (tmpEnvObject->getSize() / 2 + tmpClientRobot->getSize() / 2)
                         ) {
                     collision = true;
-                    // send message to collided env object
-      //              messageBump->port = tmpEnvObject->getPortNumber();
-                    // set collided env object coords
-       //             messageBump->coordX = tmpEnvObject->getCoords().first;
-        //            messageBump->coordY = tmpEnvObject->getCoords().second;
-       //             comModule->sendMessage(messageBump);
+//                    // send message to collided env object
+//                    messageBump->port = tmpEnvObject->getPortNumber();
+//                    // set collided env object coords
+//                    messageBump->coordX = tmpEnvObject->getCoords().first;
+//                    messageBump->coordY = tmpEnvObject->getCoords().second;
+//                    comModule->sendMessage(messageBump);
                 }
             }
 
