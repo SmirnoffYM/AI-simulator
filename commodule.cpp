@@ -45,7 +45,7 @@ void ComModule::handleMessage()
 
         quint8 version;
         stream >> version;
-        if(version != 1) {
+        if(version != 2) {
             // FIXME: stick qDebug in here
             // VERSION MISMATCH, CAN'T HANDLE THAT
             return;
@@ -53,9 +53,10 @@ void ComModule::handleMessage()
 
         /* Read some service info */
         quint32 seq_num;
+        quint8 envObjID;
         quint16 port;
         quint8 msg_type;
-        stream >> seq_num >> port >> msg_type;
+        stream >> seq_num >> envObjID >> port >> msg_type;
 
         /* Dispatch depending on the message type */
         switch(msg_type) {
@@ -87,6 +88,7 @@ void ComModule::handleMessage()
          * of Message class (see messages.h). All we need to do now is to put service info in and
          * then put the message into the queue */
         msg->num = seq_num;
+        msg->envObjID = envObjID;
         msg->port = port;
         msg->type = static_cast<MessageType>(msg_type);
 
@@ -102,10 +104,12 @@ void ComModule::sendMessage(Message *msg)
     /* Use QDataStream to populate datagram with data because it would handle endianness for us */
     QDataStream stream(&datagram, QIODevice::WriteOnly);
 
-    // version: 1
-    stream << static_cast<quint8>(1);
+    // version: 2
+    stream << static_cast<quint8>(2);
     // other header infortmation
-    stream << static_cast<quint32>(msg->num) << static_cast<quint16>(msg->port)
+    stream << static_cast<quint32>(msg->num)
+           << static_cast<quint8>(msg->envObjID)
+           << static_cast<quint16>(msg->port)
            << static_cast<quint8>(msg->type);
 
     switch(msg->type) {
