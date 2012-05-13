@@ -19,8 +19,7 @@ void HubThread::stop()
 
 void HubThread::refresh()
 {
-    if (ModellingSystem::modellingState == Started) {
-        hub->refresh();
-        QTimer::singleShot(HUB_REFRESH_TIME, this, SLOT(refresh()));
-    }
+    hub->refresh();
+    QTimer::singleShot(HUB_REFRESH_TIME, this, SLOT(refresh()));
+
 }

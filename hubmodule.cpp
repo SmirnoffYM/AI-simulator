@@ -73,11 +73,11 @@ void HubModule::refresh()
                         ) {
                     collision = true;
                     // send message to collided robot
-                    messageBump->port = tmpRobot->getPortNumber();
+     //               messageBump->port = tmpRobot->getPortNumber();
                     // set collided robot coords
-                    messageBump->coordX = tmpRobot->getCoords().first;
-                    messageBump->coordY = tmpRobot->getCoords().second;
-                    comModule->sendMessage(messageBump);
+     //               messageBump->coordX = tmpRobot->getCoords().first;
+     //               messageBump->coordY = tmpRobot->getCoords().second;
+    //                comModule->sendMessage(messageBump);
                 }
             }
             // check for collisions with env objects
@@ -95,11 +95,11 @@ void HubModule::refresh()
                         ) {
                     collision = true;
                     // send message to collided env object
-                    messageBump->port = tmpEnvObject->getPortNumber();
+      //              messageBump->port = tmpEnvObject->getPortNumber();
                     // set collided env object coords
-                    messageBump->coordX = tmpEnvObject->getCoords().first;
-                    messageBump->coordY = tmpEnvObject->getCoords().second;
-                    comModule->sendMessage(messageBump);
+       //             messageBump->coordX = tmpEnvObject->getCoords().first;
+        //            messageBump->coordY = tmpEnvObject->getCoords().second;
+       //             comModule->sendMessage(messageBump);
                 }
             }
 
@@ -109,8 +109,8 @@ void HubModule::refresh()
             else {
                 messageBump->port = messageMove->port;
                 // set current robot coords
-                messageBump->coordX = tmpClientRobot->getCoords().first;
-                messageBump->coordY = tmpClientRobot->getCoords().second;
+                messageBump->coordX = /*tmpClientRobot->getCoords().first*/500;
+                messageBump->coordY = /*tmpClientRobot->getCoords().second*/500;
                 messageBump->num = messageMove->num;
                 comModule->sendMessage(messageBump);
             }
@@ -211,7 +211,8 @@ void HubModule::refresh()
     // add time between hub refresh to those robots
     // which were idle in current refresh cycle
     for (int i = 0; i < ROBOTS; i++)
-        if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT)
+        if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT
+                && HubModule::modellingSystem->modellingState == Started)
             HubModule::idleTime[i] += HUB_REFRESH_TIME;
         else if (HubModule::idleTime[i] == 0)
             HubModule::idleTime[i] = START_IDLE_TIME;
