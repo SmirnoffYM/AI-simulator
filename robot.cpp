@@ -29,7 +29,7 @@ std::vector<Object *> Robot::iCanSee()
         else
             object = HubModule::modellingSystem->getRobot(i - ENV_OBJECTS);
 
-        if (object != NULL && object->getSize() / 2 + visibilityRadius
+        if (object != NULL && object->getSize() > 0 && object->getSize() / 2 + visibilityRadius
                 >= sqrt(pow(object->getCoords().first - coords.first, 2)
                         + pow(object->getCoords().second - coords.second, 2))) {
 
