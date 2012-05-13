@@ -109,8 +109,8 @@ void HubModule::refresh()
             else {
                 messageBump->port = messageMove->port;
                 // set current robot coords
-                messageBump->coordX = /*tmpClientRobot->getCoords().first*/500;
-                messageBump->coordY = /*tmpClientRobot->getCoords().second*/500;
+                messageBump->coordX = tmpClientRobot->getCoords().first;
+                messageBump->coordY = tmpClientRobot->getCoords().second;
                 messageBump->num = messageMove->num;
                 comModule->sendMessage(messageBump);
             }
