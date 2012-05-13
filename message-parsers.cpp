@@ -1,7 +1,5 @@
 #include "message-parsers.h"
 
-#include <QDebug>
-
 MessageMove * parseMessageMove(QDataStream & stream)
 {
     MessageMove *msg = new MessageMove();
@@ -11,8 +9,6 @@ MessageMove * parseMessageMove(QDataStream & stream)
 
     msg->coordX = x;
     msg->coordY = y;
-
-    qDebug() << "Move to (" << x << " " << y << ")\n";
 
     return msg;
 }

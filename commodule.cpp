@@ -117,8 +117,6 @@ void ComModule::sendMessage(Message *msg)
         {
         MessageBump *m = static_cast<MessageBump *>(msg);
         stream << static_cast<quint32>(m->coordX) << static_cast<quint32>(m->coordY);
-
-        qDebug() << "Bump at (" << m->coordX << " " << m->coordY << ")\n";
         };
         break;
     case MsgThereYouSee:
