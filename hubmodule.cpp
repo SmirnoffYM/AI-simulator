@@ -233,9 +233,6 @@ void HubModule::sendModellingStateMessage(ModellingState state)
     case Started:
         message->type = MsgStart;
         break;
-    case Stopped:
-        message->type = MsgStop;
-        break;
     case Paused:
         message->type = MsgPause;
         break;

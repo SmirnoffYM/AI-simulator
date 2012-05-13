@@ -23,7 +23,7 @@ Upon processing the message simulator may send some response. For
 `who is there?` it would be `there you see`. Look up relevant sections
 for details on those messages.
 
-There are 11 types of messages:
+There are 10 types of messages:
 
 * `move`
 * `turn`
@@ -35,9 +35,8 @@ There are 11 types of messages:
 * `there you see`
 * `start`
 * `pause`
-* `stop`
 
-Out of those, only first 6 can be sent by agent, and the last 5 can be
+Out of those, only first 6 can be sent by agent, and the last 4 can be
 sent only by the simulator.
 
 Following are formal specification of how does header and each message
@@ -71,7 +70,6 @@ Message types are mapped from names to numbers as follows:
 * 7: `parameter report`
 * 8: `start`
 * 9: `pause`
-* 10: `stop`
 
 ## `move` message
 
@@ -171,13 +169,13 @@ Seconds field indidates orientation of object.
 
 List of objects is just a stream of objects descriptions.
 
-## `start`, `pause` and `stop` messages
+## `start` and `pause` messages
 
 Those are used to control simulation flow. Agent program should start
 doing its work (i.e. moving agent around) upon receiving `start`
 message. If `pause` is sent, agent should pause and wait for the
-`start`. The only difference between `pause` and `stop` is that
-pausing doesn't erase current agent's state, while `stop` does.
+`start`. There's no `stop` message because agent processes are being
+killed by the simulator when user wants to stop simulation.
 
 Those messages doesn't contain anything other than header.
 

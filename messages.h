@@ -18,7 +18,6 @@ enum MessageType {
     MsgParameterReport,
     MsgStart,
     MsgPause,
-    MsgStop,
     MsgUndefined
 };
 

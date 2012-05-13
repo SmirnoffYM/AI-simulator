@@ -113,8 +113,6 @@ void ComModule::sendMessage(Message *msg)
         break;
     case MsgPause:
         break;
-    case MsgStop:
-        break;
     case MsgBump:
         {
         MessageBump *m = static_cast<MessageBump *>(msg);
