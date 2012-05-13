@@ -272,10 +272,15 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
                 return *environment;
             }
         } else {
+            /*
             srand(static_cast<unsigned int>(time(0)));
             x = rand() % (mapSize.first * REAL_PIXEL_SIZE);
             y = rand() % (mapSize.second * REAL_PIXEL_SIZE);
             qDebug() << "Object" << obj << "receives random coordinates (" << x << "," << y << ")";
+            */
+            // coordinates must be generated in the environment app
+            x = 0;
+            y = 0;
         }
 
         // Check if size is a number and is over than zero
@@ -334,7 +339,8 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
         environment->push_back(envObject);
     }
 
-    QString command = configStringList.at(0) + QString(" ") + configFilename;
+    QString command = configStringList.at(0) + QString(" ") + configFilename + QString(" ")
+            + QString("%1").arg(mapSize.first) + QString(" ") + QString("%1").arg(mapSize.second);
     qDebug() << "Environment will be called by command" << command;
     ProcessContainer::getInstance().addApplication(command);
 
