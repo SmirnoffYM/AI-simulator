@@ -52,6 +52,8 @@ void HubModule::refresh()
                     ->getRobotByPort(messageMove->port);
 
             // check for collisions with robots
+            MessageBump *messageBump = new MessageBump();
+
             for (int i = 0; i < ROBOTS; i++) {
                 Robot* tmpRobot = HubModule::modellingSystem->getRobot(i);
                 // if the current robot is the sender robot
@@ -68,8 +70,15 @@ void HubModule::refresh()
                             pow(messageMove->coordY
                                 - tmpRobot->getCoords().second, 2)
                             ) < (tmpRobot->getSize() + tmpClientRobot->getSize())
-                        )
+                        ) {
                     collision = true;
+                    // send message to collided robot
+                    messageBump->port = tmpRobot->getPortNumber();
+                    // set collided robot coords
+                    messageBump->coordX = tmpRobot->getCoords().first;
+                    messageBump->coordY = tmpRobot->getCoords().second;
+                    comModule->sendMessage(messageBump);
+                }
             }
             // check for collisions with env objects
             for (int i = 0; i < ENV_OBJECTS; i++) {
@@ -83,19 +92,26 @@ void HubModule::refresh()
                             pow(messageMove->coordY
                                 - tmpEnvObject->getCoords().second, 2)
                             ) < (tmpEnvObject->getSize() + tmpClientRobot->getSize())
-                        )
+                        ) {
                     collision = true;
+                    // send message to collided env object
+                    messageBump->port = tmpEnvObject->getPortNumber();
+                    // set collided env object coords
+                    messageBump->coordX = tmpEnvObject->getCoords().first;
+                    messageBump->coordY = tmpEnvObject->getCoords().second;
+                    comModule->sendMessage(messageBump);
+                }
             }
 
             if (!collision)
                 HubModule::modellingSystem->getRobotByPort(messageMove->port)
                         ->setCoords(messageMove->coordX, messageMove->coordY);
             else {
-                MessageBump *messageBump = new MessageBump();
                 messageBump->port = messageMove->port;
                 // set current robot coords
                 messageBump->coordX = tmpClientRobot->getCoords().first;
                 messageBump->coordY = tmpClientRobot->getCoords().second;
+                messageBump->num = messageMove->num;
                 comModule->sendMessage(messageBump);
             }
         }
