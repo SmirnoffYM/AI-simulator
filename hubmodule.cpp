@@ -48,8 +48,15 @@ void HubModule::refresh()
             // check if there'll be no collisions
             bool collision = false;
 
-            Robot* tmpClientRobot = HubModule::modellingSystem
-                    ->getRobotByPort(messageMove->port);
+            Object* object = NULL;
+
+            if (messageMove->envObjID == 0)
+                object = HubModule::modellingSystem
+                        ->getRobotByPort(messageMove->port);
+            else
+                object = HubModule::modellingSystem
+                        ->getEnvObject(messageMove->envObjID - 1);
+
 
             // check for collisions with robots
             MessageBump *messageBump = new MessageBump();
@@ -58,31 +65,41 @@ void HubModule::refresh()
                 Robot* tmpRobot = HubModule::modellingSystem->getRobot(i);
                 // if the current robot is the sender robot
                 // then make the next loop
-                if (tmpRobot->getPortNumber() == messageMove->port)
+                if (tmpRobot != NULL
+                        && tmpRobot->getPortNumber() == messageMove->port)
                     continue;
 
                 // check if distance between two points is
                 // bigger then robots size sum
-                if (sqrt(
+                if (tmpRobot != NULL && sqrt(
                             pow(messageMove->coordX
                                 - tmpRobot->getCoords().first, 2)
                             +
                             pow(messageMove->coordY
                                 - tmpRobot->getCoords().second, 2)
-                            ) < (tmpRobot->getSize() / 2 + tmpClientRobot->getSize() / 2)
+                            ) < (tmpRobot->getSize() / 2 + object->getSize() / 2)
                         ) {
                     collision = true;
-//                    // send message to collided robot
-//                    messageBump->port = tmpRobot->getPortNumber();
-//                    // set collided robot coords
-//                    messageBump->coordX = tmpRobot->getCoords().first;
-//                    messageBump->coordY = tmpRobot->getCoords().second;
-//                    comModule->sendMessage(messageBump);
+                    // send message to collided robot
+                    messageBump->port = tmpRobot->getPortNumber();
+                    // just dummy
+                    messageBump->num = 0;
+                    // why 0? read envObjID specification
+                    messageBump->envObjID = 0;
+                    // set collided robot coords
+                    messageBump->coordX = tmpRobot->getCoords().first;
+                    messageBump->coordY = tmpRobot->getCoords().second;
+                    comModule->sendMessage(messageBump);
                 }
             }
             // check for collisions with env objects
             for (int i = 0; i < ENV_OBJECTS; i++) {
                 EnvObject* tmpEnvObject = HubModule::modellingSystem->getEnvObject(i);
+                // if the current env object is the sender env object
+                // then make the next loop
+                if (tmpEnvObject != NULL
+                        && tmpEnvObject->getObjectId() == (messageMove->envObjID - 1))
+                    continue;
                 // check if distance between two points is
                 // bigger then robots size sum
                 if (tmpEnvObject != NULL && sqrt(
@@ -91,27 +108,37 @@ void HubModule::refresh()
                             +
                             pow(messageMove->coordY
                                 - tmpEnvObject->getCoords().second, 2)
-                            ) < (tmpEnvObject->getSize() / 2 + tmpClientRobot->getSize() / 2)
+                            ) < (tmpEnvObject->getSize() / 2 + object->getSize() / 2)
                         ) {
                     collision = true;
-//                    // send message to collided env object
-//                    messageBump->port = tmpEnvObject->getPortNumber();
-//                    // set collided env object coords
-//                    messageBump->coordX = tmpEnvObject->getCoords().first;
-//                    messageBump->coordY = tmpEnvObject->getCoords().second;
-//                    comModule->sendMessage(messageBump);
+                    // send message to collided env object
+                    messageBump->port = tmpEnvObject->getPortNumber();
+                    // just dummy
+                    messageBump->num = 0;
+                    // why +1? read envObjID specification
+                    messageBump->envObjID = i + 1;
+                    // set collided env object coords
+                    messageBump->coordX = tmpEnvObject->getCoords().first;
+                    messageBump->coordY = tmpEnvObject->getCoords().second;
+                    comModule->sendMessage(messageBump);
                 }
             }
 
             if (!collision)
-                HubModule::modellingSystem->getRobotByPort(messageMove->port)
-                        ->setCoords(messageMove->coordX, messageMove->coordY);
+                if (messageMove->envObjID == 0)
+                    HubModule::modellingSystem->getRobotByPort(messageMove->port)
+                            ->setCoords(messageMove->coordX, messageMove->coordY);
+                else
+                    HubModule::modellingSystem->getEnvObject(messageMove->envObjID - 1)
+                            ->setCoords(messageMove->coordX, messageMove->coordY);
             else {
                 messageBump->port = messageMove->port;
-                // set current robot coords
-                messageBump->coordX = tmpClientRobot->getCoords().first;
-                messageBump->coordY = tmpClientRobot->getCoords().second;
+                messageBump->envObjID = messageMove->envObjID;
                 messageBump->num = messageMove->num;
+                // set current robot coords
+                messageBump->coordX = object->getCoords().first;
+                messageBump->coordY = object->getCoords().second;
+
                 comModule->sendMessage(messageBump);
             }
         }
@@ -121,34 +148,45 @@ void HubModule::refresh()
         {
             MessageTurn *messageTurn = static_cast<MessageTurn *>(m);
 
-            HubModule::modellingSystem->getRobotByPort(messageTurn->port)
-                    ->setOrientation(messageTurn->degrees);
+            if (messageTurn->envObjID == 0)
+                HubModule::modellingSystem->getRobotByPort(messageTurn->port)
+                        ->setOrientation(messageTurn->degrees);
+            else
+                HubModule::modellingSystem->getEnvObject(messageTurn->envObjID - 1)
+                        ->setOrientation(messageTurn->degrees);
         }
             break;
 
         case MsgChangeSize:
         {
             MessageChangeSize *messageChangeSize = static_cast<MessageChangeSize *>(m);
-            HubModule::modellingSystem->getRobotByPort(messageChangeSize->port)
-                    ->setSize(messageChangeSize->diameter);
+            if (messageChangeSize->envObjID == 0)
+                HubModule::modellingSystem->getRobotByPort(messageChangeSize->port)
+                        ->setSize(messageChangeSize->diameter);
+            else
+                HubModule::modellingSystem->getEnvObject(messageChangeSize->envObjID - 1)
+                        ->setSize(messageChangeSize->diameter);
         }
             break;
 
         case MsgChangeColor:
         {
             MessageChangeColor *messageChangeColor = static_cast<MessageChangeColor *>(m);
-            HubModule::modellingSystem->getRobotByPort(messageChangeColor->port)
-                    ->setColor(Color(messageChangeColor->red,
-                                     messageChangeColor->green,
-                                     messageChangeColor->blue));
+            if (messageChangeColor->envObjID == 0)
+                HubModule::modellingSystem->getRobotByPort(messageChangeColor->port)
+                        ->setColor(Color(messageChangeColor->red,
+                                         messageChangeColor->green,
+                                         messageChangeColor->blue));
+            else
+                HubModule::modellingSystem->getEnvObject(messageChangeColor->envObjID - 1)
+                        ->setColor(Color(messageChangeColor->red,
+                                         messageChangeColor->green,
+                                         messageChangeColor->blue));
         }
             break;
 
         case MsgWhoIsThere:
         {
-            // I feel a tremor in the Force.
-            // Something is wrong down there
-
             MessageWhoIsThere *messageWhoIsThere = static_cast<MessageWhoIsThere *>(m);
 
             // we also need to send message about objects in
