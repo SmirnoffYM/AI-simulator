@@ -72,11 +72,11 @@ void HubModule::refresh()
                 // check if distance between two points is
                 // bigger then robots size sum
                 if (tmpRobot != NULL && sqrt(
-                            pow(messageMove->coordX
-                                - tmpRobot->getCoords().first, 2)
+                            pow((int)(messageMove->coordX
+                                - tmpRobot->getCoords().first), 2)
                             +
-                            pow(messageMove->coordY
-                                - tmpRobot->getCoords().second, 2)
+                            pow((int)(messageMove->coordY
+                                - tmpRobot->getCoords().second), 2)
                             ) < (tmpRobot->getSize() / 2 + object->getSize() / 2)
                         ) {
                     collision = true;
@@ -103,11 +103,11 @@ void HubModule::refresh()
                 // check if distance between two points is
                 // bigger then robots size sum
                 if (tmpEnvObject != NULL && sqrt(
-                            pow(messageMove->coordX
-                                - tmpEnvObject->getCoords().first, 2)
+                            pow((int)(messageMove->coordX
+                                - tmpEnvObject->getCoords().first), 2)
                             +
-                            pow(messageMove->coordY
-                                - tmpEnvObject->getCoords().second, 2)
+                            pow((int)(messageMove->coordY
+                                - tmpEnvObject->getCoords().second), 2)
                             ) < (tmpEnvObject->getSize() / 2 + object->getSize() / 2)
                         ) {
                     collision = true;
