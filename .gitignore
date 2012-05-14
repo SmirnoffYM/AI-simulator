@@ -2,8 +2,8 @@ Makefile
 ai-simulator
 ai-simulator.pro.user
 *.o
+robots/*
 # auto-generated files
 ui_*.h
 moc_*.cpp
 qrc_resource.cpp
-robots/*
