@@ -213,7 +213,7 @@ Those messages doesn't contain anything other than header.
 ```
 0x00 0x00 0x00 0x01   -- message's sequential number, 1
 0x03                  -- 3, env. object's ID
-0x04 0x01             -- agent's port, 1026
+0x04 0x01             -- agent's port, 1025
                       -- agent here is environment controller application
 0x04                  -- "change color" message
 0xa1                  -- red component, 161
@@ -226,6 +226,7 @@ Those messages doesn't contain anything other than header.
 ```
 0x00 0x00 0x00 0x02   -- message's sequential number, 2
                       -- (answering to some hyphotetical request)
+0x00                  -- env. obj. ID, zero means robot
 0x04 0x01             -- agent's port, 1025
 0x07                  -- "there you see" message
 0x03                  -- number of objects found, 3
