@@ -215,7 +215,7 @@ void HubModule::refresh()
                 messageObject.blue = objVector.at(i)->getColor().blue();
                 // set coordinates
                 messageObject.coordX = objVector.at(i)->getCoords().first;
-                messageObject.coordX = objVector.at(i)->getCoords().second;
+                messageObject.coordY = objVector.at(i)->getCoords().second;
                 // set diameter
                 messageObject.diameter = objVector.at(i)->getSize();
                 // set orientation
