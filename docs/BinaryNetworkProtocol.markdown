@@ -188,10 +188,11 @@ Those messages doesn't contain anything other than header.
 ### `move` message
 
 ```
+0x02                  -- 2, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number
 0x00                  -- env. obj. ID is 0, thus message is for robot
 0x04 0x01             -- agent's port, 1025
-0x01                  -- "move" message
+0x00                  -- "move" message
 0x00 0x00 0x00 0x15   -- x coordinate, 21
 0x00 0x00 0x00 0x2a   -- y coordinate, 42
 ```
@@ -199,6 +200,7 @@ Those messages doesn't contain anything other than header.
 ### `bump` message
 
 ```
+0x02                  -- 2, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number, copied from the
                       -- original message
 0x00                  -- env. obj. ID, zero means we're talking about robot
@@ -211,11 +213,12 @@ Those messages doesn't contain anything other than header.
 ### `change color` message
 
 ```
+0x02                  -- 2, protocol version
 0x00 0x00 0x00 0x01   -- message's sequential number, 1
 0x03                  -- 3, env. object's ID
 0x04 0x01             -- agent's port, 1025
                       -- agent here is environment controller application
-0x04                  -- "change color" message
+0x03                  -- "change color" message
 0xa1                  -- red component, 161
 0xb2                  -- green component, 178
 0xc3                  -- blue component, 195
@@ -224,6 +227,7 @@ Those messages doesn't contain anything other than header.
 ### `there you see` message
 
 ```
+0x02                  -- 2, protocol version
 0x00 0x00 0x00 0x02   -- message's sequential number, 2
                       -- (answering to some hyphotetical request)
 0x00                  -- env. obj. ID, zero means robot
