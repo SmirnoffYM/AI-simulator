@@ -90,7 +90,7 @@ Agent sends that message to change its orientation.
 
 Message contains:
 
-* seconds, *4 octets*, signed integer
+* seconds, *4 octets*, unsigned integer
 
 second is 1/60 of minute, and minute is, in turn, 1/60 of degree. That
 field specify new orientation of the agent. It is an absolute value
@@ -166,7 +166,7 @@ Each object is represented as follows:
 * X coordinate, *4 octets*, unsigned integer
 * Y coordinate, *4 octets*, unsigned integer
 * diameter, *4 octets*, unsigned integer
-* seconds, *4 octets*, integer
+* seconds, *4 octets*, unsigned integer
 * red, green and blue components of color, *1 octet* each
 
 Seconds field indidates orientation of object.
