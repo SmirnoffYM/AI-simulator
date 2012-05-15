@@ -159,9 +159,9 @@ void MainWindow::stopModelling()
         robotWindows.at(i)->hide();
     }
 
+    ProcessContainer::getInstance().stopApplications();
     hubThread->terminate();
     hubThread->~HubThread();
-    ProcessContainer::getInstance().stopApplications();
 }
 
 void MainWindow::validateButtons(ModellingState state)
