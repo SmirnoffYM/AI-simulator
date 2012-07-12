@@ -126,7 +126,6 @@ void MainWindow::on_actionRun_triggered()
         for (int i = 0; i < ROBOTS; i++) {
             robotWindows.at(i)->setMap(map);
             robotWindows.at(i)->setScaling(Servant::getInstance().getScaling(i));
-            robotWindows.at(i)->show();
         }
     }
 
@@ -135,7 +134,6 @@ void MainWindow::on_actionRun_triggered()
     validateButtons(Started);
     QTimer::singleShot(0, this, SLOT(onRefreshMap()));
 }
-
 
 void MainWindow::on_actionPause_triggered()
 {
@@ -221,8 +219,8 @@ void MainWindow::onRefreshMap()
         // hide non active robot windows if any
         double *idleTime = HubModule::getIdleTime();
         for (int i = 0; i < ROBOTS; i++)
-            if (idleTime[i] > ROBOT_TIMEOUT)
-                robotWindows[i]->hide();
+            if (idleTime[i] < ROBOT_TIMEOUT && ! robotWindows[i]->isVisible())
+                robotWindows[i]->show();
 
         drawMap(map);
         for (int i = 0; i < ROBOTS; i++) {

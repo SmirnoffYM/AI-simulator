@@ -15,10 +15,10 @@
 #define ROBOT_PARAMETER_MAX_LENGTH  15          //maximum length of robot's custom parameter name
 #define SIMULATOR_PORT              9000        // port simulator binds to
 #define MIN_MAP_SIDE                24          //minimum length of the map's side
-#define START_IDLE_TIME             0.0000001   //start idle time for robot
 #define HUB_REFRESH_TIME            1000 / SCREEN_REFRESH_RATE  // time between hub refresh
 #define ROBOT_TIMEOUT               5000        // after this time being idle robot windows
                                                 // will be closed
+#define START_IDLE_TIME             2 * ROBOT_TIMEOUT // start idle time for robot
 //TODO: define MAX_MAP_SIDE
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 enum RobotType { Normal, Flying };              // Flying robot can observe the whole map

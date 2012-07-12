@@ -256,8 +256,6 @@ void HubModule::refresh()
         if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT
                 && HubModule::modellingSystem->modellingState == Started)
             HubModule::idleTime[i] += HUB_REFRESH_TIME;
-        else if (HubModule::idleTime[i] == 0)
-            HubModule::idleTime[i] = START_IDLE_TIME;
 
 }
 
