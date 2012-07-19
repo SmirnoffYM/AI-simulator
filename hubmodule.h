@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <QTimer>
+#include <QMutex>
 #include <queue>
 #include <vector>
 #include "constants.h"
@@ -33,6 +34,7 @@ public slots:
 private:
     QThread *comModuleThread;
     ComModule *comModule;
+    QMutex msgQueueLock;
     std::queue<Message *> messageQueue;
 
     // Shows how much time each robot was passive

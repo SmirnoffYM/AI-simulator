@@ -1,8 +1,9 @@
 #include "commodule.h"
 
-ComModule::ComModule(std::queue<Message *> *q) : QObject()
+ComModule::ComModule(std::queue<Message *> *q, QMutex *l) : QObject()
 {
     messageQueue = q;
+    msgQueueLock = l;
 
     socket = new QUdpSocket(this);
     // FIXME: use the port specified in config
@@ -92,8 +93,9 @@ void ComModule::handleMessage()
         msg->port = port;
         msg->type = static_cast<MessageType>(msg_type);
 
-        // FIXME: is std::queue thread-safe? Should we use mutex here?
+        msgQueueLock->lock();
         messageQueue->push(msg);
+        msgQueueLock->unlock();
     }
 }
 

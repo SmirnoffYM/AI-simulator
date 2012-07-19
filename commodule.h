@@ -1,10 +1,12 @@
 #ifndef COMMODULE_H
 #define COMMODULE_H
 
+#include <QtCore/QMutex>
 #include <QtCore/QObject>
 #include <QtCore/QVariant>
-#include <QtNetwork/QUdpSocket>
 #include <QtNetwork/QHostAddress>
+#include <QtNetwork/QUdpSocket>
+
 #include <queue>
 
 #include "constants.h"
@@ -18,7 +20,7 @@ class ComModule : public QObject
 public:
     /* Constructor receives a pointer to the queue of messages where he would put everything he
      * receives */
-    ComModule(std::queue<Message *> *);
+    ComModule(std::queue<Message *> *, QMutex *);
     ~ComModule();
 
     /* This function is getting called from hub module when it's time to send a response */
@@ -31,6 +33,7 @@ private slots:
 private:
     QUdpSocket *socket;
     std::queue<Message *> *messageQueue;
+    QMutex *msgQueueLock;
 };
 
 #endif // COMMODULE_H

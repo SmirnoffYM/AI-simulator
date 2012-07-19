@@ -7,7 +7,7 @@ double* HubModule::idleTime = NULL;
 
 HubModule::HubModule() {
     comModuleThread = new QThread();
-    comModule = new ComModule(&messageQueue);
+    comModule = new ComModule(&messageQueue, &msgQueueLock);
     comModule->moveToThread(comModuleThread);
     comModuleThread->start();
 
@@ -34,10 +34,12 @@ void HubModule::refresh()
 
     Message *m = NULL;
 
+    msgQueueLock.lock();
     while (!messageQueue.empty())
     {
         m = messageQueue.front();
         messageQueue.pop();
+        msgQueueLock.unlock();
 
         // set idle time for current robot equal 0
         HubModule::idleTime[HubModule::modellingSystem->getSerialByPortNumber(m->port)] = 0;
@@ -250,7 +252,9 @@ void HubModule::refresh()
             break;
 
         }
+        msgQueueLock.lock();
     }
+    msgQueueLock.unlock();
 
     // add time between hub refresh to those robots
     // which were idle in current refresh cycle
