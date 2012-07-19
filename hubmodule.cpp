@@ -6,8 +6,10 @@ ModellingSystem * HubModule::modellingSystem = NULL;
 double* HubModule::idleTime = NULL;
 
 HubModule::HubModule() {
-
+    comModuleThread = new QThread();
     comModule = new ComModule(&messageQueue);
+    comModule->moveToThread(comModuleThread);
+    comModuleThread->start();
 
     HubModule::idleTime = new double[ROBOTS];
     for (int i = 0; i < ROBOTS; i++)

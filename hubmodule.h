@@ -1,6 +1,7 @@
 #ifndef HUBMODULE_H
 #define HUBMODULE_H
 
+#include <QThread>
 #include <QTimer>
 #include <queue>
 #include <vector>
@@ -17,6 +18,7 @@ public:
     HubModule();
     ~HubModule()
     {
+        comModuleThread->quit();
         delete comModule;
     }
 
@@ -29,6 +31,7 @@ public slots:
     void refresh();
 
 private:
+    QThread *comModuleThread;
     ComModule *comModule;
     std::queue<Message *> messageQueue;
 
