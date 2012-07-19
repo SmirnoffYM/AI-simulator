@@ -8,9 +8,10 @@
 #include <QTimer>
 #include <QImage>
 #include <QCloseEvent>
+#include <QThread>
+#include "hubmodule.h"
 #include "robotwindow.h"
 #include "constants.h"
-#include "hubthread.h"
 #include "mapgraphicsscene.h"
 #include "processcontainer.h"
 #include "servant.h"
@@ -49,7 +50,8 @@ private:
     QImage *map;
 
     bool mapOpened;             // this flag signals when map is already created and opened
-    HubThread *hubThread;
+    QThread *hubThread;
+    HubModule *hub;
 
     bool isMapCorrect(QImage image);
     int ** loadMap(QImage image);

@@ -1,6 +1,7 @@
 #ifndef HUBMODULE_H
 #define HUBMODULE_H
 
+#include <QTimer>
 #include <queue>
 #include <vector>
 #include "constants.h"
@@ -8,8 +9,10 @@
 #include "messages.h"
 #include "commodule.h"
 
-class HubModule
+class HubModule : public QObject
 {
+    Q_OBJECT
+
 public:
     HubModule();
     ~HubModule()
@@ -22,6 +25,7 @@ public:
     static double* getIdleTime();
     void sendModellingStateMessage(ModellingState state);
 
+public slots:
     void refresh();
 
 private:

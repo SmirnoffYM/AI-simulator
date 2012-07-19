@@ -119,7 +119,10 @@ void MainWindow::on_actionRun_triggered()
         }
 
         // starting hub thread
-        hubThread = new HubThread();
+        hubThread = new QThread();
+        hub = new HubModule();
+        connect(hubThread, SIGNAL(started()), hub, SLOT(refresh()));
+        hub->moveToThread(hubThread);
         hubThread->start();
         ProcessContainer::getInstance().launchApplications();
 
@@ -158,8 +161,8 @@ void MainWindow::stopModelling()
     }
 
     ProcessContainer::getInstance().stopApplications();
-    hubThread->terminate();
-    hubThread->~HubThread();
+    hubThread->quit();
+    hub->~HubModule();
 }
 
 void MainWindow::validateButtons(ModellingState state)

@@ -20,7 +20,6 @@ SOURCES += main.cpp\
     world.cpp \
     robot.cpp \
     envobject.cpp \
-    hubthread.cpp \
     servant.cpp \
     object.cpp \
     color.cpp \
@@ -38,7 +37,6 @@ HEADERS  += mainwindow.h \
     robot.h \
     envobject.h \
     constants.h \
-    hubthread.h \
     servant.h \
     object.h \
     color.h \

@@ -1,12 +1,12 @@
+#include <cmath>
 #include "hubmodule.h"
 #include "servant.h"
-#include <cmath>
 
 ModellingSystem * HubModule::modellingSystem = NULL;
 double* HubModule::idleTime = NULL;
 
-HubModule::HubModule()
-{
+HubModule::HubModule() {
+
     comModule = new ComModule(&messageQueue);
 
     HubModule::idleTime = new double[ROBOTS];
@@ -257,6 +257,7 @@ void HubModule::refresh()
                 && HubModule::modellingSystem->modellingState == Started)
             HubModule::idleTime[i] += HUB_REFRESH_TIME;
 
+    QTimer::singleShot(HUB_REFRESH_TIME, this, SLOT(refresh()));
 }
 
 double* HubModule::getIdleTime()
@@ -287,7 +288,6 @@ void HubModule::sendModellingStateMessage(ModellingState state)
     // send message to env object control program
     message->port = HubModule::modellingSystem->getEnvObjectPortNumber();
     comModule->sendMessage(message);
-
 }
 
 /* Limit line length to 100 characters; highlight 99th column
