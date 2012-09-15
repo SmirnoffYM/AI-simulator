@@ -13,7 +13,6 @@ TEMPLATE = app
 SOURCES += main.cpp\
     mainwindow.cpp \
     robotwindow.cpp \
-    message-parsers.cpp \
     commodule.cpp \
     hubmodule.cpp \
     modellingsystem.cpp \
@@ -30,7 +29,6 @@ HEADERS  += mainwindow.h \
     robotwindow.h \
     commodule.h \
     messages.h \
-    message-parsers.h \
     hubmodule.h \
     modellingsystem.h \
     world.h \

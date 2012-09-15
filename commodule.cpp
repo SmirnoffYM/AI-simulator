@@ -21,7 +21,7 @@ ComModule::~ComModule()
 
 void ComModule::handleMessage()
 {
-    /* More messages may appear one we process the first one, so let's wrap the core into the loop
+    /* More messages may appear while we process the first one, so let's wrap the core into the loop
      * which would iterate while there's something in the socket to read */
     while(socket->hasPendingDatagrams()) {
         /* We represent message as an array of bytes, for which Qt has a handy class */
@@ -62,22 +62,22 @@ void ComModule::handleMessage()
         /* Dispatch depending on the message type */
         switch(msg_type) {
         case MsgMove:
-            msg = parseMessageMove(stream);
+            msg = new MessageMove(stream);
             break;
         case MsgTurn:
-            msg = parseMessageTurn(stream);
+            msg = new MessageTurn(stream);
             break;
         case MsgChangeSize:
-            msg = parseMessageChangeSize(stream);
+            msg = new MessageChangeSize(stream);
             break;
         case MsgChangeColor:
-            msg = parseMessageChangeColor(stream);
+            msg = new MessageChangeColor(stream);
             break;
         case MsgWhoIsThere:
-            msg = parseMessageWhoIsThere(stream);
+            msg = new MessageWhoIsThere(stream);
             break;
         case MsgParameterReport:
-            msg = parseMessageParameterReport(stream);
+            msg = new MessageParameterReport(stream);
             break;
         default:
             // FIXME: qDebug

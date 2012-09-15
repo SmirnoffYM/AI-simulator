@@ -11,7 +11,6 @@
 
 #include "constants.h"
 #include "messages.h"
-#include "message-parsers.h"
 
 class ComModule : public QObject
 {
