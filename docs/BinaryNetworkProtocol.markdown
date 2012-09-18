@@ -10,11 +10,8 @@
 
 ## Motivation for version 3
 
-* Protocol should be as "relative" as possible: agent shouldn't know
-  in advance neither the map size, nor his current coordinates, nor
-  where the "north" is; he should express his requests in terms of
-  "how far I want to go" and "how much do I want to turn", not "where
-  exactly I want to go" and "how I want to be oriented".
+* Agent should not know its absolute position on the map. All
+  coordinates should be expressed relatively to the agent itself.
 
 So here we go!
 
@@ -91,7 +88,13 @@ Agent sends that message to move somewhere.
 
 Message contains:
 
-* distance, *4 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+
+Parameters describe point on Cartesian plane where agent wants to move
+to. Agent is placed in the center of the plane, and axes are always
+oriented horizontally and vertically (thus agent's orientation doesn't
+affect them).
 
 The parameter specifies how far to travel in the direction that agent
 is facing (see `turn` message). If agent bumps into something on the
@@ -106,8 +109,9 @@ Message contains:
 * seconds, *4 octets*, integer
 
 second is 1/60 of minute, and minute is, in turn, 1/60 of degree. The
-parameter specifies how much agent should turn in clockwise direction.
-Negative value means turning in counterclockwise direction.
+parameter specifies how much agent should turn in clockwise direction
+relatively to "north", i.e. the top of the map. Negative value means
+turning in counterclockwise direction.
 
 ## `change size` message
 
@@ -137,12 +141,15 @@ Message contains:
 
 * distance, *4 octets*, unsigned integer
 
+In response to that request, simulator would send `there you see`
+message.
+
 ## `parameter report` message
 
-Agent sends that message to report the state of one of his current
-parameters.
+Agent sends that message to report current state of one of his
+parameters (which are totally user-defined).
 
-Mesage contains:
+Message contains:
 
 * parameter id, *1 octet*
 * integral part of the value, *4 octets*, signed integer
@@ -161,7 +168,11 @@ moving.
 
 Message contains:
 
-* distance, *4 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+
+Parameters specify agent's position on Cartesian plane with agent's
+previous position as a center.
 
 The parameter contains the distance agent has traveled before bumping
 into the object.
@@ -178,8 +189,8 @@ Message contains:
 Each object is represented as follows:
 
 * type, *1 octet*
-* azimuth, *4 octets*, unsigned integer
-* distance, *4 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
 
 There are the following types of objects:
 
@@ -192,11 +203,9 @@ Agent objects (type 1) have five more fields:
 * orientation, *4 octets*, unsigned integer
 * red, green and blue components of color, *1 octet* each
 
-Azimuth (measured in seconds relatively to the direction agent is
-facing) and distance parameters specify position of the object
-relative to the agent's position. Diameter, orientation (measured in
-seconds relatively to the direction agent is facing) and color
-describe the object.
+X and Y parameters specify position of the object relative to the
+agent's position. Diameter, orientation (measured in seconds
+relatively to the "north") and color describe the object.
 
 List of objects is just a stream of objects descriptions.
 
@@ -207,6 +216,9 @@ doing its work (i.e. moving agent around) upon receiving `start`
 message. If `pause` is sent, agent should pause and wait for the
 `start`. There's no `stop` message because agent processes are being
 killed by the simulator when user wants to stop simulation.
+
+No `start` is being sent when agent is run by the simulator, i.e.
+agents should start doing its work right away.
 
 Those messages doesn't contain anything other than header.
 
@@ -220,7 +232,8 @@ Those messages doesn't contain anything other than header.
 0x00                  -- env. obj. ID is 0, thus message is for robot
 0x04 0x01             -- agent's port, 1025
 0x00                  -- "move" message
-0x00 0x00 0x00 0x15   -- distance, 21
+0x00 0x00 0x00 0x15   -- X coordinate, 21
+0xff 0xff 0xff 0xeb   -- Y coordinate, -21
 ```
 
 ### `bump` message
@@ -232,7 +245,8 @@ Those messages doesn't contain anything other than header.
 0x00                  -- env. obj. ID, zero means we're talking about robot
 0x04 0x01             -- agent's port, 1025
 0x06                  -- "bump" message
-0x00 0x00 0x00 0x0b   -- distance, 11
+0x00 0x00 0x00 0x0b   -- X coordinate, 11
+0xff 0xff 0xff 0xf5   -- Y coordinate, -11
 ```
 
 ### `change color` message
@@ -261,8 +275,8 @@ Those messages doesn't contain anything other than header.
 0x03                  -- number of objects found, 3
                       -- description of first object starts here
 0x01                  --     some agent
-0x00 0x00 0x00 0x10   --     azimuth, 16 seconds
-0x00 0x00 0x00 0x12   --     distance, 18
+0x00 0x00 0x00 0x10   --     X coordinate, 16
+0xff 0xff 0xff 0xf0   --     Y coordinate, -16
 0x00 0x00 0x00 0x15   --     diameter, 21
 0x00 0x00 0x01 0x68   --     orientation, 360 seconds (one degree)
 0x7f                  --     red component, 127
@@ -270,14 +284,14 @@ Those messages doesn't contain anything other than header.
 0x3d                  --     blue component, 61
                       -- description of second object starts here
 0x00                  --     boundary of the map
-0x00 0x00 0x00 0x5d   --     azimuth, 93
-0x00 0x00 0x09 0x2a   --     distance, 2346
+0x00 0x00 0x00 0x5d   --     x coordinate, 93
+0x00 0x00 0x09 0x2a   --     Y coordinate, 2346
                       -- description of third object starts here
 0x01                  --     some agent
-0x00 0x0d 0xa6 0x3b   --     azimuth, 894523 seconds (248° 28' 43")
-0x00 0x08 0xa7 0xfb   --     distance, 567291
+0x00 0x0d 0xa6 0x3b   --     X coordinate, 894523
+0x00 0x08 0xa7 0xfb   --     Y coordinate, 567291
 0x00 0x00 0x08 0x6c   --     diameter, 2165
-0x00 0x03 0x4b 0xc0   --     orientation, 216000 (60 degrees)
+0x00 0x03 0x4b 0xc0   --     orientation, 216000 seconds (60 degrees)
 0x5c                  --     red component, 92
 0x41                  --     green component, 65
 0x04                  --     blue component, 4
