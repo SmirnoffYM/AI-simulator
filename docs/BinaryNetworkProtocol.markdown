@@ -28,7 +28,7 @@ carries information about sender, while body contains command and some
 parameters.
 
 Upon processing the message simulator would send some response. For
-`move` it would be either `bump` or `arrived successfully` (if bump
+`move` it would be either `bump` or `moved successfully` (if bump
 didn't happen). For `who is there?` it would be `there you see`. Look
 up relevant sections for details on those messages.
 
@@ -41,7 +41,7 @@ There are the following types of messages:
 * `who is there?`
 * `parameter report`
 * `bump`
-* `arrived successfully`
+* `moved successfully`
 * `there you see`
 * `start`
 * `pause`
@@ -81,7 +81,7 @@ Message types are mapped from names to numbers as follows:
 *  3: `change color`
 *  4: `who is there?`
 *  5: `bump`
-*  6: `arrived successfully`
+*  6: `moved successfully`
 *  7: `there you see`
 *  8: `parameter report`
 *  9: `start`
@@ -102,7 +102,7 @@ oriented horizontally and vertically (thus agent's orientation doesn't
 affect them).
 
 If agent bumps into something on the way, he would receive `bump`
-message, otherwise there would be `arrived successfully` message.
+message, otherwise there would be `moved successfully` message.
 
 ## `turn` message
 
@@ -178,9 +178,9 @@ Message contains:
 Parameters specify agent's position on Cartesian plane with agent's
 previous position as a center.
 
-## `arrived successfully` message
+## `moved successfully` message
 
-Simulator returns that message when agent doesn't bump into something
+Simulator returns that message when he agent doesn't bump into something
 while moving. There's no payload in this message.
 
 ## `there you see` message
