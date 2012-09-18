@@ -12,6 +12,9 @@
 
 * Agent should not know its absolute position on the map. All
   coordinates should be expressed relatively to the agent itself.
+* I made a mistake specifying `move` to have *optional* parameter.
+  That led to slow and quite unreliable decisions, namely using
+  timeouts to wait for response.
 
 So here we go!
 
@@ -24,10 +27,10 @@ Each message consists of two parts: the header and the body. Header
 carries information about sender, while body contains command and some
 parameters.
 
-Upon processing the message simulator may send some response. For
-`move` it may be either `bump` or nothing (if bump didn't happen). For
-`who is there?` it would be `there you see`. Look up relevant sections
-for details on those messages.
+Upon processing the message simulator would send some response. For
+`move` it would be either `bump` or `arrived successfully` (if bump
+didn't happen). For `who is there?` it would be `there you see`. Look
+up relevant sections for details on those messages.
 
 There are the following types of messages:
 
@@ -38,11 +41,12 @@ There are the following types of messages:
 * `who is there?`
 * `parameter report`
 * `bump`
+* `arrived successfully`
 * `there you see`
 * `start`
 * `pause`
 
-Out of those, only first 6 can be sent by agent, and the last 4 can be
+Out of those, only first 6 can be sent by agent, and the last 5 can be
 sent only by the simulator.
 
 Following are formal specifications of how does header and each message
@@ -71,16 +75,17 @@ controller.
 
 Message types are mapped from names to numbers as follows:
 
-* 0: `move`
-* 1: `turn`
-* 2: `change size`
-* 3: `change color`
-* 4: `who is there?`
-* 5: `bump`
-* 6: `there you see`
-* 7: `parameter report`
-* 8: `start`
-* 9: `pause`
+*  0: `move`
+*  1: `turn`
+*  2: `change size`
+*  3: `change color`
+*  4: `who is there?`
+*  5: `bump`
+*  6: `arrived successfully`
+*  7: `there you see`
+*  8: `parameter report`
+*  9: `start`
+* 10: `pause`
 
 ## `move` message
 
@@ -96,9 +101,8 @@ to. Agent is placed in the center of the plane, and axes are always
 oriented horizontally and vertically (thus agent's orientation doesn't
 affect them).
 
-The parameter specifies how far to travel in the direction that agent
-is facing (see `turn` message). If agent bumps into something on the
-way, he would receive `bump` message.
+If agent bumps into something on the way, he would receive `bump`
+message, otherwise there would be `arrived successfully` message.
 
 ## `turn` message
 
@@ -174,8 +178,10 @@ Message contains:
 Parameters specify agent's position on Cartesian plane with agent's
 previous position as a center.
 
-The parameter contains the distance agent has traveled before bumping
-into the object.
+## `arrived successfully` message
+
+Simulator returns that message when agent doesn't bump into something
+while moving. There's no payload in this message.
 
 ## `there you see` message
 
