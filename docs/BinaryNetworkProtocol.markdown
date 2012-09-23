@@ -58,7 +58,7 @@ Header contains:
 
 * protocol version, *1 octet*
 * message's sequential number, *4 octets*, unsigned integer
-* environment object's ID, *1 octet*, unsigned integer
+* environment object's ID, *2 octets*, unsigned integer
 * agent's port, *2 octets*, unsigned integer
 * message type, *1 octet*
 
@@ -233,7 +233,7 @@ Those messages doesn't contain anything other than header.
 ```
 0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number
-0x00                  -- env. obj. ID is 0, thus message is for robot
+0x00 0x00             -- env. obj. ID is 0, thus message is for robot
 0x04 0x01             -- agent's port, 1025
 0x00                  -- "move" message
 0x00 0x00 0x00 0x15   -- X coordinate, 21
@@ -246,7 +246,7 @@ Those messages doesn't contain anything other than header.
 0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number, copied from the
                       -- original message
-0x00                  -- env. obj. ID, zero means we're talking about robot
+0x00 0x00             -- env. obj. ID, zero means we're talking about robot
 0x04 0x01             -- agent's port, 1025
 0x06                  -- "bump" message
 0x00 0x00 0x00 0x0b   -- X coordinate, 11
@@ -258,7 +258,7 @@ Those messages doesn't contain anything other than header.
 ```
 0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x01   -- message's sequential number, 1
-0x03                  -- 3, env. object's ID
+0x00 0x03             -- 3, env. object's ID
 0x04 0x01             -- agent's port, 1025
                       -- agent here is environment controller application
 0x03                  -- "change color" message
@@ -273,7 +273,7 @@ Those messages doesn't contain anything other than header.
 0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x02   -- message's sequential number, 2
                       -- (answering to some hyphotetical request)
-0x00                  -- env. obj. ID, zero means robot
+0x00 0x00             -- env. obj. ID, zero means robot
 0x04 0x01             -- agent's port, 1025
 0x07                  -- "there you see" message
 0x03                  -- number of objects found, 3
