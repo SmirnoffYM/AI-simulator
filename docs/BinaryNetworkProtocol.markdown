@@ -204,11 +204,11 @@ There are the following types of objects:
 Agent objects (type 1) have five more fields:
 
 * diameter, *4 octets*, unsigned integer
-* orientation, *4 octets*, unsigned integer
+* orientation, *2 octets*, unsigned integer
 * red, green and blue components of color, *1 octet* each
 
 X and Y parameters specify position of the object relative to the
-agent's position. Diameter, orientation (measured in seconds
+agent's position. Diameter, orientation (measured in degrees
 relatively to the "north") and color describe the object.
 
 List of objects is just a stream of objects descriptions.
@@ -282,7 +282,7 @@ Those messages doesn't contain anything other than header.
 0x00 0x00 0x00 0x10   --     X coordinate, 16
 0xff 0xff 0xff 0xf0   --     Y coordinate, -16
 0x00 0x00 0x00 0x15   --     diameter, 21
-0x00 0x00 0x01 0x68   --     orientation, 360 seconds (one degree)
+0x01 0x68             --     orientation, 359 degrees (one degree)
 0x7f                  --     red component, 127
 0xda                  --     green component, 218
 0x3d                  --     blue component, 61
@@ -295,7 +295,7 @@ Those messages doesn't contain anything other than header.
 0x00 0x0d 0xa6 0x3b   --     X coordinate, 894523
 0x00 0x08 0xa7 0xfb   --     Y coordinate, 567291
 0x00 0x00 0x08 0x6c   --     diameter, 2165
-0x00 0x03 0x4b 0xc0   --     orientation, 216000 seconds (60 degrees)
+0x00 0x2a             --     orientation, 21 degrees
 0x5c                  --     red component, 92
 0x41                  --     green component, 65
 0x04                  --     blue component, 4
