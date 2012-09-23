@@ -110,12 +110,10 @@ Agent sends that message to change his orientation.
 
 Message contains:
 
-* seconds, *4 octets*, integer
+* degrees, *4 octets*, unsigned integer
 
-second is 1/60 of minute, and minute is, in turn, 1/60 of degree. The
-parameter specifies how much agent should turn in clockwise direction
-relatively to "north", i.e. the top of the map. Negative value means
-turning in counterclockwise direction.
+The parameter specifies how much agent should turn in clockwise
+direction relatively to its current orientation.
 
 ## `change size` message
 
