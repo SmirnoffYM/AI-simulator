@@ -7,6 +7,8 @@
 #include <QtCore/QMetaType>
 #include <list>
 
+#include "messages.h"
+
 enum MessageType {
     MsgMove = 0,
     MsgTurn,
@@ -44,6 +46,7 @@ public:
     }
 
     unsigned int coordX, coordY;
+
 };
 
 class MessageBump : public Message
@@ -70,6 +73,7 @@ public:
     }
 
     double degrees; 
+
 };
 
 class MessageChangeSize : public Message
@@ -83,7 +87,7 @@ public:
         stream >> diameter;
     }
 
-    unsigned int diameter; 
+    unsigned int diameter;
 };
 
 class MessageChangeColor : public Message
@@ -103,7 +107,7 @@ public:
         blue = b;
     }
 
-    char red, green, blue; 
+    char red, green, blue;
 };
 
 class MessageWhoIsThere : public Message
@@ -138,7 +142,8 @@ public:
     
     char id;
     int integral;
-    unsigned int real; 
+    unsigned int real;
+
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
@@ -147,6 +152,7 @@ struct MessageObject {
     unsigned int diameter;
     unsigned int coordX, coordY;
     double degrees;
+
 };
 
 class MessageThereYouSee : public Message

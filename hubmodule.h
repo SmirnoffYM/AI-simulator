@@ -10,6 +10,7 @@
 #include "modellingsystem.h"
 #include "messages.h"
 #include "commodule.h"
+#include "messagehandler.h"
 
 class HubModule : public QObject
 {
@@ -36,6 +37,9 @@ private:
     ComModule *comModule;
     QMutex msgQueueLock;
     std::queue<Message *> messageQueue;
+
+    // message handler
+    MessageHandler *messageHandler;
 
     // Shows how much time each robot was passive
     static double* idleTime;
