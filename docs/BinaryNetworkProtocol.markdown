@@ -41,6 +41,7 @@ There are the following types of messages:
 * `who is there?`
 * `parameter report`
 * `bump`
+* `we're being hit!`
 * `moved successfully`
 * `there you see`
 * `start`
@@ -81,11 +82,12 @@ Message types are mapped from names to numbers as follows:
 *  3: `change color`
 *  4: `who is there?`
 *  5: `bump`
-*  6: `moved successfully`
-*  7: `there you see`
-*  8: `parameter report`
-*  9: `start`
-* 10: `pause`
+*  6: `we're being hit!`
+*  7: `moved successfully`
+*  8: `there you see`
+*  9: `parameter report`
+* 10: `start`
+* 11: `pause`
 
 ## `move` message
 
@@ -175,6 +177,13 @@ Message contains:
 
 Parameters specify agent's position on Cartesian plane with agent's
 previous position as a center.
+
+## `we're being hit!` message
+
+Simulator sends that message when agent is begin bumped into by some
+other agent.
+
+Message doesn't have any payload.
 
 ## `moved successfully` message
 
