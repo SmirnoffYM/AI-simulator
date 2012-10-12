@@ -1,6 +1,6 @@
-# Binary network protocol specification (version 2)
+# Binary network protocol specification (version 3)
 
-## Motivation
+## Motivation for version 2
 
 * `QLinkedList` can't be serialized into JSON using `qjson` (not with
   the standard capabilities anyway, and I, Alexander Batischev, don't
@@ -8,22 +8,31 @@
 * Client said that JSON is too inefficient and he wants some binary
   protocol
 
+## Motivation for version 3
+
+* Agent should not know its absolute position on the map. All
+  coordinates should be expressed relatively to the agent itself.
+* I made a mistake specifying `move` to have *optional* parameter.
+  That led to slow and quite unreliable design decisions, namely using
+  timeouts to wait for response.
+
 So here we go!
 
 ## Overview
 
-UDP is used as underlying protocol to transmit binary-encoded messages.
+UDP is used as underlying protocol to transmit binary-encoded
+messages.
 
 Each message consists of two parts: the header and the body. Header
 carries information about sender, while body contains command and some
 parameters.
 
-Upon processing the message simulator may send some response. For
-`move` it may be either `bump` or nothing (if bump didn't happen). For
-`who is there?` it would be `there you see`. Look up relevant sections
-for details on those messages.
+Upon processing the message simulator would send some response. For
+`move` it would be either `bump` or `moved successfully` (if bump
+didn't happen). For `who is there?` it would be `there you see`. Look
+up relevant sections for details on those messages.
 
-There are 10 types of messages:
+There are the following types of messages:
 
 * `move`
 * `turn`
@@ -32,14 +41,17 @@ There are 10 types of messages:
 * `who is there?`
 * `parameter report`
 * `bump`
+* `we're being hit!`
+* `moved successfully`
 * `there you see`
+* `here's your navigation chart`
 * `start`
 * `pause`
 
-Out of those, only first 6 can be sent by agent, and the last 4 can be
+Out of those, only first 6 can be sent by agent, and the last 5 can be
 sent only by the simulator.
 
-Following are formal specification of how does header and each message
+Following are formal specifications of how does header and each message
 type look like.
 
 ## Header format
@@ -48,57 +60,68 @@ Header contains:
 
 * protocol version, *1 octet*
 * message's sequential number, *4 octets*, unsigned integer
-* environment object's ID, *1 octet*, unsigned integer
+* environment object's ID, *2 octets*, unsigned integer
 * agent's port, *2 octets*, unsigned integer
 * message type, *1 octet*
 
-This document describes protocol version 2, so the first octet of the
-message should contain 2.
+This document describes protocol version 3, so the first octet of the
+message should contain 3.
 
 Sequential numbers are set by the agent and required by him to make
 sense out of responses. Simulator should just copy that field from the
-message it is responding to.
+message he is responding to.
 
-Environment object's ID should be 0 when message is sent by/to the robot and
-non-zero when message is sent by/to the environment controller.
+Environment object's ID should be 0 when message is sent by/to the
+robot and non-zero when message is sent by/to the environment
+controller.
 
 Message types are mapped from names to numbers as follows:
 
-* 0: `move`
-* 1: `turn`
-* 2: `change size`
-* 3: `change color`
-* 4: `who is there?`
-* 5: `bump`
-* 6: `there you see`
-* 7: `parameter report`
-* 8: `start`
-* 9: `pause`
+*  0: `move`
+*  1: `turn`
+*  2: `change size`
+*  3: `change color`
+*  4: `who is there?`
+*  5: `bump`
+*  6: `we're being hit!`
+*  7: `moved successfully`
+*  8: `there you see`
+*  9: `here's your navigation chart`
+* 10: `parameter report`
+* 11: `start`
+* 12: `pause`
 
 ## `move` message
 
-Agent sends that message to move to somewhere else.
+Agent sends that message to move somewhere.
 
 Message contains:
 
-* X coordinate, *4 octets*, unsigned integer
-* Y coordinate, *4 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+
+Parameters describe point on Cartesian plane where agent wants to move
+to. Agent is placed in the center of the plane, and axes are always
+oriented horizontally and vertically (thus agent's orientation doesn't
+affect them).
+
+If agent bumps into something on the way, he would receive `bump`
+message, otherwise there would be `moved successfully` message.
 
 ## `turn` message
 
-Agent sends that message to change its orientation.
+Agent sends that message to change his orientation.
 
 Message contains:
 
-* seconds, *4 octets*, unsigned integer
+* degrees, *4 octets*, unsigned integer
 
-second is 1/60 of minute, and minute is, in turn, 1/60 of degree. That
-field specify new orientation of the agent. It is an absolute value
-counted from the north direction, which is at the top of the map.
+The parameter specifies how much agent should turn in clockwise
+direction relatively to its current orientation.
 
 ## `change size` message
 
-Agent sends that message to change its size.
+Agent sends that message to change his size.
 
 Message contains:
 
@@ -106,7 +129,7 @@ Message contains:
 
 ## `change color` message
 
-Agent sends that message to change its color.
+Agent sends that message to change his color.
 
 Message contains:
 
@@ -116,21 +139,23 @@ Message contains:
 
 ## `who is there?` message
 
-Agent sends that message to get a list of object situated inside a
-circle with the given centre and radius.
+Agent sends that message to get a list of objects situated not further
+from him than a specified distance. Landscape can influence visibility
+of the objects.
 
 Message contains:
 
-* X coordinate, *4 octets*, unsigned integer
-* Y coordinate, *4 octets*, unsigned integer
-* radius, *4 octets*, unsigned integer
+* distance, *4 octets*, unsigned integer
+
+In response to that request, simulator would send `there you see`
+message.
 
 ## `parameter report` message
 
-Agent sends that message to report the state of one of his current
-parameters.
+Agent sends that message to report current state of one of his
+parameters (which are totally user-defined).
 
-Mesage contains:
+Message contains:
 
 * parameter id, *1 octet*
 * integral part of the value, *4 octets*, signed integer
@@ -138,19 +163,36 @@ Mesage contains:
 
 Parameter id is an unsigned integer number in the range of [0; 15].
 
-Parameter's value is split into integral part and first 6 digits of real part.
-Note that real part is unsigned - sign is carried with integral part.
+Parameter's value is split into integral part and first 6 digits of
+real part. Note that real part is unsigned - sign is carried with
+integral part.
 
 ## `bump` message
 
 Simulator returns that message when agent bumps into something while
-moving to the point specified by `move` command. It contains new
-coordinates of the agent.
+moving.
 
 Message contains:
 
-* X coordinate, *4 octets*, unsigned integer
-* Y coordinate, *4 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+
+Parameters specify agent's position on Cartesian plane with agent's
+previous position as a center.
+
+## `we're being hit!` message
+
+Simulator sends that message when agent is begin bumped into by some
+other agent.
+
+Message doesn't have any payload.
+
+## `moved successfully` message
+
+Simulator returns that message when he agent doesn't bump into something
+while moving.
+
+Message doesn't have any payload.
 
 ## `there you see` message
 
@@ -158,20 +200,57 @@ Simulator sends that message in response to `who is there?` message.
 
 Message contains:
 
+* number of map pieces to be received, *2 octets*, unsigned integer
 * number of objects found, *4 octets*, unsigned integer
 * list of objects
 
+Relevant map parts would be sent with `here's your navigation chart`
+messages.
+
 Each object is represented as follows:
 
-* X coordinate, *4 octets*, unsigned integer
-* Y coordinate, *4 octets*, unsigned integer
+* type, *1 octet*
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+
+There are the following types of objects:
+
+* 0: boundary of the map
+* 1: other agent (possibly an environment object)
+
+Agent objects (type 1) have five more fields:
+
 * diameter, *4 octets*, unsigned integer
-* seconds, *4 octets*, unsigned integer
+* orientation, *2 octets*, unsigned integer
 * red, green and blue components of color, *1 octet* each
 
-Seconds field indidates orientation of object.
+X and Y parameters specify position of the object relative to the
+agent's position. Diameter, orientation (measured in degrees
+relatively to the "north") and color describe the object.
 
 List of objects is just a stream of objects descriptions.
+
+## `here's your navigation chart` message
+
+Simulator sends a few of those along with `there you see` message.
+They contain parts of the map that agent can see.
+
+Message contains:
+
+* fragment id, *2 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+* width, *1 octet*
+* height, *1 octet*
+* point heights, *`width` × `height` octets*
+
+Message describes some fragment of the visible map. Fragment's upper
+left corner is described relatively to the agent's position using X
+and Y coordinates. 
+
+Height of each point on the map can be described with 1 octet. We
+flatten a matrix representing part of the map into the vector,
+concatenating rows in the top-to-bottom direction.
 
 ## `start` and `pause` messages
 
@@ -181,6 +260,9 @@ message. If `pause` is sent, agent should pause and wait for the
 `start`. There's no `stop` message because agent processes are being
 killed by the simulator when user wants to stop simulation.
 
+No `start` is being sent when agent is run by the simulator, i.e.
+agents should start doing its work right away.
+
 Those messages doesn't contain anything other than header.
 
 ## Example messages
@@ -188,34 +270,34 @@ Those messages doesn't contain anything other than header.
 ### `move` message
 
 ```
-0x02                  -- 2, protocol version
+0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number
-0x00                  -- env. obj. ID is 0, thus message is for robot
+0x00 0x00             -- env. obj. ID is 0, thus message is for robot
 0x04 0x01             -- agent's port, 1025
 0x00                  -- "move" message
-0x00 0x00 0x00 0x15   -- x coordinate, 21
-0x00 0x00 0x00 0x2a   -- y coordinate, 42
+0x00 0x00 0x00 0x15   -- X coordinate, 21
+0xff 0xff 0xff 0xeb   -- Y coordinate, -21
 ```
 
 ### `bump` message
 
 ```
-0x02                  -- 2, protocol version
+0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x00   -- message's sequential number, copied from the
                       -- original message
-0x00                  -- env. obj. ID, zero means we're talking about robot
+0x00 0x00             -- env. obj. ID, zero means we're talking about robot
 0x04 0x01             -- agent's port, 1025
 0x06                  -- "bump" message
-0x00 0x00 0x00 0x0b   -- x coordinate, 11
-0x00 0x00 0x00 0x0f   -- y coordinate, 15
+0x00 0x00 0x00 0x0b   -- X coordinate, 11
+0xff 0xff 0xff 0xf5   -- Y coordinate, -11
 ```
 
 ### `change color` message
 
 ```
-0x02                  -- 2, protocol version
+0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x01   -- message's sequential number, 1
-0x03                  -- 3, env. object's ID
+0x00 0x03             -- 3, env. object's ID
 0x04 0x01             -- agent's port, 1025
                       -- agent here is environment controller application
 0x03                  -- "change color" message
@@ -227,34 +309,32 @@ Those messages doesn't contain anything other than header.
 ### `there you see` message
 
 ```
-0x02                  -- 2, protocol version
+0x03                  -- 3, protocol version
 0x00 0x00 0x00 0x02   -- message's sequential number, 2
                       -- (answering to some hyphotetical request)
-0x00                  -- env. obj. ID, zero means robot
+0x00 0x00             -- env. obj. ID, zero means robot
 0x04 0x01             -- agent's port, 1025
 0x07                  -- "there you see" message
 0x03                  -- number of objects found, 3
                       -- description of first object starts here
-0x00 0x00 0x00 0x10   --     x coordinate, 16
-0x00 0x00 0x00 0x12   --     y coordinate, 18
+0x01                  --     some agent
+0x00 0x00 0x00 0x10   --     X coordinate, 16
+0xff 0xff 0xff 0xf0   --     Y coordinate, -16
 0x00 0x00 0x00 0x15   --     diameter, 21
-0x00 0x00 0x01 0x68   --     seconds, 360 (one degree)
+0x01 0x68             --     orientation, 359 degrees (one degree)
 0x7f                  --     red component, 127
 0xda                  --     green component, 218
 0x3d                  --     blue component, 61
                       -- description of second object starts here
+0x00                  --     boundary of the map
 0x00 0x00 0x00 0x5d   --     x coordinate, 93
-0x00 0x00 0x09 0x2a   --     y coordinate, 2346
-0x00 0x00 0x00 0x03   --     diameter, 3
-0x00 0x01 0xa5 0xe0   --     seconds, 108000 (30 degrees)
-0x05                  --     red component, 5
-0x07                  --     green component, 7
-0x0b                  --     blue component, 11
+0x00 0x00 0x09 0x2a   --     Y coordinate, 2346
                       -- description of third object starts here
-0x00 0x0d 0xa6 0x3b   --     x coordinate, 894523
-0x00 0x08 0xa7 0xfb   --     y coordinate, 567291
+0x01                  --     some agent
+0x00 0x0d 0xa6 0x3b   --     X coordinate, 894523
+0x00 0x08 0xa7 0xfb   --     Y coordinate, 567291
 0x00 0x00 0x08 0x6c   --     diameter, 2165
-0x00 0x03 0x4b 0xc0   --     seconds, 216000 (60 degrees)
+0x00 0x2a             --     orientation, 21 degrees
 0x5c                  --     red component, 92
 0x41                  --     green component, 65
 0x04                  --     blue component, 4
@@ -264,3 +344,5 @@ Those messages doesn't contain anything other than header.
 
 All integer values larger than an octet should be converted to network
 byte order (big endian).
+
+<!-- vim: set tw=70 : -->
