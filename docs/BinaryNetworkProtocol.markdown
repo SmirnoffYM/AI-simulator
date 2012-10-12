@@ -44,7 +44,7 @@ There are the following types of messages:
 * `hit!`
 * `moved successfully`
 * `there you see`
-* `here's your navigation chart`
+* `navigation chart`
 * `start`
 * `pause`
 
@@ -86,9 +86,10 @@ Message types are mapped from names to numbers as follows:
 *  6: `hit!`
 *  7: `moved successfully`
 *  8: `there you see`
-*  9: `parameter report`
-* 10: `start`
-* 11: `pause`
+*  9: `navigation chart`
+* 10: `parameter report`
+* 11: `start`
+* 12: `pause`
 
 ## `move` message
 
@@ -203,8 +204,7 @@ Message contains:
 * number of objects found, *4 octets*, unsigned integer
 * list of objects
 
-Relevant map parts would be sent with `here's your navigation chart`
-messages.
+Relevant map parts would be sent with `navigation chart` messages.
 
 Each object is represented as follows:
 
@@ -229,7 +229,7 @@ relatively to the "north") and color describe the object.
 
 List of objects is just a stream of objects descriptions.
 
-## `here's your navigation chart` message
+## `navigation chart` message
 
 Simulator sends a few of those along with `there you see` message.
 They contain parts of the map that agent can see.
