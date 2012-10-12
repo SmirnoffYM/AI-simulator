@@ -49,14 +49,6 @@ public:
 
 };
 
-class MessageBump : public Message
-{
-public:
-    MessageBump() { type = MsgBump; }
-
-    unsigned int coordX, coordY;
-};
-
 class MessageTurn : public Message
 {
 public:
@@ -123,6 +115,14 @@ public:
 
     unsigned int coordX, coordY; 
     unsigned int radius;
+};
+
+class MessageBump : public Message
+{
+public:
+    MessageBump() { type = MsgBump; }
+
+    unsigned int coordX, coordY;
 };
 
 class MessageParameterReport : public Message
