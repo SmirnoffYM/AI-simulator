@@ -13,7 +13,7 @@
 * Agent should not know its absolute position on the map. All
   coordinates should be expressed relatively to the agent itself.
 * I made a mistake specifying `move` to have *optional* parameter.
-  That led to slow and quite unreliable decisions, namely using
+  That led to slow and quite unreliable design decisions, namely using
   timeouts to wait for response.
 
 So here we go!
@@ -179,7 +179,9 @@ previous position as a center.
 ## `moved successfully` message
 
 Simulator returns that message when he agent doesn't bump into something
-while moving. There's no payload in this message.
+while moving.
+
+Message doesn't have any payload.
 
 ## `there you see` message
 
