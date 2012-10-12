@@ -315,6 +315,8 @@ Those messages doesn't contain anything other than header.
 0x00 0x00             -- env. obj. ID, zero means robot
 0x04 0x01             -- agent's port, 1025
 0x07                  -- "there you see" message
+0x00 0x01             -- there would be one `here's you chart map`
+                         message
 0x03                  -- number of objects found, 3
                       -- description of first object starts here
 0x01                  --     some agent
