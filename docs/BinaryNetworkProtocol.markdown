@@ -44,6 +44,7 @@ There are the following types of messages:
 * `we're being hit!`
 * `moved successfully`
 * `there you see`
+* `here's your navigation chart`
 * `start`
 * `pause`
 
@@ -85,9 +86,10 @@ Message types are mapped from names to numbers as follows:
 *  6: `we're being hit!`
 *  7: `moved successfully`
 *  8: `there you see`
-*  9: `parameter report`
-* 10: `start`
-* 11: `pause`
+*  9: `here's your navigation chart`
+* 10: `parameter report`
+* 11: `start`
+* 12: `pause`
 
 ## `move` message
 
@@ -198,8 +200,12 @@ Simulator sends that message in response to `who is there?` message.
 
 Message contains:
 
+* number of map pieces to be received, *2 octets*, unsigned integer
 * number of objects found, *4 octets*, unsigned integer
 * list of objects
+
+Relevant map parts would be sent with `here's your navigation chart`
+messages.
 
 Each object is represented as follows:
 
@@ -223,6 +229,28 @@ agent's position. Diameter, orientation (measured in degrees
 relatively to the "north") and color describe the object.
 
 List of objects is just a stream of objects descriptions.
+
+## `here's your navigation chart` message
+
+Simulator sends a few of those along with `there you see` message.
+They contain parts of the map that agent can see.
+
+Message contains:
+
+* fragment id, *2 octets*, unsigned integer
+* X coordinate, *4 octets*, signed integer
+* Y coordinate, *4 octets*, signed integer
+* width, *1 octet*
+* height, *1 octet*
+* point heights, *`width` × `height` octets*
+
+Message describes some fragment of the visible map. Fragment's upper
+left corner is described relatively to the agent's position using X
+and Y coordinates. 
+
+Height of each point on the map can be described with 1 octet. We
+flatten a matrix representing part of the map into the vector,
+concatenating rows in the top-to-bottom direction.
 
 ## `start` and `pause` messages
 
