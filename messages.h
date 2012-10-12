@@ -16,7 +16,10 @@ enum MessageType {
     MsgChangeColor,
     MsgWhoIsThere,
     MsgBump,
+    MsgHit,
+    MsgMovedSuccessfully,
     MsgThereYouSee,
+    MsgNavigationChart,
     MsgParameterReport,
     MsgStart,
     MsgPause,
@@ -65,7 +68,6 @@ public:
     }
 
     double degrees; 
-
 };
 
 class MessageChangeSize : public Message
@@ -125,6 +127,29 @@ public:
     unsigned int coordX, coordY;
 };
 
+class MessageHit : public Message
+{
+public:
+    MessageHit() { type = MsgHit; };
+};
+
+class MessageMovedSuccessfully : public Message
+{
+public:
+    MessageMovedSuccessfully() { type = MsgMovedSuccessfully; }
+};
+
+class MessageNavigationChart : public Message
+{
+public:
+    MessageNavigationChart() { type = MsgNavigationChart; };
+
+    unsigned int fragmentId;
+    unsigned int coordX, coordY;
+    char width, height;
+    char* points;
+};
+
 class MessageParameterReport : public Message
 {
 public:
@@ -160,6 +185,7 @@ class MessageThereYouSee : public Message
 public:
     MessageThereYouSee() { type = MsgThereYouSee; }
 
+    unsigned int mapChuncks;
     std::list<MessageObject> objects;
 };
 

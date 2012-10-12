@@ -235,3 +235,7 @@ void MessageHandler::handle(MessageParameterReport *msg)
     HubModule::modellingSystem->getRobotByPort(msg->port)
             ->setParametersByID(msg->id, paramValue);
 }
+
+/* Limit line length to 100 characters; highlight 99th column
+ * vim: set textwidth=100 colorcolumn=-1:
+ */
