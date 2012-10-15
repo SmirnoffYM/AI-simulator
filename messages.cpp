@@ -35,8 +35,7 @@ QDataStream& serializeMessage(Message *msg, QDataStream &stream) {
 /**** Message
  ******************************************/
 QDataStream& Message::serialize(QDataStream &stream) {
-    // version: 3
-    stream << static_cast<quint8>(3);
+    stream << static_cast<quint8>(PROTOCOL_VERSION);
     // other header infortmation
     stream << static_cast<quint32>(num)
            << static_cast<quint8>(envObjID)

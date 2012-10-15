@@ -7,6 +7,8 @@
 #include <QtCore/QMetaType>
 #include <list>
 
+#include "constants.h"
+
 enum MessageType {
     MsgMove = 0,
     MsgTurn,

@@ -19,6 +19,7 @@
 #define ROBOT_TIMEOUT               5000        // after this time being idle robot windows
                                                 // will be closed
 #define START_IDLE_TIME             2 * ROBOT_TIMEOUT // start idle time for robot
+#define PROTOCOL_VERSION            3
 //TODO: define MAX_MAP_SIDE
 enum Intersection { Allowed, Denied, AllowedForSameColor };
 enum RobotType { Normal, Flying };              // Flying robot can observe the whole map

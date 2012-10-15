@@ -46,7 +46,7 @@ void ComModule::handleMessage()
 
         quint8 version;
         stream >> version;
-        if(version != 2) {
+        if(version != PROTOCOL_VERSION) {
             // FIXME: stick qDebug in here
             // VERSION MISMATCH, CAN'T HANDLE THAT
             return;
