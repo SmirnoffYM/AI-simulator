@@ -9,6 +9,11 @@ class Object
 {
 public:
     Object();
+    // making destructor virtual tells compiler to call most derived class' destructor when we
+    // delete pointer to Object. That way we can be sure that all resources are freed correctly.
+    // Even though we don't actually derive anything from this class, we need specifier in order to
+    // ensure compiler it's okay to do deletes
+    virtual ~Object() {};
 
 protected:
     Color color;                     //object's color
@@ -81,3 +86,7 @@ public:
 };
 
 #endif // OBJECT_H
+
+/* Limit line length to 100 characters; highlight 99th column
+ * vim: set textwidth=100 colorcolumn=-1:
+ */

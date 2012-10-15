@@ -11,6 +11,11 @@ class Robot : public virtual Object
 {
 public:
     Robot();
+    // making destructor virtual tells compiler to call most derived class' destructor when we
+    // delete pointer to Robot. That way we can be sure that all resources are freed correctly. Even
+    // though we don't actually derive anything from this class, we need specifier in order to
+    // ensure compiler it's okay to do deletes
+    virtual ~Robot() {};
 
 private:
     unsigned int portNumber;                    // also it's robot's id
@@ -88,7 +93,6 @@ public:
     {
         visibilityAngle = angle;
     }
-
 };
 
 #endif // ROBOT_H
