@@ -141,6 +141,9 @@ void ComModule::sendMessage(Message *msg)
         }
         };
         break;
+    default:
+        // simulator can't send any other messages, thus we don't need to serialize them
+        break;
     }
 
     /* Send the message */
