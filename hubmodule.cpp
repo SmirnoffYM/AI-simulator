@@ -80,6 +80,9 @@ void HubModule::sendModellingStateMessage(ModellingState state)
     case Paused:
         message->type = MsgPause;
         break;
+    case Stopped:
+        // FIXME: explain why Stopped does not need to be handled
+        break;
     }
     // send message about modelling state
     // to all robots
