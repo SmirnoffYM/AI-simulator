@@ -26,7 +26,7 @@ enum MessageType {
 class Message
 {
 public:
-    int num, port, envObjID;
+    unsigned int num, port, envObjID;
     MessageType type;
 };
 
