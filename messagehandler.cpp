@@ -35,6 +35,9 @@ void MessageHandler::handle(Message *msg)
         handle(static_cast<MessageParameterReport *> (msg));
         break;
 
+    default:
+        // agent can't send any other message types, thus we don't need to handle them
+        break;
     }
 }
 
