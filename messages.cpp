@@ -155,6 +155,8 @@ MessageParameterReport::MessageParameterReport(QDataStream &stream) {
 MessageThereYouSee::MessageThereYouSee() { type = MsgThereYouSee; }
 
 QDataStream& MessageThereYouSee::serialize(QDataStream &stream) {
+    Message::serialize(stream);
+
     quint32 count = static_cast<quint32>(objects.size());
     stream << count;
     /* For each object, put its description into the stream */
