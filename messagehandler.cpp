@@ -190,14 +190,12 @@ void MessageHandler::handle(MessageWhoIsThere *msg)
     // we also need a list of those objects
     std::list<MessageObject> objectsInRange;
 
-
     Robot *robot = HubModule::modellingSystem->getRobotByPort(msg->port);
 
     std::vector<Object *> objVector = std::vector<Object *>();
     objVector = robot->iCanSee();
 
-    for (int i = 0; i < objVector.size(); i++) {
-
+    for (unsigned int i = 0; i < objVector.size(); i++) {
         MessageObject messageObject;
         // set color
         messageObject.red = objVector.at(i)->getColor().red();
