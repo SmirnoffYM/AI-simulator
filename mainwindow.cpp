@@ -44,7 +44,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::closeEvent(QCloseEvent *event)
+void MainWindow::closeEvent(QCloseEvent *)
 {
     if (HubModule::modellingSystem->modellingState == Started)
         stopModelling();
