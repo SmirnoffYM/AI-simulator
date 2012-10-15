@@ -1,5 +1,51 @@
 #include "messages.h"
 
+QDataStream& serializeMessage(Message *msg, QDataStream &stream) {
+    switch(msg->type) {
+    case MsgBump:
+        (static_cast<MessageBump *>(msg))->serialize(stream);
+        break;
+    case MsgHit:
+        static_cast<MessageHit *>(msg)->serialize(stream);
+        break;
+    case MsgMovedSuccessfully:
+        static_cast<MessageMovedSuccessfully *>(msg)->serialize(stream);
+        break;
+    case MsgThereYouSee:
+        static_cast<MessageThereYouSee *>(msg)->serialize(stream);
+        break;
+    case MsgNavigationChart:
+        static_cast<MessageNavigationChart *>(msg)->serialize(stream);
+        break;
+    case MsgStart:
+        msg->serialize(stream);
+        break;
+    case MsgPause:
+        msg->serialize(stream);
+        break;
+    default:
+        // those messages can't be sent from simulator, thus we don't need serialization code for
+        // them
+        break;
+    }
+
+    return stream;
+};
+
+/**** Message
+ ******************************************/
+QDataStream& Message::serialize(QDataStream &stream) {
+    // version: 3
+    stream << static_cast<quint8>(3);
+    // other header infortmation
+    stream << static_cast<quint32>(num)
+           << static_cast<quint8>(envObjID)
+           << static_cast<quint16>(port)
+           << static_cast<quint8>(type);
+
+    return stream;
+}
+
 /**** MessageMove
  ******************************************/
 MessageMove::MessageMove() { type = MsgMove; }
@@ -68,6 +114,15 @@ MessageWhoIsThere::MessageWhoIsThere(QDataStream &stream) {
  ******************************************/
 MessageBump::MessageBump() { type = MsgBump; }
 
+QDataStream& MessageBump::serialize(QDataStream &stream) {
+    Message::serialize(stream);
+
+    stream << static_cast<quint32>(coordX)
+           << static_cast<quint32>(coordY);
+
+    return stream;
+}
+
 /**** MessageHit
  ******************************************/
 MessageHit::MessageHit() { type = MsgHit; }
@@ -99,6 +154,22 @@ MessageParameterReport::MessageParameterReport(QDataStream &stream) {
 /**** MessageThereYouSee
  ******************************************/
 MessageThereYouSee::MessageThereYouSee() { type = MsgThereYouSee; }
+
+QDataStream& MessageThereYouSee::serialize(QDataStream &stream) {
+    quint32 count = static_cast<quint32>(objects.size());
+    stream << count;
+    /* For each object, put its description into the stream */
+    for(quint32 i = 0; i < count; i++) {
+        MessageObject o = objects.front();
+        objects.pop_front();
+        stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
+               << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees / 3600)
+               << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
+               << static_cast<quint8>(o.blue);
+    }
+
+    return stream;
+}
 
 /* Limit line length to 100 characters; highlight 99th column
  * vim: set textwidth=100 colorcolumn=-1:

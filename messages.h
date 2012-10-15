@@ -29,6 +29,8 @@ class Message
 public:
     unsigned int num, port, envObjID;
     MessageType type;
+
+    virtual QDataStream& serialize(QDataStream &);
 };
 
 class MessageMove : public Message
@@ -81,6 +83,7 @@ class MessageBump : public Message
 {
 public:
     MessageBump();
+    QDataStream& serialize(QDataStream &);
 
     unsigned int coordX, coordY;
 };
@@ -133,6 +136,7 @@ class MessageThereYouSee : public Message
 {
 public:
     MessageThereYouSee();
+    QDataStream& serialize(QDataStream &);
 
     unsigned int mapChuncks;
     std::list<MessageObject> objects;

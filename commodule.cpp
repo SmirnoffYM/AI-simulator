@@ -105,47 +105,7 @@ void ComModule::sendMessage(Message *msg)
     QByteArray datagram;
     /* Use QDataStream to populate datagram with data because it would handle endianness for us */
     QDataStream stream(&datagram, QIODevice::WriteOnly);
-
-    // version: 2
-    stream << static_cast<quint8>(2);
-    // other header infortmation
-    stream << static_cast<quint32>(msg->num)
-           << static_cast<quint8>(msg->envObjID)
-           << static_cast<quint16>(msg->port)
-           << static_cast<quint8>(msg->type);
-
-    switch(msg->type) {
-    case MsgStart:
-        break;
-    case MsgPause:
-        break;
-    case MsgBump:
-        {
-        MessageBump *m = static_cast<MessageBump *>(msg);
-        stream << static_cast<quint32>(m->coordX) << static_cast<quint32>(m->coordY);
-        };
-        break;
-    case MsgThereYouSee:
-        {
-        MessageThereYouSee *m = static_cast<MessageThereYouSee *>(msg);
-        quint32 count = static_cast<quint32>(m->objects.size());
-        stream << count;
-        /* For each object, put its description into the stream */
-        for(quint32 i = 0; i < count; i++) {
-            MessageObject o = m->objects.front();
-            m->objects.pop_front();
-            stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
-                   << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees / 3600)
-                   << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
-                   << static_cast<quint8>(o.blue);
-        }
-        };
-        break;
-    default:
-        // simulator can't send any other messages, thus we don't need to serialize them
-        break;
-    }
-
+    msg->serialize(stream);
     /* Send the message */
     socket->writeDatagram(datagram, QHostAddress::LocalHost, msg->port);
 }
