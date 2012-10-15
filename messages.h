@@ -7,8 +7,6 @@
 #include <QtCore/QMetaType>
 #include <list>
 
-#include "messages.h"
-
 enum MessageType {
     MsgMove = 0,
     MsgTurn,
@@ -36,36 +34,17 @@ public:
 class MessageMove : public Message
 {
 public:
-    MessageMove() { type = MsgMove; }
-
-    MessageMove(QDataStream & stream) {
-        // I would have wrote that in C++11 from the beginning if I knew there was delegating
-        // constructors in the upcoming standard
-        type = MsgMove;
-
-        // it's safe to read directly into unsigned int without casting to quint32 - the latter is
-        // just a typedef aliasing to the former
-        stream >> coordX >> coordY;
-    }
-
     unsigned int coordX, coordY;
 
+    MessageMove();
+    MessageMove(QDataStream &);
 };
 
 class MessageTurn : public Message
 {
 public:
-    MessageTurn() { type = MsgTurn; }
-
-    MessageTurn(QDataStream & stream) {
-        type = MsgTurn;
-
-        qint32 seconds;
-        stream >> seconds;
-
-        // 60 seconds is a minute, and 60 minutes is a degree
-        degrees = static_cast<double>(seconds) / 3600;
-    }
+    MessageTurn();
+    MessageTurn(QDataStream &);
 
     double degrees; 
 };
@@ -73,13 +52,8 @@ public:
 class MessageChangeSize : public Message
 {
 public:
-    MessageChangeSize() { type = MsgChangeSize; }
-
-    MessageChangeSize(QDataStream & stream) {
-        type = MsgChangeSize;
-
-        stream >> diameter;
-    }
+    MessageChangeSize();
+    MessageChangeSize(QDataStream &);
 
     unsigned int diameter;
 };
@@ -87,19 +61,8 @@ public:
 class MessageChangeColor : public Message
 {
 public:
-    MessageChangeColor() { type = MsgChangeColor; }
-
-    MessageChangeColor(QDataStream & stream) {
-        type = MsgChangeColor;
-
-        // have to use intermediate variables as there's no operator>>(char) defined for QDataStream
-        quint8 r, g, b;
-        stream >> r >> g >> b;
-
-        red = r;
-        green = g;
-        blue = b;
-    }
+    MessageChangeColor();
+    MessageChangeColor(QDataStream &);
 
     char red, green, blue;
 };
@@ -107,13 +70,8 @@ public:
 class MessageWhoIsThere : public Message
 {
 public:
-    MessageWhoIsThere() { type = MsgWhoIsThere; }
-
-    MessageWhoIsThere(QDataStream & stream) {
-        type = MsgWhoIsThere;
-
-        stream >> coordX >> coordY >> radius;
-    }
+    MessageWhoIsThere();
+    MessageWhoIsThere(QDataStream &);
 
     unsigned int coordX, coordY; 
     unsigned int radius;
@@ -122,7 +80,7 @@ public:
 class MessageBump : public Message
 {
 public:
-    MessageBump() { type = MsgBump; }
+    MessageBump();
 
     unsigned int coordX, coordY;
 };
@@ -130,19 +88,19 @@ public:
 class MessageHit : public Message
 {
 public:
-    MessageHit() { type = MsgHit; };
+    MessageHit();
 };
 
 class MessageMovedSuccessfully : public Message
 {
 public:
-    MessageMovedSuccessfully() { type = MsgMovedSuccessfully; }
+    MessageMovedSuccessfully();
 };
 
 class MessageNavigationChart : public Message
 {
 public:
-    MessageNavigationChart() { type = MsgNavigationChart; };
+    MessageNavigationChart();
 
     unsigned int fragmentId;
     unsigned int coordX, coordY;
@@ -153,17 +111,8 @@ public:
 class MessageParameterReport : public Message
 {
 public:
-    MessageParameterReport() { type = MsgParameterReport; }
-
-    MessageParameterReport(QDataStream & stream) {
-        type = MsgParameterReport;
-
-        quint8 i; // id
-        stream >> i
-               >> integral >> real;
-
-        id = i;
-    }
+    MessageParameterReport();
+    MessageParameterReport(QDataStream &);
     
     char id;
     int integral;
@@ -183,7 +132,7 @@ struct MessageObject {
 class MessageThereYouSee : public Message
 {
 public:
-    MessageThereYouSee() { type = MsgThereYouSee; }
+    MessageThereYouSee();
 
     unsigned int mapChuncks;
     std::list<MessageObject> objects;
