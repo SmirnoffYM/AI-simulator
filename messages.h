@@ -94,6 +94,7 @@ class MessageNavigationChart : public Message
 {
 public:
     MessageNavigationChart();
+    QDataStream& serialize(QDataStream &);
 
     unsigned int fragmentId;
     unsigned int coordX, coordY;

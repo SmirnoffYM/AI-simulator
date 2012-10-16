@@ -123,6 +123,25 @@ MessageNavigationChart::MessageNavigationChart() {
     type = MsgNavigationChart;
 }
 
+QDataStream& MessageNavigationChart::serialize(QDataStream &stream) {
+    Message::serialize(stream);
+
+    stream << static_cast<quint16>(fragmentId)
+           << static_cast<qint32>(coordX)
+           << static_cast<qint32>(coordY)
+           << static_cast<quint8>(width)
+           << static_cast<quint8>(height);
+
+    for(char i = 0; i < height; i++) {
+        for(char j = 0; j < width; j++) {
+            // going through `points' left to right, top to bottom
+            stream << static_cast<qint8>(points[i * width + j]);
+        }
+    }
+    
+    return stream;
+}
+
 /**** MessageParameterReport
  ******************************************/
 MessageParameterReport::MessageParameterReport() { type = MsgParameterReport; }
