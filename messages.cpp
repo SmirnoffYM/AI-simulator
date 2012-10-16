@@ -5,22 +5,17 @@ QDataStream& serializeMessage(Message *msg, QDataStream &stream) {
     case MsgBump:
         (static_cast<MessageBump *>(msg))->serialize(stream);
         break;
-    case MsgHit:
-        static_cast<MessageHit *>(msg)->serialize(stream);
-        break;
-    case MsgMovedSuccessfully:
-        static_cast<MessageMovedSuccessfully *>(msg)->serialize(stream);
-        break;
     case MsgThereYouSee:
         static_cast<MessageThereYouSee *>(msg)->serialize(stream);
         break;
     case MsgNavigationChart:
         static_cast<MessageNavigationChart *>(msg)->serialize(stream);
         break;
+    case MsgMovedSuccessfully:
+    case MsgHit:
     case MsgStart:
-        msg->serialize(stream);
-        break;
     case MsgPause:
+        // all these messages don't have any payload so it's sufficient to serialize header only
         msg->serialize(stream);
         break;
     default:
@@ -121,14 +116,6 @@ QDataStream& MessageBump::serialize(QDataStream &stream) {
 
     return stream;
 }
-
-/**** MessageHit
- ******************************************/
-MessageHit::MessageHit() { type = MsgHit; }
-
-/**** MessageMovedSuccessfully
- ******************************************/
-MessageMovedSuccessfully::MessageMovedSuccessfully() { type = MsgMovedSuccessfully; }
 
 /**** MessageNavigationChart
  ******************************************/

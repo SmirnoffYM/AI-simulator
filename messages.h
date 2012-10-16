@@ -90,18 +90,6 @@ public:
     unsigned int coordX, coordY;
 };
 
-class MessageHit : public Message
-{
-public:
-    MessageHit();
-};
-
-class MessageMovedSuccessfully : public Message
-{
-public:
-    MessageMovedSuccessfully();
-};
-
 class MessageNavigationChart : public Message
 {
 public:
