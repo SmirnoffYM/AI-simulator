@@ -38,10 +38,10 @@ public:
 class MessageMove : public Message
 {
 public:
-    unsigned int coordX, coordY;
-
     MessageMove();
     MessageMove(QDataStream &);
+
+    unsigned int coordX, coordY;
 };
 
 class MessageTurn : public Message
@@ -110,7 +110,6 @@ public:
     char id;
     int integral;
     unsigned int real;
-
 };
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
@@ -119,7 +118,6 @@ struct MessageObject {
     unsigned int diameter;
     unsigned int coordX, coordY;
     double degrees;
-
 };
 
 class MessageThereYouSee : public Message
