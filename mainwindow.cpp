@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for (int i = 0; i < ROBOTS; i++)
     {
 
-        RobotWindow *robotWindow = new RobotWindow;
+        RobotWindow *robotWindow = new RobotWindow();
 
         int delta = robotWindow->frameGeometry().height() -
                     (screen.height() - ROBOT_WINDOWS_INDENT) / ROBOTS;
@@ -221,9 +221,12 @@ void MainWindow::onRefreshMap()
 
         // hide non active robot windows if any
         double *idleTime = HubModule::getIdleTime();
-        for (int i = 0; i < ROBOTS; i++)
-            if (idleTime[i] < ROBOT_TIMEOUT && ! robotWindows[i]->isVisible())
+        for (int i = 0; i < ROBOTS; i++) {
+            if (idleTime[i] < ROBOT_TIMEOUT && !robotWindows[i]->isVisible())
                 robotWindows[i]->show();
+            else if (idleTime[i] > ROBOT_TIMEOUT)
+                robotWindows[i]->hide();
+        }
 
         drawMap(map);
         for (int i = 0; i < ROBOTS; i++) {

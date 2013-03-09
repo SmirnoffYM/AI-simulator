@@ -1,6 +1,7 @@
 #include "messagehandler.h"
 #include "modellingsystem.h"
 #include "hubmodule.h"
+#include "messages.h"
 #include <cmath>
 
 MessageHandler::MessageHandler(ComModule *comModule)
@@ -82,15 +83,15 @@ void MessageHandler::handle(MessageMove *msg)
                 ) {
             collision = true;
             // send message to collided robot
-            messageBump->port = tmpRobot->getPortNumber();
-            // just dummy
-            messageBump->num = 0;
+            Message *m = new Message();
             // why 0? read envObjID specification
-            messageBump->envObjID = 0;
-            // set collided robot coords
-            messageBump->coordX = tmpRobot->getCoords().first;
-            messageBump->coordY = tmpRobot->getCoords().second;
-            comModule->sendMessage(messageBump);
+            m->envObjID = 0;
+            m->port = tmpRobot->getPortNumber();
+            // just dummy
+            m->num = 0;
+            m->type = MsgHit;
+
+            comModule->sendMessage(m);
         }
     }
     // check for collisions with env objects
@@ -114,26 +115,42 @@ void MessageHandler::handle(MessageMove *msg)
                     ) < (tmpEnvObject->getSize() / 2 + object->getSize() / 2)
                 ) {
             collision = true;
-            // send message to collided env object
-            messageBump->port = tmpEnvObject->getPortNumber();
+            // send message to collided robot
+            Message *m = new Message();
+            // why 0? read envObjID specification
+            m->envObjID = i + 1;
+            m->port = tmpEnvObject->getPortNumber();
             // just dummy
-            messageBump->num = 0;
-            // why +1? read envObjID specification
-            messageBump->envObjID = i + 1;
-            // set collided env object coords
-            messageBump->coordX = tmpEnvObject->getCoords().first;
-            messageBump->coordY = tmpEnvObject->getCoords().second;
-            comModule->sendMessage(messageBump);
+            m->num = 0;
+            m->type = MsgHit;
+
+            comModule->sendMessage(m);
         }
     }
 
     if (!collision)
-        if (msg->envObjID == 0)
+        if (msg->envObjID == 0) {
             HubModule::modellingSystem->getRobotByPort(msg->port)
                     ->setCoords(msg->coordX, msg->coordY);
-        else
+            Message *m = new Message();
+            m->type = MsgMovedSuccessfully;
+            m->port = msg->port;
+            m->envObjID = 0;
+            m->num = 0;
+
+            comModule->sendMessage(m);
+        }
+        else {
             HubModule::modellingSystem->getEnvObject(msg->envObjID - 1)
                     ->setCoords(msg->coordX, msg->coordY);
+            Message *m = new Message();
+            m->type = MsgMovedSuccessfully;
+            m->port = msg->port;
+            m->envObjID = msg->envObjID;
+            m->num = 0;
+
+            comModule->sendMessage(m);
+        }
     else {
         messageBump->port = msg->port;
         messageBump->envObjID = msg->envObjID;

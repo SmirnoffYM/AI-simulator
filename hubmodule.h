@@ -21,7 +21,7 @@ public:
     ~HubModule()
     {
         comModuleThread->quit();
-        delete comModule;
+        comModule->deleteLater();
     }
 
     static ModellingSystem *modellingSystem;
