@@ -2,6 +2,7 @@
 #define MODELLINGSYSTEM_H
 
 #include <vector>
+#include <QDebug>
 #include "constants.h"
 #include "robot.h"
 #include "envobject.h"

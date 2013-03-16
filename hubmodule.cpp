@@ -57,8 +57,11 @@ void HubModule::refresh()
     // which were idle in current refresh cycle
     for (int i = 0; i < ROBOTS; i++)
         if (HubModule::idleTime[i] != 0 && HubModule::idleTime[i] <= ROBOT_TIMEOUT
-                && HubModule::modellingSystem->modellingState == Started)
+                && HubModule::modellingSystem->modellingState == Started) {
             HubModule::idleTime[i] += HUB_REFRESH_TIME;
+        }
+
+
 
     QTimer::singleShot(HUB_REFRESH_TIME, this, SLOT(refresh()));
 }
@@ -72,6 +75,7 @@ void HubModule::sendModellingStateMessage(ModellingState state)
 {
     Message *message = new Message();
     message->num = 0;
+    message->envObjID = 0;
 
     switch(state) {
     case Started:
@@ -90,6 +94,7 @@ void HubModule::sendModellingStateMessage(ModellingState state)
         message->port = HubModule::modellingSystem->getPortBySerialNumber(i);
         comModule->sendMessage(message);
     }
+
 
     // send message to env object control program
     message->port = HubModule::modellingSystem->getEnvObjectPortNumber();
