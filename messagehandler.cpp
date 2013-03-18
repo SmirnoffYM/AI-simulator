@@ -50,12 +50,16 @@ void MessageHandler::handle(MessageMove *msg)
 
     Object* object = NULL;
 
-    if (msg->envObjID == 0)
+    if (msg->envObjID == 0) {
         object = HubModule::modellingSystem
                 ->getRobotByPort(msg->port);
-    else
+    } else {
         object = HubModule::modellingSystem
                 ->getEnvObject(msg->envObjID - 1);
+    }
+
+    int destX = object->getCoords().first + msg->coordX;
+    int destY = object->getCoords().second + msg->coordY;
 
 
     // check for collisions with robots
@@ -74,10 +78,10 @@ void MessageHandler::handle(MessageMove *msg)
         if (tmpRobot != NULL
                 && tmpRobot->getSize() != 0
                 && sqrt(
-                    pow((int)(msg->coordX
+                    pow((int)(destX
                               - tmpRobot->getCoords().first), 2)
                     +
-                    pow((int)(msg->coordY
+                    pow((int)(destY
                               - tmpRobot->getCoords().second), 2)
                     ) < (tmpRobot->getSize() / 2 + object->getSize() / 2)
                 ) {
@@ -107,10 +111,10 @@ void MessageHandler::handle(MessageMove *msg)
         if (tmpEnvObject != NULL
                 && tmpEnvObject->getSize() != 0
                 && sqrt(
-                    pow((int)(msg->coordX
+                    pow((int)(destX
                               - tmpEnvObject->getCoords().first), 2)
                     +
-                    pow((int)(msg->coordY
+                    pow((int)(destY
                               - tmpEnvObject->getCoords().second), 2)
                     ) < (tmpEnvObject->getSize() / 2 + object->getSize() / 2)
                 ) {
@@ -131,7 +135,7 @@ void MessageHandler::handle(MessageMove *msg)
     if (!collision)
         if (msg->envObjID == 0) {
             HubModule::modellingSystem->getRobotByPort(msg->port)
-                    ->setCoords(msg->coordX, msg->coordY);
+                    ->setCoords(destX, destY);
             Message *m = new Message();
             m->type = MsgMovedSuccessfully;
             m->port = msg->port;
@@ -142,7 +146,7 @@ void MessageHandler::handle(MessageMove *msg)
         }
         else {
             HubModule::modellingSystem->getEnvObject(msg->envObjID - 1)
-                    ->setCoords(msg->coordX, msg->coordY);
+                    ->setCoords(destX, destY);
             Message *m = new Message();
             m->type = MsgMovedSuccessfully;
             m->port = msg->port;
