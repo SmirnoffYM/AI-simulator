@@ -170,12 +170,18 @@ void MessageHandler::handle(MessageMove *msg)
 // handle MessageTurn message
 void MessageHandler::handle(MessageTurn *msg)
 {
-    if (msg->envObjID == 0)
-        HubModule::modellingSystem->getRobotByPort(msg->port)
-                ->setOrientation(msg->degrees);
-    else
-        HubModule::modellingSystem->getEnvObject(msg->envObjID - 1)
-                ->setOrientation(msg->degrees);
+    if (msg->envObjID == 0) {
+        Robot *robot = HubModule::modellingSystem->getRobotByPort(msg->port);
+        double currentOrientation = robot->getOrientation();
+
+        robot->setOrientation(currentOrientation + msg->degrees);
+    }
+    else {
+        EnvObject* env = HubModule::modellingSystem->getEnvObject(msg->envObjID - 1);
+        double currentOrientation = env->getOrientation();
+
+        env->setOrientation(currentOrientation + msg->degrees);
+    }
 }
 
 // handle MessageChangeSize message
