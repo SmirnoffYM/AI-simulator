@@ -3,6 +3,7 @@
 #include "hubmodule.h"
 #include "messages.h"
 #include <cmath>
+#include <QDebug>
 
 MessageHandler::MessageHandler(ComModule *comModule)
 {
@@ -58,8 +59,14 @@ void MessageHandler::handle(MessageMove *msg)
                 ->getEnvObject(msg->envObjID - 1);
     }
 
-    int destX = object->getCoords().first + msg->coordX;
-    int destY = object->getCoords().second + msg->coordY;
+
+    double degrees = 360 - object->getOrientation();
+    double radians = degrees * (PI / 180);
+
+    int destX = object->getCoords().first
+            + msg->coordX * cos(radians) - msg->coordY * sin(radians);
+    int destY = object->getCoords().second
+            - msg->coordX * sin(radians) - msg->coordY * cos(radians);
 
 
     // check for collisions with robots

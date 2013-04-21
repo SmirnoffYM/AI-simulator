@@ -65,7 +65,8 @@ MessageTurn::MessageTurn(QDataStream &stream) {
     stream >> seconds;
 
     // 60 seconds is a minute, and 60 minutes is a degree
-    degrees = static_cast<double>(seconds) / 3600;
+    // WTF????? Changed. FIX ME.
+    degrees = static_cast<double>(seconds);
 }
 
 /**** MessageChangeSize
