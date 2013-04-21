@@ -232,15 +232,29 @@ void MessageHandler::handle(MessageWhoIsThere *msg)
     std::vector<Object *> objVector = std::vector<Object *>();
     objVector = robot->iCanSee();
 
+    double degrees = 360 - robot->getOrientation();
+    double radians = degrees * (PI / 180);
+
+    int x = robot->getCoords().first * cos(radians)
+            + robot->getCoords().second * sin(radians);
+    int y = - robot->getCoords().first * sin(radians)
+            + robot->getCoords().second * cos(radians);
+
     for (unsigned int i = 0; i < objVector.size(); i++) {
         MessageObject messageObject;
+        Object* obj = objVector.at(i);
         // set color
-        messageObject.red = objVector.at(i)->getColor().red();
-        messageObject.green = objVector.at(i)->getColor().green();
-        messageObject.blue = objVector.at(i)->getColor().blue();
+        messageObject.red = obj->getColor().red();
+        messageObject.green = obj->getColor().green();
+        messageObject.blue = obj->getColor().blue();
         // set coordinates
-        messageObject.coordX = objVector.at(i)->getCoords().first;
-        messageObject.coordY = objVector.at(i)->getCoords().second;
+        int objX = obj->getCoords().first * cos(radians)
+                + obj->getCoords().second * sin(radians);
+        int objY = - obj->getCoords().first * sin(radians)
+                + obj->getCoords().second * cos(radians);
+
+        messageObject.coordX = objX - x;
+        messageObject.coordY = objY - y;
         // set diameter
         messageObject.diameter = objVector.at(i)->getSize();
         // set orientation
