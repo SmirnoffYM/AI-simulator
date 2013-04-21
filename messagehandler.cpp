@@ -69,6 +69,18 @@ void MessageHandler::handle(MessageMove *msg)
             - msg->coordX * sin(radians) - msg->coordY * cos(radians);
 
 
+    // check for collisions with border
+    std::pair<int, int> border = HubModule::modellingSystem->getWorld()->getSize();
+    border.first *= REAL_PIXEL_SIZE;
+    border.second *= REAL_PIXEL_SIZE;
+
+    if ((destX + object->getSize() / 2 > border.first) ||
+            (destX - (int) object->getSize() / 2 < 0) ||
+            (destY + object->getSize() / 2 > border.second) ||
+            (destY - (int) object->getSize() / 2 < 0)) {
+        collision = true;
+    }
+
     // check for collisions with robots
     MessageBump *messageBump = new MessageBump();
 
