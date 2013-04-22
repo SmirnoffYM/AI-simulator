@@ -256,6 +256,7 @@ void MessageHandler::handle(MessageWhoIsThere *msg)
         MessageObject messageObject;
         Object* obj = objVector.at(i);
         // set color
+        messageObject.type = 1;
         messageObject.red = obj->getColor().red();
         messageObject.green = obj->getColor().green();
         messageObject.blue = obj->getColor().blue();

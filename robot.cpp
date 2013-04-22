@@ -33,6 +33,10 @@ std::vector<Object *> Robot::iCanSee()
                 >= sqrt(pow(object->getCoords().first - coords.first, 2)
                         + pow(object->getCoords().second - coords.second, 2))) {
 
+            // if object == this robot, don't add it to the list
+            if (i >= ENV_OBJECTS && (dynamic_cast<Robot *>(object))->getPortNumber() == portNumber)
+                continue;
+
             // if object intersects with this robot, add it to the list
             if (object->getSize() / 2 + size / 2
                     >= sqrt(pow(object->getCoords().first - coords.first, 2)
@@ -40,11 +44,6 @@ std::vector<Object *> Robot::iCanSee()
                 objects.push_back(object);
                 continue;
             }
-
-            // if object == this robot, don't add it to the list
-            if (i >= ENV_OBJECTS && object != NULL
-                    && (dynamic_cast<Robot *>(object))->getPortNumber() == portNumber)
-                continue;
 
             // check if object is in visibilty sector
             double angle = acos(fabs(object->getCoords().second - coords.second)
