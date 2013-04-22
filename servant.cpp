@@ -219,7 +219,7 @@ std::vector<EnvObject *> Servant::buildEnvironment(std::pair<int, int> mapSize)
         }
 
         // Check orientation
-        double orientation = objectParams.at(5).toDouble(&ok);
+        int orientation = objectParams.at(5).toDouble(&ok);
         if (!ok || orientation < 0) {
             qDebug() << "Invalid orientation (object" << obj << ")";
             return *environment;

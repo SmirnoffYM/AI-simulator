@@ -50,7 +50,7 @@ public:
     MessageTurn();
     MessageTurn(QDataStream &);
 
-    unsigned int degrees;
+    int degrees;
 };
 
 class MessageChangeSize : public Message
@@ -119,7 +119,7 @@ struct MessageObject {
     char red, green, blue;
     unsigned int diameter;
     unsigned int coordX, coordY;
-    double degrees;
+    int degrees;
 };
 
 class MessageThereYouSee : public Message

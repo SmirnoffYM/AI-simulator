@@ -18,7 +18,7 @@ public:
 protected:
     Color color;                     //object's color
     unsigned int size;               //diameter in special pixels (1/60 of real pixel)
-    unsigned int orientation;        //orientation (in degrees)
+    int orientation;                 //orientation (in degrees)
     Intersection intersection;       //type of intersection
     bool movable;                    //is object movable
     std::pair<int, int> coords;      //object's coordinates, first - x, second - y;
@@ -60,12 +60,12 @@ public:
         this->size = size;
     }
 
-    void setOrientation(double orientation)
+    void setOrientation(int orientation)
     {
-        if (orientation >= 360 || orientation < 0)
-            this->orientation = 0;
-        else
-            this->orientation = orientation;
+        // orientation % 360 strips unnecessary rounds from the angle, but leaves the sign in place
+        // (e.g. negative number stays negative). Thus we add 360 to convert negative number into
+        // positive one, and then once again take modulo to put result back into [0..360] range
+        this->orientation = (360 + (orientation % 360)) % 360;
     }
 
     void setColor(Color color)

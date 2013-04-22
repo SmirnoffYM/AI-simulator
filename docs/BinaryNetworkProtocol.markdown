@@ -114,10 +114,11 @@ Agent sends that message to change his orientation.
 
 Message contains:
 
-* degrees, *4 octets*, unsigned integer
+* degrees, *4 octets*, signed integer
 
-The parameter specifies how much agent should turn in clockwise
-direction relatively to its current orientation.
+The parameter specifies how much agent should turn in clockwise (if
+positive) or counter-clockwise (if negative) direction relatively to
+its current orientation.
 
 ## `change size` message
 
@@ -220,12 +221,13 @@ There are the following types of objects:
 Agent objects (type 1) have five more fields:
 
 * diameter, *4 octets*, unsigned integer
-* orientation, *2 octets*, unsigned integer
+* orientation, *2 octets*, signed integer
 * red, green and blue components of color, *1 octet* each
 
 X and Y parameters specify position of the object relative to the
 agent's position. Diameter, orientation (measured in degrees
-relatively to the "north") and color describe the object.
+relatively to the "north"; see also `turn` message) and color describe
+the object.
 
 List of objects is just a stream of objects descriptions.
 
@@ -322,7 +324,7 @@ Those messages doesn't contain anything other than header.
 0x00 0x00 0x00 0x10   --     X coordinate, 16
 0xff 0xff 0xff 0xf0   --     Y coordinate, -16
 0x00 0x00 0x00 0x15   --     diameter, 21
-0x01 0x68             --     orientation, 359 degrees (one degree)
+0x01 0x68             --     orientation, 359 degrees
 0x7f                  --     red component, 127
 0xda                  --     green component, 218
 0x3d                  --     blue component, 61
