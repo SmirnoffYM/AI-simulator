@@ -18,7 +18,7 @@ public:
 protected:
     Color color;                     //object's color
     unsigned int size;               //diameter in special pixels (1/60 of real pixel)
-    double orientation;              //orientation (in degrees)
+    unsigned int orientation;        //orientation (in degrees)
     Intersection intersection;       //type of intersection
     bool movable;                    //is object movable
     std::pair<int, int> coords;      //object's coordinates, first - x, second - y;
@@ -38,7 +38,7 @@ public:
         return size;
     }
 
-    double getOrientation()
+    unsigned int getOrientation()
     {
         return orientation;
     }

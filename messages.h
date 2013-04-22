@@ -50,7 +50,7 @@ public:
     MessageTurn();
     MessageTurn(QDataStream &);
 
-    double degrees; 
+    unsigned int degrees;
 };
 
 class MessageChangeSize : public Message

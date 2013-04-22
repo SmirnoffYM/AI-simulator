@@ -60,7 +60,7 @@ void MessageHandler::handle(MessageMove *msg)
     }
 
 
-    double degrees = 360 - object->getOrientation();
+    int degrees = 360 - object->getOrientation();
     double radians = degrees * (PI / 180);
 
     int destX = object->getCoords().first
@@ -74,9 +74,9 @@ void MessageHandler::handle(MessageMove *msg)
     border.first *= REAL_PIXEL_SIZE;
     border.second *= REAL_PIXEL_SIZE;
 
-    if ((destX + object->getSize() / 2 > border.first) ||
+    if ((destX + object->getSize() / 2 > static_cast<double>(border.first)) ||
             (destX - (int) object->getSize() / 2 < 0) ||
-            (destY + object->getSize() / 2 > border.second) ||
+            (destY + object->getSize() / 2 > static_cast<double>(border.second)) ||
             (destY - (int) object->getSize() / 2 < 0)) {
         collision = true;
     }
@@ -191,13 +191,13 @@ void MessageHandler::handle(MessageTurn *msg)
 {
     if (msg->envObjID == 0) {
         Robot *robot = HubModule::modellingSystem->getRobotByPort(msg->port);
-        double currentOrientation = robot->getOrientation();
+        unsigned int currentOrientation = robot->getOrientation();
 
         robot->setOrientation(currentOrientation + msg->degrees);
     }
     else {
         EnvObject* env = HubModule::modellingSystem->getEnvObject(msg->envObjID - 1);
-        double currentOrientation = env->getOrientation();
+        unsigned int currentOrientation = env->getOrientation();
 
         env->setOrientation(currentOrientation + msg->degrees);
     }

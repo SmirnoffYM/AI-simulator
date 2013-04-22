@@ -61,12 +61,7 @@ MessageTurn::MessageTurn() { type = MsgTurn; }
 MessageTurn::MessageTurn(QDataStream &stream) {
     type = MsgTurn;
 
-    qint32 seconds;
-    stream >> seconds;
-
-    // 60 seconds is a minute, and 60 minutes is a degree
-    // WTF????? Changed. FIX ME.
-    degrees = static_cast<double>(seconds);
+    stream >> degrees;
 }
 
 /**** MessageChangeSize
@@ -171,7 +166,7 @@ QDataStream& MessageThereYouSee::serialize(QDataStream &stream) {
         MessageObject o = objects.front();
         objects.pop_front();
         stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
-               << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees / 3600)
+               << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees)
                << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
                << static_cast<quint8>(o.blue);
     }

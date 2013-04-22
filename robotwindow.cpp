@@ -105,7 +105,8 @@ void RobotWindow::refreshRobotParams()
 
     QString params = buildParametersLabel();
     params = params.arg(robot->getCoords().first).arg(robot->getCoords().second).
-                    arg(robot->getOrientation(), 2, 'f', 1).arg(robot->getSize());
+                    arg(static_cast<double>(robot->getOrientation()), 2, 'f', 1).
+                    arg(robot->getSize());
 
     std::pair<std::string, double> *parameters = robot->getParameters();
     for (int i = 0; i < CUSTOM_PARAMETERS_QUANTITY; i++)
