@@ -165,10 +165,13 @@ QDataStream& MessageThereYouSee::serialize(QDataStream &stream) {
     for(quint32 i = 0; i < count; i++) {
         MessageObject o = objects.front();
         objects.pop_front();
-        stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
-               << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees)
-               << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
-               << static_cast<quint8>(o.blue);
+        stream << static_cast<quint8>(o.type);
+        if(o.type == 1) { // some agent
+            stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
+                   << static_cast<quint32>(o.diameter) << static_cast<quint32>(o.degrees)
+                   << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
+                   << static_cast<quint8>(o.blue);
+        }
     }
 
     return stream;

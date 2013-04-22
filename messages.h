@@ -115,6 +115,7 @@ public:
 
 /* Excuse me for awkward name - I really couldn't come up with anything better */
 struct MessageObject {
+    char type;
     char red, green, blue;
     unsigned int diameter;
     unsigned int coordX, coordY;
