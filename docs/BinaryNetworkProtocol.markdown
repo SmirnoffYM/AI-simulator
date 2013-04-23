@@ -114,7 +114,7 @@ Agent sends that message to change his orientation.
 
 Message contains:
 
-* degrees, *4 octets*, signed integer
+* degrees, *2 octets*, signed integer
 
 The parameter specifies how much agent should turn in clockwise (if
 positive) or counter-clockwise (if negative) direction relatively to
