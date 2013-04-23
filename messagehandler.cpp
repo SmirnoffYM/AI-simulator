@@ -267,7 +267,7 @@ void MessageHandler::handle(MessageWhoIsThere *msg)
                 + obj->getCoords().second * cos(radians);
 
         messageObject.coordX = objX - x;
-        messageObject.coordY = objY - y;
+        messageObject.coordY = y - objY;
         // set diameter
         messageObject.diameter = objVector.at(i)->getSize();
         // set orientation
