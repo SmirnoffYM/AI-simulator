@@ -88,6 +88,7 @@ public:
     QDataStream& serialize(QDataStream &);
 
     unsigned int coordX, coordY;
+    char type;
 };
 
 class MessageNavigationChart : public Message

@@ -181,6 +181,7 @@ void MessageHandler::handle(MessageMove *msg)
         // set current robot coords
         messageBump->coordX = object->getCoords().first;
         messageBump->coordY = object->getCoords().second;
+        // FIXME: set messageBump->type
 
         comModule->sendMessage(messageBump);
     }

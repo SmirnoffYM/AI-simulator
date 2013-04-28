@@ -108,7 +108,8 @@ QDataStream& MessageBump::serialize(QDataStream &stream) {
     Message::serialize(stream);
 
     stream << static_cast<quint32>(coordX)
-           << static_cast<quint32>(coordY);
+           << static_cast<quint32>(coordY)
+           << static_cast<quint8>(type);
 
     return stream;
 }

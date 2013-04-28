@@ -177,9 +177,14 @@ Message contains:
 
 * X coordinate, *4 octets*, signed integer
 * Y coordinate, *4 octets*, signed integer
+* type, *1 octet*
 
 Parameters specify agent's position on Cartesian plane with agent's
-previous position as a center.
+previous position as a center. Type descibes an object the agent
+bumped into:
+
+* 0: boundary of the map
+* 1: other agent (possibly an environment object)
 
 ## `hit!` message
 
