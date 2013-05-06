@@ -69,6 +69,14 @@ void MessageHandler::handle(MessageMove *msg)
             - msg->coordX * sin(radians) - msg->coordY * cos(radians);
 
 
+    // REFACTORING!!!! WHERE ARE YOU?
+    int bumpX;
+    int bumpY;
+
+
+    // check for collisions with robots
+    MessageBump *messageBump = new MessageBump();
+
     // check for collisions with border
     std::pair<int, int> border = HubModule::modellingSystem->getWorld()->getSize();
     border.first *= REAL_PIXEL_SIZE;
@@ -79,10 +87,10 @@ void MessageHandler::handle(MessageMove *msg)
             (destY + object->getSize() / 2 > static_cast<double>(border.second)) ||
             (destY - (int) object->getSize() / 2 < 0)) {
         collision = true;
+        bumpX = msg->coordX;
+        bumpY = msg->coordY;
+        messageBump->type = 0;
     }
-
-    // check for collisions with robots
-    MessageBump *messageBump = new MessageBump();
 
     for (int i = 0; i < ROBOTS; i++) {
         Robot* tmpRobot = HubModule::modellingSystem->getRobot(i);
@@ -105,6 +113,9 @@ void MessageHandler::handle(MessageMove *msg)
                     ) < (tmpRobot->getSize() / 2 + object->getSize() / 2)
                 ) {
             collision = true;
+            bumpX = tmpRobot->getCoords().first;
+            bumpY = tmpRobot->getCoords().second;
+            messageBump->type = 1;
             // send message to collided robot
             Message *m = new Message();
             // why 0? read envObjID specification
@@ -138,6 +149,9 @@ void MessageHandler::handle(MessageMove *msg)
                     ) < (tmpEnvObject->getSize() / 2 + object->getSize() / 2)
                 ) {
             collision = true;
+            bumpX = tmpEnvObject->getCoords().first;
+            bumpY = tmpEnvObject->getCoords().second;
+            messageBump->type = 1;
             // send message to collided robot
             Message *m = new Message();
             // why 0? read envObjID specification
@@ -178,10 +192,17 @@ void MessageHandler::handle(MessageMove *msg)
         messageBump->port = msg->port;
         messageBump->envObjID = msg->envObjID;
         messageBump->num = msg->num;
-        // set current robot coords
-        messageBump->coordX = object->getCoords().first;
-        messageBump->coordY = object->getCoords().second;
-        // FIXME: set messageBump->type
+        // set bump object coords
+        int x = object->getCoords().first * cos(radians)
+                + object->getCoords().second * sin(radians);
+        int y = - object->getCoords().first * sin(radians)
+                + object->getCoords().second * cos(radians);
+
+        int objX = bumpX * cos(radians) + bumpY * sin(radians);
+        int objY = - bumpX * sin(radians) + bumpY * cos(radians);
+
+        messageBump->coordX = objX - x;
+        messageBump->coordY = y - objY;
 
         comModule->sendMessage(messageBump);
     }
