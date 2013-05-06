@@ -89,7 +89,7 @@ void MessageHandler::handle(MessageMove *msg)
         collision = true;
         bumpX = msg->coordX;
         bumpY = msg->coordY;
-        messageBump->type = 0;
+        messageBump->bumpType = 0;
     }
 
     for (int i = 0; i < ROBOTS; i++) {
@@ -115,7 +115,7 @@ void MessageHandler::handle(MessageMove *msg)
             collision = true;
             bumpX = tmpRobot->getCoords().first;
             bumpY = tmpRobot->getCoords().second;
-            messageBump->type = 1;
+            messageBump->bumpType = 1;
             // send message to collided robot
             Message *m = new Message();
             // why 0? read envObjID specification
@@ -151,7 +151,7 @@ void MessageHandler::handle(MessageMove *msg)
             collision = true;
             bumpX = tmpEnvObject->getCoords().first;
             bumpY = tmpEnvObject->getCoords().second;
-            messageBump->type = 1;
+            messageBump->bumpType = 1;
             // send message to collided robot
             Message *m = new Message();
             // why 0? read envObjID specification
