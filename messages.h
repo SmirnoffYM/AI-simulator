@@ -41,7 +41,7 @@ public:
     MessageMove();
     MessageMove(QDataStream &);
 
-    unsigned int coordX, coordY;
+    int coordX, coordY;
 };
 
 class MessageTurn : public Message
@@ -77,7 +77,7 @@ public:
     MessageWhoIsThere();
     MessageWhoIsThere(QDataStream &);
 
-    unsigned int coordX, coordY; 
+    int coordX, coordY;
     unsigned int radius;
 };
 
@@ -87,7 +87,7 @@ public:
     MessageBump();
     QDataStream& serialize(QDataStream &);
 
-    unsigned int coordX, coordY;
+    int coordX, coordY;
     char bumpType;
 };
 
@@ -98,7 +98,7 @@ public:
     QDataStream& serialize(QDataStream &);
 
     unsigned int fragmentId;
-    unsigned int coordX, coordY;
+    int coordX, coordY;
     char width, height;
     char* points;
 };
@@ -108,7 +108,7 @@ class MessageParameterReport : public Message
 public:
     MessageParameterReport();
     MessageParameterReport(QDataStream &);
-    
+
     char id;
     int integral;
     unsigned int real;
@@ -119,7 +119,7 @@ struct MessageObject {
     char type;
     char red, green, blue;
     unsigned int diameter;
-    unsigned int coordX, coordY;
+    int coordX, coordY;
     int degrees;
 };
 

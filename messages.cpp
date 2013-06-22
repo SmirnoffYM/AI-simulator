@@ -49,8 +49,8 @@ MessageMove::MessageMove(QDataStream &stream) {
     // constructors in the upcoming standard
     type = MsgMove;
 
-    // it's safe to read directly into unsigned int without casting to quint32 - the latter is
-    // just a typedef aliasing to the former
+    // it's safe to read directly into signed int without casting to qint32 - the latter is just a
+    // typedef aliasing to the former
     stream >> coordX >> coordY;
 }
 
@@ -107,8 +107,8 @@ MessageBump::MessageBump() { type = MsgBump; }
 QDataStream& MessageBump::serialize(QDataStream &stream) {
     Message::serialize(stream);
 
-    stream << static_cast<quint32>(coordX)
-           << static_cast<quint32>(coordY)
+    stream << static_cast<qint32>(coordX)
+           << static_cast<qint32>(coordY)
            << static_cast<quint8>(bumpType);
 
     return stream;
@@ -168,7 +168,7 @@ QDataStream& MessageThereYouSee::serialize(QDataStream &stream) {
         objects.pop_front();
         stream << static_cast<quint8>(o.type);
         if(o.type == 1) { // some agent
-            stream << static_cast<quint32>(o.coordX) << static_cast<quint32>(o.coordY)
+            stream << static_cast<qint32>(o.coordX) << static_cast<qint32>(o.coordY)
                    << static_cast<quint32>(o.diameter) << static_cast<qint16>(o.degrees)
                    << static_cast<quint8>(o.red) << static_cast<quint8>(o.green)
                    << static_cast<quint8>(o.blue);
